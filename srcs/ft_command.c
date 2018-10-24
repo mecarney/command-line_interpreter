@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 23:58:44 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/23 17:11:21 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/23 19:05:02 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static int	ft_checkpath(char **ptr)
 	return (on);
 }
 
-void		ft_checkcommand(char **ptr)
+void		ft_run_system_cmd(char **ptr)
 {
 	int		on;
 	pid_t	newchild;
@@ -73,4 +73,38 @@ void		ft_checkcommand(char **ptr)
 		on = ft_checkpath(ptr);
 	(on == -1) ? ft_printf("%s: command not found\n", ptr[0]) : 0;
 	exit(0);
+}
+
+int			ft_check_builtin(char **cmd)
+{
+	int ret;
+
+	ret = -1;
+	while (++ret < NBRBUILTIN)
+		if (ft_strcmp(cmd[0], g_builtin[ret].command) == 0)
+			return (ret);
+	return (-1);
+}
+
+void		ft_run_cmd(char **cmd)
+{
+	int		ret;
+	int		stat_loc;
+	_Bool	result;
+	pid_t	pid;
+
+	ret = -1;
+	result = 0;
+	if (cmd == NULL)
+		return ;
+	if ((ret = ft_check_builtin(cmd)) != -1)
+		result = g_builtin[ret].fct(cmd);
+	else
+	{
+		if ((pid = fork()) == 0)
+			ft_run_system_cmd(cmd);
+		else if (pid < 0)
+			ft_error("ERROR: Fail to create new process");
+		waitpid(pid, &stat_loc, WUNTRACED);
+	}
 }

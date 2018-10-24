@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/23 17:09:37 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/23 19:10:08 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 # include "libft.h"
 
+# define SHELLNAME	"\033[1m\033[34m42sh%\033[0m "
 # define NBRBUILTIN 6
 # define ENVNAME(x) (ft_strchr(x, '=') - x)
 # define PATH_MAX 4096
@@ -63,7 +64,9 @@ char				**ft_addenv(char *str);
 /*
 **	ft_command.c
 */
-void				ft_checkcommand(char **ptr);
+void				ft_run_system_cmd(char **ptr);
+int					ft_check_builtin(char **cmd);
+void				ft_run_cmd(char **cmd);
 
 /*
 **	ft_helper.c

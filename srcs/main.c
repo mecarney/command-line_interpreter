@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:15:18 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/23 17:11:06 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/23 19:06:53 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,15 @@ t_builtin	g_builtin[NBRBUILTIN] = {
 
 int		main(int argc, char **argv, char **envp)
 {
-	int		stat_loc;
 	char	**command;
-	pid_t	child;
 
 	(argc != 1 || !argv[0]) ? ft_error("Usage: ./minishell") : NULL;
+	ft_putendl("\033[1m\033[92mWelcome!\033[0m Make great code today");
 	envp = ft_newenv(envp);
 	while (!(command = NULL))
 	{
 		if ((command = ft_init()) && *command)
-		{
-			if (!ft_builtin(command))
-			{
-				if ((child = fork()) == 0)
-					ft_checkcommand(command);
-				else
-					waitpid(child, &stat_loc, WUNTRACED);
-			}
-		}
+			ft_run_cmd(command);
 		ft_ptrdel(command);
 	}
 	return (0);
@@ -52,7 +43,7 @@ char	**ft_init(void)
 	char	*line;
 	char	**command;
 
-	ft_putstr("$> ");
+	ft_putstr(SHELLNAME);
 	if (get_next_line(0, &line) <= 0)
 		return (NULL);
 	command = ft_strsplitspaces(line);
