@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:15:18 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/24 22:52:02 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/24 23:35:28 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,15 @@ void	ft_tokens_to_cmd(t_ast *tokens, _Bool *ret)
 
 _Bool	execute_tokens(t_ast *tokens)
 {
-	int		fd_origin;
+	int		fd_origin0;
+	int		fd_origin1;
+	int		stat_loc;
+	pid_t	pid;
 	_Bool	ret;
 
 	ret = 1;
-	fd_origin = dup(1);
+	fd_origin0 = dup(0);
+	fd_origin1 = dup(1);
 	if (tokens)
 	{
 		if (tokens->r_child)
@@ -103,10 +107,25 @@ _Bool	execute_tokens(t_ast *tokens)
 			else if (ft_strcmp(tokens->val, "|") == 0)
 			{
 				pipe(fd);
-				ret = execute_tokens(tokens->l_child);
-				ret = execute_tokens(tokens->r_child);
-				close(fd[1]);
-				dup2(fd_origin, 1);
+				if((pid = fork()) != 0)
+				{
+					waitpid(pid, &stat_loc, WUNTRACED);
+					dup2(fd_origin1, 1);
+					close(fd[1]);
+					dup2(fd[0], 0);
+					close(fd[0]);
+					ret = execute_tokens(tokens->r_child);
+					dup2(fd_origin0, 0);
+					dup2(fd_origin1, 1);
+				}
+				else if (pid == 0)
+				{
+					close(fd[0]);
+					dup2(fd[1], 1);
+					close(fd[1]);
+					ret = execute_tokens(tokens->l_child);
+					exit(1);
+				}
 			}
 			else if (ft_strcmp(tokens->val, ">") == 0)
 			{
@@ -118,7 +137,7 @@ _Bool	execute_tokens(t_ast *tokens)
 				dup2(fd[1], 1);
 				ret = execute_tokens(tokens->l_child);
 				close(fd[1]);
-				dup2(fd_origin, 1);
+				dup2(fd_origin1, 1);
 			}
 			else if (ft_strcmp(tokens->val, ">>") == 0)
 			{
@@ -131,7 +150,7 @@ _Bool	execute_tokens(t_ast *tokens)
 				lseek(fd[1], 0, SEEK_END);
 				ret = execute_tokens(tokens->l_child);
 				close(fd[1]);
-				dup2(fd_origin, 1);
+				dup2(fd_origin1, 1);
 			}
 			else
 				ft_putendl("Attend, Wait!");
