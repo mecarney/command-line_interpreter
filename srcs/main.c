@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:15:18 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/24 23:35:28 by fhong            ###   ########.fr       */
+/*   Updated: 2018/10/24 23:38:40 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ _Bool	execute_tokens(t_ast *tokens)
 					close(fd[0]);
 					ret = execute_tokens(tokens->r_child);
 					dup2(fd_origin0, 0);
-					dup2(fd_origin1, 1);
 				}
 				else if (pid == 0)
 				{
