@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 23:58:44 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/24 22:53:19 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/25 14:51:14 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,15 @@ static char	*ft_check_path(char **ptr, int *ret)
 	return (tmp);
 }
 
-static void	ft_execute_cmd(char *path, char **ptr)
+static void	ft_execute_cmd(char *path, char **ptr, int *ret)
 {
-	int		stat_loc;
 	pid_t	pid;
 
 	if ((pid = fork()) == 0)
 		execve(path, ptr, g_envp);
 	else if (pid < 0)
 		ft_putendl("ERROR: Fail to create new process");
-	// (fd[0] != 0) ? close(fd[0]) : 0;
-	// (fd[1] != 0) ? close(fd[1]) : 0;
-	waitpid(pid, &stat_loc, WUNTRACED);
+	waitpid(pid, ret, WUNTRACED);
 	(ft_strcmp(path, ptr[0])) ? ft_strdel(&path) : NULL;
 }
 
@@ -91,8 +88,10 @@ int			ft_run_cmd(char **cmd)
 			path = cmd[0];
 		else
 			path = ft_check_path(cmd, &ret);
-		(ret == 0) ? ft_execute_cmd(path, cmd) : NULL;
-		(ret != 0) ? ft_printf("%s: command not found\n", cmd[0]) : 0;
+		if (ret == 0)
+			ft_execute_cmd(path, cmd, &ret);
+		else
+			ft_printf("%s: command not found\n", cmd[0]);
 	}
 	return (ret);
 }

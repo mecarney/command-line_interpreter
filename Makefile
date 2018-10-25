@@ -6,7 +6,7 @@
 #    By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/09 11:32:00 by mjacques          #+#    #+#              #
-#    Updated: 2018/10/24 19:38:47 by mjacques         ###   ########.fr        #
+#    Updated: 2018/10/25 15:19:00 by mjacques         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,9 @@ FUNCTIONS	= main.c\
 			  ft_environement.c\
 			  ft_helper.c\
 			  ft_command.c\
-			  lexer_parser.c
+			  lexer_parser.c\
+			  ft_tokens_exec.c\
+			  ft_tokens_fct.c
 
 SRCPATH		= srcs/
 FILES		= $(addprefix $(SRCPATH), $(FUNCTIONS))

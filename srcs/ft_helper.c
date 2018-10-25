@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/16 19:39:02 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/24 17:31:26 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/25 12:07:17 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,23 @@ _Bool			ft_change_dir(char *str, int on)
 		ret = ft_change_pwd();
 	}
 	else
-	{
-		if (access(str, F_OK) == -1)
-			ft_printf("cd: no such file or directory: %s\n", str);
-		else if (access(str, R_OK) == -1)
-			ft_printf("cd: permission denied: %s\n", str);
-		else
-			ft_printf("cd: not a directory: %s\n", str);
-	}
+		ret = ft_return_access("cd", str);
 	ft_strdel(&str);
 	return (ret);
+}
+
+_Bool			ft_return_access(const char *name, char *str)
+{
+	if (access(str, F_OK) == -1)
+		ft_printf("%s: no such file or directory: %s\n", name, str);
+	else if (access(str, R_OK) == -1)
+		ft_printf("%s: permission denied: %s\n", name, str);
+	else
+	{
+		if (ft_strcmp(name, "cd") == 0)
+			ft_printf("%s: not a directory: %s\n", name, str);
+		else
+			ft_printf("%s: is directory: %s\n", name, str);
+	}
+	return (1);
 }

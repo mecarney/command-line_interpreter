@@ -245,3 +245,43 @@ int					ft_strfind(const char *s1, const char *s2)
 	}
 	return (!(str1[i]));
 }
+
+void	free_ast(t_ast *tokens)
+{
+	t_ast	*tmp;
+
+	if (!(tokens))
+		return ;
+	if (!(tokens->r_child))
+	{
+		while (tokens->l_child)
+		{
+			tmp = tokens;
+			tokens = tokens->l_child;
+			ft_strdel(&tmp->val);
+			free(tmp);
+		}
+	}
+	else
+	{
+		if (tokens->l_child)
+			free_ast(tokens->l_child);
+		if (tokens->r_child)
+			free_ast(tokens->r_child);
+	}
+	ft_strdel(&tokens->val);
+	free(tokens);
+}
+
+int		ft_len_cmd(t_ast *tokens)
+{
+	int		len;
+
+	len = 0;
+	while (tokens)
+	{
+		len++;
+		tokens = tokens->l_child;
+	}
+	return (len);
+}
