@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:15:18 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/24 20:46:55 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/24 20:54:55 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,23 +94,23 @@ _Bool	execute_tokens(t_ast *tokens)
 					if((pid1 = fork()) != 0)
 					{
 						waitpid(pid1, &stat_loc, WUNTRACED);
-						close(fd[1]);
+						(fd[1] != 0) ? close(fd[1]) : 0;
 						dup2(fd[0], 0);
-						close(fd[0]);
+						(fd[0] != 0) ? close(fd[0]) : 0;
 						//execlp("cat", "cat", "-e", NULL);
 						ret = execute_tokens(tokens->r_child);
 					}
 					else
 					{
-						close(fd[0]);
+						(fd[0] != 0) ? close(fd[0]) : 0;
 						dup2(fd[1], 1);
-						close(fd[1]);
+						(fd[1] != 0) ? close(fd[1]) : 0;
 						//		execve("/bin/ls", command, NULL);
 						ret = execute_tokens(tokens->l_child);
 					}
 				}
-				close(fd[0]);
-				close(fd[1]);
+				(fd[0] != 0) ? close(fd[0]) : 0;
+				(fd[1] != 0) ? close(fd[1]) : 0;
 				waitpid(pid, &stat_loc, WUNTRACED);
 			}
 			else if (ft_strcmp(tokens->val, ">") == 0)
@@ -122,7 +122,7 @@ _Bool	execute_tokens(t_ast *tokens)
 					ret = execute_tokens(tokens->l_child);
 					close(fd[1]);
 				}
-				close(fd[1]);
+				(fd[1] != 0) ? close(fd[1]) : 0;
 				waitpid(pid, &stat_loc, WUNTRACED);
 			}
 			else if (ft_strcmp(tokens->val, ">>") == 0)
@@ -134,7 +134,7 @@ _Bool	execute_tokens(t_ast *tokens)
 					ret = execute_tokens(tokens->l_child);
 					close(fd[1]);
 				}
-				close(fd[1]);
+				(fd[1] != 0) ? close(fd[1]) : 0;
 				waitpid(pid, &stat_loc, WUNTRACED);
 			}
 			else
