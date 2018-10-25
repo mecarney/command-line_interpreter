@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:15:18 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/24 20:54:55 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/24 22:52:02 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ int		main(int argc, char **argv, char **envp)
 	while (!(command = NULL))
 	{
 		(ret) ? ft_putstr(RED) : ft_putstr(PURPLE);
-		// if ((command = ft_init()) && *command)
-		// 	ret = ft_run_cmd(command);
 		ret = ft_init();
 		ft_ptrdel(command);
 	}
@@ -56,17 +54,33 @@ int		ft_len_cmd(t_ast *tokens)
 	return (len);
 }
 
-_Bool	execute_tokens(t_ast *tokens)
+void	ft_tokens_to_cmd(t_ast *tokens, _Bool *ret)
 {
 	int		i;
-	int		stat_loc;
-	_Bool	ret;
+	int		len;
 	char	**command;
-	pid_t	pid;
-	pid_t	pid1;
 
-	command = NULL;
+	len = ft_len_cmd(tokens);
+	command = (char **)ft_memalloc(sizeof(char *) * (len + 1));
+	i = -1;
+	while (tokens)
+	{
+		command[++i] = ft_strdup(tokens->val);
+		tokens = tokens->l_child;
+	}
+	command = ft_checkquote(command);
+	command = ft_checkenv(command);
+	*ret = ft_run_cmd(command);
+	ft_ptrdel(command);
+}
+
+_Bool	execute_tokens(t_ast *tokens)
+{
+	int		fd_origin;
+	_Bool	ret;
+
 	ret = 1;
+	fd_origin = dup(1);
 	if (tokens)
 	{
 		if (tokens->r_child)
@@ -89,72 +103,70 @@ _Bool	execute_tokens(t_ast *tokens)
 			else if (ft_strcmp(tokens->val, "|") == 0)
 			{
 				pipe(fd);
-				if((pid = fork()) == 0)
-				{
-					if((pid1 = fork()) != 0)
-					{
-						waitpid(pid1, &stat_loc, WUNTRACED);
-						(fd[1] != 0) ? close(fd[1]) : 0;
-						dup2(fd[0], 0);
-						(fd[0] != 0) ? close(fd[0]) : 0;
-						//execlp("cat", "cat", "-e", NULL);
-						ret = execute_tokens(tokens->r_child);
-					}
-					else
-					{
-						(fd[0] != 0) ? close(fd[0]) : 0;
-						dup2(fd[1], 1);
-						(fd[1] != 0) ? close(fd[1]) : 0;
-						//		execve("/bin/ls", command, NULL);
-						ret = execute_tokens(tokens->l_child);
-					}
-				}
-				(fd[0] != 0) ? close(fd[0]) : 0;
-				(fd[1] != 0) ? close(fd[1]) : 0;
-				waitpid(pid, &stat_loc, WUNTRACED);
+				ret = execute_tokens(tokens->l_child);
+				ret = execute_tokens(tokens->r_child);
+				close(fd[1]);
+				dup2(fd_origin, 1);
 			}
 			else if (ft_strcmp(tokens->val, ">") == 0)
 			{
-				if ((pid = fork()) == 0)
+				if ((fd[1] = open(tokens->r_child->val, O_RDWR | O_CREAT | O_TRUNC, 0666)) == -1)
 				{
-					fd[1] = open(tokens->r_child->val, O_RDWR | O_CREAT | O_TRUNC, 0666);
-					dup2(fd[1], 1);
-					ret = execute_tokens(tokens->l_child);
-					close(fd[1]);
+					ft_printf("%s: Permission denied\n", tokens->r_child->val);
+					return (1);
 				}
-				(fd[1] != 0) ? close(fd[1]) : 0;
-				waitpid(pid, &stat_loc, WUNTRACED);
+				dup2(fd[1], 1);
+				ret = execute_tokens(tokens->l_child);
+				close(fd[1]);
+				dup2(fd_origin, 1);
 			}
 			else if (ft_strcmp(tokens->val, ">>") == 0)
 			{
-				if ((pid = fork()) == 0)
+				if ((fd[1] = open(tokens->r_child->val, O_RDWR | O_CREAT, 0666)) == -1)
 				{
-					fd[1] = open(tokens->r_child->val, O_RDWR | O_CREAT, 0666);
-					dup2(fd[1], 1);
-					ret = execute_tokens(tokens->l_child);
-					close(fd[1]);
+					ft_printf("%s: Permission denied\n", tokens->r_child->val);
+					return (1);
 				}
-				(fd[1] != 0) ? close(fd[1]) : 0;
-				waitpid(pid, &stat_loc, WUNTRACED);
+				dup2(fd[1], 1);
+				lseek(fd[1], 0, SEEK_END);
+				ret = execute_tokens(tokens->l_child);
+				close(fd[1]);
+				dup2(fd_origin, 1);
 			}
 			else
-				ft_putendl("Wait Wait!");
+				ft_putendl("Attend, Wait!");
 		}
 		else
-		{
-			command = (char **)ft_memalloc(sizeof(char *) * (ft_len_cmd(tokens) + 1));
-			i = -1;
-			while (tokens)
-			{
-				command[++i] = ft_strdup(tokens->val);
-				tokens = tokens->l_child;
-			}
-			command = ft_checkquote(command);
-			command = ft_checkenv(command);
-			ret = ft_run_cmd(command);
-		}
+			ft_tokens_to_cmd(tokens, &ret);
 	}
 	return (ret);
+}
+
+void	free_ast(t_ast *tokens)
+{
+	t_ast	*tmp;
+
+	if (!(tokens))
+		return ;
+	if (!(tokens->r_child))
+	{
+		while (tokens->l_child)
+		{
+			tmp = tokens;
+			tokens = tokens->l_child;
+			ft_strdel(&tmp->val);
+			free(tmp);
+		}
+	}
+	else
+	{
+		if (tokens->l_child)
+			free_ast(tokens->l_child);
+		if (tokens->r_child)
+			free_ast(tokens->r_child);
+	}
+	ft_strdel(&tokens->val);
+	free(tokens);
 }
 
 _Bool	ft_init(void)
@@ -178,5 +190,7 @@ _Bool	ft_init(void)
 	// tokens ? printf("%s \n", tokens->val) : 0;
 	// print_ast(tokens);
 	ret = execute_tokens(tokens);
+	ft_strdel(&line);
+	free_ast(tokens);
 	return (ret);
 }

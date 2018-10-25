@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 23:58:44 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/24 20:43:41 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/24 22:53:19 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ static void	ft_execute_cmd(char *path, char **ptr)
 		execve(path, ptr, g_envp);
 	else if (pid < 0)
 		ft_putendl("ERROR: Fail to create new process");
-	(fd[0] != 0) ? close(fd[0]) : 0;
-	(fd[1] != 0) ? close(fd[1]) : 0;
+	// (fd[0] != 0) ? close(fd[0]) : 0;
+	// (fd[1] != 0) ? close(fd[1]) : 0;
 	waitpid(pid, &stat_loc, WUNTRACED);
 	(ft_strcmp(path, ptr[0])) ? ft_strdel(&path) : NULL;
 }
