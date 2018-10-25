@@ -6,13 +6,13 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/16 19:39:02 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/23 17:11:12 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/24 17:31:26 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-size_t		ft_ptrlen(char **ptr)
+size_t			ft_ptrlen(char **ptr)
 {
 	size_t	size;
 
@@ -22,7 +22,7 @@ size_t		ft_ptrlen(char **ptr)
 	return (size);
 }
 
-void		ft_ptrdel(char **ptr)
+void			ft_ptrdel(char **ptr)
 {
 	int i;
 
@@ -34,7 +34,7 @@ void		ft_ptrdel(char **ptr)
 	free(ptr);
 }
 
-static void	ft_change_pwd(void)
+static _Bool	ft_change_pwd(void)
 {
 	int		j;
 	char	*pwd;
@@ -45,17 +45,21 @@ static void	ft_change_pwd(void)
 	pwd = (j != -1) ? ft_strdup(&g_envp[j][4]) : NULL;
 	tmp = ft_strdup(getcwd(cwd, PATH_MAX));
 	ft_setenv("OLDPWD", pwd);
-	ft_setenv("PWD", tmp);
 	ft_strdel(&pwd);
+	ft_setenv("PWD", tmp);
 	ft_strdel(&tmp);
+	return (0);
 }
 
-void		ft_change_dir(char *str, int on)
+_Bool			ft_change_dir(char *str, int on)
 {
+	int	ret;
+
+	ret = 1;
 	if (!chdir(str))
 	{
 		(on) ? ft_putendl(str) : NULL;
-		ft_change_pwd();
+		ret = ft_change_pwd();
 	}
 	else
 	{
@@ -67,4 +71,5 @@ void		ft_change_dir(char *str, int on)
 			ft_printf("cd: not a directory: %s\n", str);
 	}
 	ft_strdel(&str);
+	return (ret);
 }

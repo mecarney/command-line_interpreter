@@ -6,13 +6,13 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 17:43:29 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/23 17:11:18 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/24 17:33:36 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static int		ft_isvariable(char **ptr)
+static int	ft_isvariable(char **ptr)
 {
 	int	i;
 
@@ -23,7 +23,7 @@ static int		ft_isvariable(char **ptr)
 	return (0);
 }
 
-_Bool			ft_builtin_env(char **ptr)
+_Bool		ft_builtin_env(char **ptr)
 {
 	int i;
 	int j;
@@ -46,31 +46,32 @@ _Bool			ft_builtin_env(char **ptr)
 	j = 0;
 	while (ptr[++j] && (i = -1) == -1)
 		(ft_envar(ptr[j]) == -1) ? ft_putendl(ptr[j]) : 0;
-	return (1);
+	return (0);
 }
 
-_Bool			ft_setenv(char *name, char *value)
+char		**ft_addenv(char *str)
 {
-	int		i;
-	char	*str;
+	int		size;
+	char	**newenv;
 
-	str = ft_strappend(name, '=');
-	if (value)
-		str = free_join(str, value);
-	i = ft_envar(name);
-	if (i != -1)
-		g_envp[i] = free_str(g_envp[i], ft_strdup(str));
-	else
-		g_envp = ft_addenv(str);
-	ft_strdel(&str);
-	return (1);
+	size = ft_ptrlen(g_envp);
+	newenv = (char **)ft_memalloc(sizeof(char *) * (size + 2));
+	size = -1;
+	while (g_envp[++size])
+		newenv[size] = ft_strdup(g_envp[size]);
+	newenv[size] = ft_strdup(str);
+	newenv[size + 1] = NULL;
+	ft_ptrdel(g_envp);
+	return (newenv);
 }
 
-_Bool			ft_builtin_setenv(char **ptr)
+_Bool		ft_builtin_setenv(char **ptr)
 {
 	int		i;
+	int		ret;
 	char	*name;
 
+	ret = 1;
 	if (ptr[1] && ft_isvariable(ptr) == 0 && !ptr[2])
 	{
 		name = ft_strmcpy(ptr[1], ENVNAME(ptr[1]));
@@ -80,16 +81,19 @@ _Bool			ft_builtin_setenv(char **ptr)
 		else
 			g_envp = ft_addenv(ptr[1]);
 		ft_strdel(&name);
+		ret = 0;
 	}
 	else
 		ft_putendl("Usage: setenv name=[value]");
-	return (1);
+	return (ret);
 }
 
-_Bool			ft_builtin_unsetenv(char **ptr)
+_Bool		ft_builtin_unsetenv(char **ptr)
 {
 	int	i;
+	int	ret;
 
+	ret = 1;
 	if (!ptr[1] || (ptr[1] && ptr[2]) || !ft_isvariable(ptr))
 		ft_putendl("Usage: unsetenv name");
 	else
@@ -101,6 +105,7 @@ _Bool			ft_builtin_unsetenv(char **ptr)
 		while (g_envp[++i] && g_envp[i + 1])
 			g_envp[i] = free_str(g_envp[i], ft_strdup(g_envp[i + 1]));
 		ft_strdel(&g_envp[i]);
+		ret = 0;
 	}
-	return (1);
+	return (ret);
 }

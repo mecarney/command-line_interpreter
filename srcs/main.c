@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:15:18 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/23 19:06:53 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/24 17:51:02 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,18 @@ t_builtin	g_builtin[NBRBUILTIN] = {
 
 int		main(int argc, char **argv, char **envp)
 {
+	_Bool	ret;
 	char	**command;
 
 	(argc != 1 || !argv[0]) ? ft_error("Usage: ./minishell") : NULL;
-	ft_putendl("\033[1m\033[92mWelcome!\033[0m Make great code today");
+	ft_printf("%s%sWelcome!%s Make great code today\n", BOLD, BLUE, REGULAR);
 	envp = ft_newenv(envp);
+	ret = 0;
 	while (!(command = NULL))
 	{
+		(ret) ? ft_putstr(RED) : ft_putstr(PURPLE);
 		if ((command = ft_init()) && *command)
-			ft_run_cmd(command);
+			ret = ft_run_cmd(command);
 		ft_ptrdel(command);
 	}
 	return (0);
@@ -43,7 +46,9 @@ char	**ft_init(void)
 	char	*line;
 	char	**command;
 
+	ft_putstr(BOLD);
 	ft_putstr(SHELLNAME);
+	ft_putstr(REGULAR);
 	if (get_next_line(0, &line) <= 0)
 		return (NULL);
 	command = ft_strsplitspaces(line);

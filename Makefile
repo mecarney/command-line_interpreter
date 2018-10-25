@@ -6,7 +6,7 @@
 #    By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/09 11:32:00 by mjacques          #+#    #+#              #
-#    Updated: 2018/10/23 17:10:57 by mjacques         ###   ########.fr        #
+#    Updated: 2018/10/24 15:48:32 by mjacques         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,9 +24,9 @@ FUNCTIONS	= main.c\
 			  ft_environement.c\
 			  ft_helper.c\
 			  ft_command.c
-SRCPATH	= srcs/
-FILES		= $(addprefix $(SRCPATH), $(FUNCTIONS))
 
+SRCPATH		= srcs/
+FILES		= $(addprefix $(SRCPATH), $(FUNCTIONS))
 OBJECTS		= $(FILES:.c=.o)
 
 .PHONY: all clean fclean re

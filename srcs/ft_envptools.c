@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 17:40:01 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/23 17:11:15 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/24 17:33:23 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,18 +81,18 @@ int			ft_envar(char *name)
 	return (i);
 }
 
-char		**ft_addenv(char *str)
+void		ft_setenv(char *name, char *value)
 {
-	int		size;
-	char	**newenv;
+	int		i;
+	char	*str;
 
-	size = ft_ptrlen(g_envp);
-	newenv = (char **)ft_memalloc(sizeof(char *) * (size + 2));
-	size = -1;
-	while (g_envp[++size])
-		newenv[size] = ft_strdup(g_envp[size]);
-	newenv[size] = ft_strdup(str);
-	newenv[size + 1] = NULL;
-	ft_ptrdel(g_envp);
-	return (newenv);
+	str = ft_strappend(name, '=');
+	if (value)
+		str = free_join(str, value);
+	i = ft_envar(name);
+	if (i != -1)
+		g_envp[i] = free_str(g_envp[i], ft_strdup(str));
+	else
+		g_envp = ft_addenv(str);
+	ft_strdel(&str);
 }
