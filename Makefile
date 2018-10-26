@@ -6,7 +6,7 @@
 #    By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/09 11:32:00 by mjacques          #+#    #+#              #
-#    Updated: 2018/10/25 15:19:00 by mjacques         ###   ########.fr        #
+#    Updated: 2018/10/25 18:56:16 by fuhong           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ FUNCTIONS	= main.c\
 			  ft_environement.c\
 			  ft_helper.c\
 			  ft_command.c\
+			  ft_history.c\
 			  lexer_parser.c\
 			  ft_tokens_exec.c\
 			  ft_tokens_fct.c

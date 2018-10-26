@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:15:18 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/25 17:55:34 by fhong            ###   ########.fr       */
+/*   Updated: 2018/10/25 19:22:48 by fuhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,13 @@ int		main(int argc, char **argv, char **envp)
 	ft_printf("%s%sWelcome!%s Make great code today\n", BOLD, BLUE, REGULAR);
 	envp = ft_newenv(envp);
 	ret = 0;
+	g_history = NULL;
 	while (!(command = NULL))
 	{
 		(ret) ? ft_putstr(RED) : ft_putstr(PURPLE);
 		ret = ft_init();
 		ft_ptrdel(command);
+		ft_print_history();
 	}
 	return (0);
 }
@@ -47,7 +49,6 @@ _Bool	ft_init(void)
 	t_okenize				t;
 	t_ast			*tokens;
 
-
 	ft_putstr(BOLD);
 	ft_putstr(SHELLNAME);
 	ft_putstr(REGULAR);
@@ -56,10 +57,7 @@ _Bool	ft_init(void)
 	defaults(&t);
 	tokens = NULL;
 	check_quotes(line, &t, &tokens);
-	// printf("%d\n", t.tokens);
 	tokens = parser(&tokens, NULL);
-	// tokens ? printf("%s \n", tokens->val) : 0;
-	// print_ast(tokens);
 	ret = ft_tokens_exec(tokens);
 	ft_strdel(&line);
 	free_ast(tokens);

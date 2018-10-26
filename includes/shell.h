@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/25 15:20:07 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/25 18:56:20 by fuhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,13 @@
 # define PURPLE "\033[34m"
 # define YELLOW "\033[33m"
 
+typedef struct		s_hist
+{
+	int				index;
+	char			*command;
+	struct s_hist 	*next;
+}					t_history;
+
 typedef struct		s_builtin
 {
 	char			*command;
@@ -37,6 +44,7 @@ typedef struct		s_builtin
 
 extern t_builtin	g_builtin[NBRBUILTIN];
 extern char			**g_envp;
+extern t_history	*g_history;
 
 /*
 **	main.c
@@ -138,5 +146,12 @@ void				ft_tokens_or(t_ast *tokens, _Bool *ret);
 void				ft_tokens_redirect(t_ast *tokens, _Bool *ret);
 void				ft_tokens_redirect_append(t_ast *tokens, _Bool *ret);
 void				ft_tokens_redirect_fd(t_ast *tokens, _Bool *ret);
+
+/*
+** ft_history.c
+*/
+
+void				ft_history_add(char *command);
+void				ft_print_history(void);
 
 #endif

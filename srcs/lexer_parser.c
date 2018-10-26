@@ -169,11 +169,13 @@ void 		append_str(char *str, t_okenize *t, t_ast **tokens, char *msg)
 	ft_putstr(msg);
 	if (get_next_line(0, &line) <= 0)
 		ft_error("gnl error");
+	tmp = ft_strjoin(str, "\n");
+	str = ft_strdup(tmp);
+	free(tmp);
 	tmp = ft_strjoin(str, line);
 	str = ft_strdup(tmp);
 	free(tmp);
 	ft_strdel(&line);
-	// ft_printf("HELLO: %d %s\n", t->i, str);
 	check_quotes(str, t, tokens);
 	free(str);
 }
@@ -190,6 +192,7 @@ int		check_operator(char *str, t_okenize *t, t_ast **tokens)
 		append_str(str, t, tokens, "operator> ");
 		return (1);
 	}
+	ft_history_add(str);
 	return (0);
 }
 
