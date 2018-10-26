@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:15:18 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/26 15:14:24 by fhong            ###   ########.fr       */
+/*   Updated: 2018/10/26 15:49:12 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,10 @@ void	ft_init(_Bool *ret)
 	ft_putstr(SHELLNAME);
 	if (get_next_line(0, &line) <= 0)
 		return ;
-	defaults(&t);
+	t.i = -1;
+	t.j = 0;
+	t.tokens = 0;
+	t.prev = '\0';
 	tokens = NULL;
 	check_quotes(line, &t, &tokens);
 	tokens = parser(&tokens, NULL);

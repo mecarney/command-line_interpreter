@@ -6,7 +6,7 @@
 #    By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/09 11:32:00 by mjacques          #+#    #+#              #
-#    Updated: 2018/10/26 09:17:44 by fuhong           ###   ########.fr        #
+#    Updated: 2018/10/26 15:39:17 by mcarney          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,14 +21,16 @@ INCLUDES	= -I includes/\
 FUNCTIONS	= main.c\
 			  ft_envptools.c\
 			  ft_builtins.c\
-			  ft_environement.c\
+			  ft_environment.c\
 			  ft_helper.c\
 			  ft_command.c\
 			  ft_history.c\
 			  ft_historytools.c\
-			  lexer_parser.c\
 			  ft_tokens_exec.c\
-			  ft_tokens_fct.c
+			  ft_tokens_fct.c\
+			  ft_validate.c\
+			  ft_tokenizer.c\
+			  ft_ast.c
 
 SRCPATH		= srcs/
 FILES		= $(addprefix $(SRCPATH), $(FUNCTIONS))
