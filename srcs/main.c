@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:15:18 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/25 21:02:31 by fhong            ###   ########.fr       */
+/*   Updated: 2018/10/25 22:42:07 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ t_builtin	g_builtin[NBRBUILTIN] = {
 	{"setenv", &ft_builtin_setenv},
 	{"unsetenv", &ft_builtin_unsetenv},
 	{"env", &ft_builtin_env},
-	{"exit", &ft_builtin_exit}
+	{"exit", &ft_builtin_exit},
+	{"history", &ft_builtin_history}
 };
 
 int		main(int argc, char **argv, char **envp)
@@ -32,8 +33,10 @@ int		main(int argc, char **argv, char **envp)
 	ret = 0;
 	g_history = NULL;
 	while (42)
+	{
 		ft_init(&ret);
-	//ft_print_history(g_history);
+	//	ft_print_history(g_history, 3);
+	}
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 17:42:49 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/24 17:51:08 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/25 22:47:30 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ _Bool		ft_builtin_exit(char **ptr)
 	ft_ptrdel(ptr);
 	ptr = NULL;
 	ft_printf("%s%sHave a nice day!%s\n", BOLD, YELLOW, REGULAR);
+	ft_write_history();
+	ft_free_history();
 	exit(0);
 	return (0);
 }

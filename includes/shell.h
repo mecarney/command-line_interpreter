@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/25 20:58:06 by fhong            ###   ########.fr       */
+/*   Updated: 2018/10/25 22:51:03 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "libft.h"
 
 # define SHELLNAME	"\033[1m42sh% \033[0m"
-# define NBRBUILTIN 6
+# define NBRBUILTIN 7
 # define ENVNAME(x) (ft_strchr(x, '=') - x)
 # define PATH_MAX 4096
 
@@ -28,6 +28,7 @@
 # define BLUE "\033[92m"
 # define PURPLE "\033[34m"
 # define YELLOW "\033[33m"
+# define STDOUTPUT 1 // for normal print history or write the command in .42sh_history
 
 typedef struct		s_hist
 {
@@ -148,10 +149,18 @@ void				ft_tokens_redirect_append(t_ast *tokens, _Bool *ret);
 void				ft_tokens_redirect_fd(t_ast *tokens, _Bool *ret);
 
 /*
-** ft_history.c
+** ft_historytools.c
 */
 
 void				ft_history_add(char *command);
-void				ft_print_history(t_history *history);
+void				ft_print_history(t_history *history, int index, int io);
+void				ft_write_history(void);
+void				ft_free_history(void);
+
+/*
+** ft_history.c
+*/
+
+_Bool		ft_builtin_history(char **ptr);
 
 #endif

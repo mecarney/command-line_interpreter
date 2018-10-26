@@ -3,55 +3,49 @@
 /*                                                        :::      ::::::::   */
 /*   ft_history.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fuhong <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: fhong <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/25 18:34:18 by fuhong            #+#    #+#             */
-/*   Updated: 2018/10/25 20:39:57 by fhong            ###   ########.fr       */
+/*   Created: 2018/10/25 21:22:23 by fhong             #+#    #+#             */
+/*   Updated: 2018/10/25 22:51:06 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-t_history			*g_history;
-static t_history	*new_history(char *command)
+int		ft_isnumber(char *str)
 {
-	t_history	*new_hist;
-
-	new_hist = (t_history *)malloc(sizeof(t_history) * 1);
-	new_hist->index = 0;
-	new_hist->command = ft_strdup(command);
-	new_hist->next = NULL;
-	return (new_hist);
+	while (*str)
+		if (!ft_isdigit(*str++))
+			return (0);
+	return (1);
 }
 
-void	ft_history_add(char *command)
+/*
+static	int	check_histroy_para(**ptr)
 {
-	int			i;
-	t_history	*new_hist;
+	int i;
 
-	i = 1;
-	if (!command || !*command)
-		return ;
-	new_hist = new_history(command);
-	if (!g_history)
+	i = 0;
+	while (ptr[++i])
 	{
-		g_history = new_hist;
-		new_hist->index = 1;
+		
 	}
+}*/
+
+_Bool		ft_builtin_history(char **ptr)
+{
+	int		ret;
+
+	(void)ptr;
+	ret = 1;
+	if (ptr[1] && !ft_isnumber(ptr[1]))
+	{
+		ft_putendl("Usage: history [flag][number]");
+		return (1);
+	}
+	if (ptr[1])
+		ft_print_history(g_history, ft_atoi(ptr[1]), 1);
 	else
-	{
-		new_hist->next = g_history;
-		new_hist->index = g_history->index + 1;
-		g_history = new_hist;
-	}
-}
-
-void	ft_print_history(t_history *history)
-{
-	t_history	*tmp;
-
-	tmp = (history == g_history) ? g_history : history;
-	if (tmp->next)
-		ft_print_history(tmp->next);
-	ft_printf("[%4d] %s\n", tmp->index, tmp->command);
+		ft_print_history(g_history, g_history->index, 1);
+	return (0);
 }
