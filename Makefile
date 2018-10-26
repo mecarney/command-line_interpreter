@@ -6,14 +6,14 @@
 #    By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/09 11:32:00 by mjacques          #+#    #+#              #
-#    Updated: 2018/10/25 22:46:48 by fhong            ###   ########.fr        #
+#    Updated: 2018/10/26 09:17:44 by fuhong           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC			= gcc
 RM			= rm -rf
 NAME		= 42sh
-CFLAGS		= -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS		= -Wall -Wextra -Werror -g
 LIBFT		= libft/libft.a
 INCLUDES	= -I includes/\
 			  -I libft/header

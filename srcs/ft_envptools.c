@@ -47,6 +47,45 @@ char		**ft_checkenv(char **cmd)
 	return (cmd);
 }
 
+void 		print_checkhistory(char **cmd)
+{
+	int i;
+
+	i = -1;
+	while (cmd[++i + 1])
+		ft_printf("%s ", cmd[i]);
+	ft_printf("%s\n", cmd[i]);
+}
+
+char		**ft_checkhistory(char **cmd)
+{
+	int				i;
+	int				index;
+	t_history	*tmp;
+
+	i = -1;
+	while (cmd[++i])
+	{
+		if (cmd[i][0] == '!' && (cmd[i][1] == '!' || ft_isnumber(&cmd[i][1])))
+		{
+			index = (cmd[i][1] == '!') ? -1 : ft_atoi(&cmd[i][1]);
+			(index < 0) && (index = g_history->index - index);
+			if (index == 0 || index > g_history->index)
+			{
+				ft_printf("sh: %s: event not found\n", cmd[i]);
+				ft_ptrdel(cmd);
+				return (NULL);
+			}
+			tmp = g_history;
+			while (tmp->index != index)
+				tmp = tmp->next;
+			cmd[i] = free_str(cmd[i], ft_strdup(tmp->command));
+			print_checkhistory(cmd);
+		}
+	}
+	return (cmd);
+}
+
 char		**ft_checkquote(char **cmd)
 {
 	int		i;

@@ -6,7 +6,7 @@
 /*   By: fhong <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 21:55:53 by fhong             #+#    #+#             */
-/*   Updated: 2018/10/25 22:49:40 by fhong            ###   ########.fr       */
+/*   Updated: 2018/10/26 09:09:54 by fuhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ void	ft_write_history(void)
 	int			fd_base;
 	t_history	*tmp;
 
-//	if (!g_history)
-//		return ;
+	if (!g_history)
+		return ;
 	tmp = g_history;
 	fd = open(".42sh_history", O_WRONLY | O_CREAT, 0666);
 	fd_base = dup(1);
@@ -74,6 +74,7 @@ void	ft_write_history(void)
 	lseek(fd, 0, SEEK_END);
 	ft_print_history(tmp, tmp->index, 0);
 	dup2(fd_base, 1);
+	close(fd);
 }
 
 void	ft_free_history(void)

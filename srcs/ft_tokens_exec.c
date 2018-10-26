@@ -38,6 +38,7 @@ void		ft_tokens_to_cmd(t_ast *tokens, _Bool *ret)
 	}
 	command = ft_checkquote(command);
 	command = ft_checkenv(command);
+	command = ft_checkhistory(command);
 	*ret = ft_run_cmd(command);
 	ft_ptrdel(command);
 }

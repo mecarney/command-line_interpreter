@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/25 22:51:03 by fhong            ###   ########.fr       */
+/*   Updated: 2018/10/26 12:15:19 by fuhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ _Bool				ft_builtin_unsetenv(char **ptr);
 char				**ft_newenv(char **envp);
 char				**ft_checkenv(char **cmd);
 char				**ft_checkquote(char **cmd);
+char				**ft_checkhistory(char **cmd);
 int					ft_envar(char *name);
 void				ft_setenv(char *name, char *value);
 
@@ -110,19 +111,19 @@ typedef struct		s_ast
 	struct s_ast	*r_child;
 }					t_ast;
 
-t_ast		*search(t_ast **tokens, int *n, char *str, size_t len);
-t_ast 		*parser(t_ast **tokens, t_ast *parent);
-void	add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str);
+t_ast				*search(t_ast **tokens, int *n, char *str, size_t len);
+t_ast				*parser(t_ast **tokens, t_ast *parent);
+void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str);
 void				quoting(char *str, char ch, t_okenize *t, t_ast **tokens);
 int					is_operator(char a);
-void 	tokenize(char *str, t_okenize *t, t_ast **tokens);
-void 		defaults(t_okenize *t);
-void print_ast(t_ast *tokens);
-void 		append_str(char *str, t_okenize *t, t_ast **tokens, char *msg);
-int		check_operator(char *str, t_okenize *t, t_ast **tokens);
-void	check_quotes(char *str, t_okenize *t, t_ast **tokens);
+void				tokenize(char *str, t_okenize *t, t_ast **tokens);
+void				defaults(t_okenize *t);
+void				print_ast(t_ast *tokens);
+void				append_str(char *str, t_okenize *t, t_ast **tokens, char *msg);
+int					check_operator(char *str, t_okenize *t, t_ast **tokens);
+void				check_quotes(char *str, t_okenize *t, t_ast **tokens);
 int					ft_strfind(const char *s1, const char *s2);
-void	free_ast(t_ast *tokens);
+void				free_ast(t_ast *tokens);
 
 /*
 **	ft_operator.c
@@ -161,6 +162,7 @@ void				ft_free_history(void);
 ** ft_history.c
 */
 
-_Bool		ft_builtin_history(char **ptr);
+int					ft_isnumber(char *str);
+_Bool				ft_builtin_history(char **ptr);
 
 #endif
