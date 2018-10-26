@@ -50,7 +50,7 @@ static int	history_flag(char **ptr)
 	{
 		fd = open(".42sh_history", O_RDONLY, 0666);
 		int j = 0;
-		while (get_next_line(fd, &line) != 0 &&  ++j < 10)
+		while (get_next_line(fd, &line) > 0 &&  ++j < 10)
 		{
 			ft_history_add(line);
 			ft_strdel(&line);
