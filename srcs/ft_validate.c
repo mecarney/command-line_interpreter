@@ -3,22 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_validate.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcarney <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
-/*   Updated: 2018/10/26 15:54:52 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/10/26 16:18:09 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-
-void 		defaults(t_okenize *t)
-{
-	t->i = -1;
-	t->j = 0;
-	t->tokens = 0;
-	t->prev = '\0';
-}
 
 int					ft_strfind(const char *s1, const char *s2)
 {
