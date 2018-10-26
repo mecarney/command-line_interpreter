@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 23:58:44 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/25 14:51:14 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/25 17:36:31 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,19 @@ int			ft_run_cmd(char **cmd)
 		ret = g_builtin[ret].fct(cmd);
 	else
 	{
-		if ((ret = access(cmd[0], F_OK)) == 0)
+		if ((ret = access(cmd[0], X_OK)) == 0  && ft_strchr(cmd[0], '/'))
 			path = cmd[0];
 		else
 			path = ft_check_path(cmd, &ret);
 		if (ret == 0)
 			ft_execute_cmd(path, cmd, &ret);
 		else
-			ft_printf("%s: command not found\n", cmd[0]);
+		{
+			if (access(cmd[0], F_OK & R_OK) == 0 && ft_strchr(cmd[0], '/'))
+				ft_printf("42sh: permission denied: %s\n", cmd[0]);
+			else
+				ft_printf("42sh: command not found: %s\n", cmd[0]);
+		}
 	}
 	return (ret);
 }

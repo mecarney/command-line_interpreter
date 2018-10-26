@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:15:18 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/25 15:20:17 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/25 17:32:41 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int		main(int argc, char **argv, char **envp)
 	_Bool	ret;
 	char	**command;
 
-	(argc != 1 || !argv[0]) ? ft_error("Usage: ./minishell") : NULL;
+	(argc != 1 || !argv[0]) ? ft_error("Usage: ./42sh") : NULL;
 	ft_printf("%s%sWelcome!%s Make great code today\n", BOLD, BLUE, REGULAR);
 	envp = ft_newenv(envp);
 	ret = 0;

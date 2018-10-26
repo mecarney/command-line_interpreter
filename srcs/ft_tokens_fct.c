@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 13:01:24 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/25 15:21:05 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/25 16:18:16 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void		ft_tokens_redirect(t_ast *tokens, _Bool *ret)
 	int		fd_base;
 
 	fd_base = dup(1);
-	fd_new = open(tokens->r_child->val, O_RDWR | O_CREAT | O_TRUNC, 0666);
+	fd_new = open(tokens->r_child->val, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (fd_new == -1)
 		*ret = ft_return_access("42sh", tokens->r_child->val);
 	else
@@ -48,7 +48,7 @@ void		ft_tokens_redirect_append(t_ast *tokens, _Bool *ret)
 	int		fd_base;
 
 	fd_base = dup(1);
-	fd_new = open(tokens->r_child->val, O_RDWR | O_CREAT, 0666);
+	fd_new = open(tokens->r_child->val, O_WRONLY | O_CREAT, 0666);
 	if (fd_new == -1)
 		*ret = ft_return_access("42sh", tokens->r_child->val);
 	else
