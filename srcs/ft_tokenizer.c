@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/10/26 16:21:35 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/10/26 16:46:12 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 
 	ch = str[t->i];
 	if (t->prev && t->prev != ' ' && t->prev != '\t')
-		add_token(t, t->i, t->j, tokens, str);
+		add_token(t, t->i - 1, t->j, tokens, str);
 	t->i = t->i + 1;
 	if (ch == '\\')
 		ft_putchar('\n');
@@ -54,7 +54,7 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 				(str[t->i] == ch && str[t->i - 1] == '\\')))
 			t->i = t->i + 1; //check for $ with "
 	}
-	add_token(t, t->i, t->j, tokens, str);
+	add_token(t, t->i, t->j + 1, tokens, str);
 }
 
 int					is_operator(char a)
