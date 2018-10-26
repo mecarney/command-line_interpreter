@@ -192,7 +192,6 @@ int		check_operator(char *str, t_okenize *t, t_ast **tokens)
 		append_str(str, t, tokens, "operator> ");
 		return (1);
 	}
-	ft_history_add(str);
 	return (0);
 }
 
@@ -215,6 +214,8 @@ void	check_quotes(char *str, t_okenize *t, t_ast **tokens)
 	if (check_operator(str, t, tokens))
 		return ;
 	defaults(t);
+//	str = check_history(str);
+	ft_history_add(str);
 	tokenize(str, t, tokens);
 	if (t->prev && t->prev != ' ' && t->prev != '\t')
 		add_token(t, t->i, t->j, tokens, str);
