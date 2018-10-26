@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/25 18:56:20 by fuhong           ###   ########.fr       */
+/*   Updated: 2018/10/25 20:58:06 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 # include "libft.h"
 
-# define SHELLNAME	"42sh% "
+# define SHELLNAME	"\033[1m42sh% \033[0m"
 # define NBRBUILTIN 6
 # define ENVNAME(x) (ft_strchr(x, '=') - x)
 # define PATH_MAX 4096
@@ -49,7 +49,7 @@ extern t_history	*g_history;
 /*
 **	main.c
 */
-_Bool	ft_init(void);
+void				ft_init(_Bool *ret);
 
 /*
 **	ft_builtins.c
@@ -152,6 +152,6 @@ void				ft_tokens_redirect_fd(t_ast *tokens, _Bool *ret);
 */
 
 void				ft_history_add(char *command);
-void				ft_print_history(void);
+void				ft_print_history(t_history *history);
 
 #endif
