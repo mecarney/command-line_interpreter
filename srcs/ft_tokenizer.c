@@ -72,7 +72,7 @@ int					is_operator(char a)
 
 void 				tokenize(char *str, t_okenize *t, t_ast **tokens)
 {
-	while (str[++t->i] && str[t->i] != '#')
+	while (str && str[++t->i] && str[t->i] != '#')
 	{
 		if (t->prev && is_operator(t->prev) && str[t->i] == t->prev)
 			add_token(t, t->i, t->i - 1, tokens, str);

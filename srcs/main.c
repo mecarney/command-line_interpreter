@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:15:18 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/27 08:41:05 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/10/27 08:47:32 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,7 @@ int		main(int argc, char **argv, char **envp)
 	ret = 0;
 	g_history = NULL;
 	while (42)
-	{
 		ft_init(&ret);
-	//	ft_print_history(g_history, 3);
-	}
 	return (0);
 }
 
@@ -55,9 +52,9 @@ void	ft_init(_Bool *ret)
 	t.tokens = 0;
 	t.prev = '\0';
 	tokens = NULL;
-	check_quotes(line, &t, &tokens);
+	(line) ? check_quotes(line, &t, &tokens) : 0;
 	tokens = parser(&tokens, NULL);
 	*ret = ft_tokens_exec(tokens);
-	ft_strdel(&line);
+	// ft_strdel(&line); I free it in "check_quotes()" and "ft_check_history"
 	free_ast(tokens);
 }

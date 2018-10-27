@@ -136,9 +136,11 @@ void	check_quotes(char *str, t_okenize *t, t_ast **tokens)
 	if (!(check_operator(str, t, tokens)))
 	{
 		t->i = -1;
+		str = ft_check_history(str);
 		ft_history_add(str);
 		tokenize(str, t, tokens);
 		if (t->prev && t->prev != ' ' && t->prev != '\t')
 			add_token(t, t->i, t->j, tokens, str);
+		ft_strdel(&str);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 13:01:26 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/26 15:54:09 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/10/27 07:26:04 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void		ft_tokens_to_cmd(t_ast *tokens, _Bool *ret)
 	}
 	command = ft_checkquote(command);
 	command = ft_checkenv(command);
-	command = ft_checkhistory(command);
 	*ret = ft_run_cmd(command);
 	ft_ptrdel(command);
 }
@@ -74,31 +73,33 @@ static void	ft_dup_fd(int fd_origin, int fd_new, int io)
 {
 	close(fd_origin);
 	dup2(fd_new, io);
-	close(fd_new);
 }
 
 void		ft_tokens_pipe(t_ast *tokens, _Bool *ret)
 {
 	int		stat_loc;
-	int		fd_new[2];
-	int		fd_origin[2];
-	pid_t	pid;
+	int		fd[2];
+	pid_t	child_left;
+	pid_t	child_right;
 
-	pipe(fd_new);
-	fd_origin[0] = dup(0);
-	fd_origin[1] = dup(1);
-	if ((pid = fork()) != 0)
+	pipe(fd);
+	if ((child_left = fork()) == 0)
 	{
-		waitpid(pid, &stat_loc, WUNTRACED);
-		dup2(fd_origin[1], 1);
-		ft_dup_fd(fd_new[1], fd_new[0], 0);
-		*ret = ft_tokens_exec(tokens->r_child);
-		dup2(fd_origin[0], 0);
+		ft_dup_fd(fd[0], fd[1], 1);
+		exit(ft_tokens_exec(tokens->l_child));
 	}
-	else if (pid == 0)
+	else if (child_left < 0)
+		ft_putendl("ERROR: fork() failed");
+	if ((child_right = fork()) == 0)
 	{
-		ft_dup_fd(fd_new[0], fd_new[1], 1);
-		*ret = ft_tokens_exec(tokens->l_child);
-		exit(1);
+		ft_dup_fd(fd[1], fd[0], 0);
+		exit(ft_tokens_exec(tokens->r_child));
 	}
+	else if (child_right < 0)
+		ft_putendl("ERROR: fork() failed");
+	close(fd[0]);
+	close(fd[1]);
+	waitpid(child_left, 0, WUNTRACED);
+	waitpid(child_right, &stat_loc, WUNTRACED);
+	*ret = stat_loc;
 }
