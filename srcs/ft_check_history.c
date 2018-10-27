@@ -22,8 +22,8 @@ char		*get_history(char *cmd)
 	if (cmd[0] == '!')
 	{
 		index = (cmd[1] == '!') ? -1 : ft_atoi(&cmd[1]);
-		(g_history && index < 0) && (index = g_history->index - index - 1);
-		if (!g_history || index == 0 || index > g_history->index)
+		(g_history && index < 0) && (index = g_history->index + index + 1);
+		if (!g_history || index <= 0 || index > g_history->index)
 		{
 			ft_printf("sh: %s: event not found\n", cmd);
 			return (NULL);
@@ -54,12 +54,13 @@ char  *ft_check_history(char *str)
 		(tmp) ? ft_strdel(&tmp) : 0;
 		tmp = get_history(mark);
     cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
-    current = (!ft_strncmp(mark, "!!", 2)) ? mark + 1 : mark;
-    while ((++current) && ft_isdigit(*current))
-      ;
+		if (!ft_strncmp(mark, "!!", 2))
+			current = mark + 2;
+		else
+    	current += (ft_numlen(&mark[1]) + 1);
   }
   cmd = free_join(cmd, current);
-  ft_strdel(&str);
+  //ft_strdel(&str);
 	ft_putendl(cmd);
   return (cmd);
 }

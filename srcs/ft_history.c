@@ -12,14 +12,17 @@
 
 #include "shell.h"
 
-int			ft_isnumber(char *str)
+int			ft_numlen(char *str)
 {
-	if (*str == '-')
-		str++;
-	while (*str)
-		if (!ft_isdigit(*str++))
+	int len;
+
+	len = 0;
+	if (str[len] == '-')
+		len++;
+	while (str[len])
+		if (!ft_isdigit(str[len++]))
 			return (0);
-	return (1);
+	return (len);
 }
 int			history_help(int i)
 {
@@ -63,7 +66,7 @@ _Bool		ft_builtin_history(char **ptr)
 {
 	if (ptr[0] && !ptr[1])
 		ft_print_history(g_history, g_history->index, 1);
-	else if (ptr[1] && ft_isnumber(ptr[1]) && !ptr[2] && ft_atoi(ptr[1]) > 0)
+	else if (ptr[1] && ft_numlen(ptr[1]) && !ptr[2] && ft_atoi(ptr[1]) > 0)
 		ft_print_history(g_history, ft_atoi(ptr[1]), 1);
 	else if (ptr[1] && !ptr[2] && ptr[1][0] == '-')
 		return (history_flag(ptr));

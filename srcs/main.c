@@ -55,6 +55,6 @@ void	ft_init(_Bool *ret)
 	(line) ? check_quotes(line, &t, &tokens) : 0;
 	tokens = parser(&tokens, NULL);
 	*ret = ft_tokens_exec(tokens);
-	// ft_strdel(&line); I free it in "check_quotes()" and "ft_check_history"
+	ft_strdel(&line); //I free it in "check_quotes()" and "ft_check_history"
 	free_ast(tokens);
 }

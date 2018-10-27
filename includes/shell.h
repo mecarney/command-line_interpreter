@@ -160,7 +160,7 @@ void				ft_free_history(void);
 ** ft_history.c
 */
 
-int					ft_isnumber(char *str);
+int					ft_numlen(char *str);
 _Bool				ft_builtin_history(char **ptr);
 
 /*
