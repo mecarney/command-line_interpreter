@@ -6,19 +6,15 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2018/10/26 19:47:40 by fhong            ###   ########.fr       */
+=======
+/*   Updated: 2018/10/26 18:57:22 by mcarney          ###   ########.fr       */
+>>>>>>> master
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-
-void 		defaults(t_okenize *t)
-{
-	t->i = -1;
-	t->j = 0;
-	t->tokens = 0;
-	t->prev = '\0';
-}
 
 int					ft_strfind(const char *s1, const char *s2)
 {
@@ -140,6 +136,7 @@ void	check_quotes(char *str, t_okenize *t, t_ast **tokens)
 				return ;
 			}
 		}
+	t->i = 0;
 	if (!(check_operator(str, t, tokens)))
 	{
 		t->i = -1;

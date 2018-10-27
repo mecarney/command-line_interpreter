@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/10/26 19:53:57 by fhong            ###   ########.fr       */
+/*   Updated: 2018/10/26 16:46:12 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 				(str[t->i] == ch && str[t->i - 1] == '\\')))
 			t->i = t->i + 1; //check for $ with "
 	}
-	add_token(t, t->i, t->j, tokens, str);
+	add_token(t, t->i, t->j + 1, tokens, str);
 }
 
 int					is_operator(char a)
@@ -95,29 +95,3 @@ void 				tokenize(char *str, t_okenize *t, t_ast **tokens)
 		}
 	}
 }
-
-// int					main(int ac, char **av)
-// {
-// 	t_okenize		t;
-// 	t_ast			*tokens;
-// 	char			*line;
-//
-// 	if (ac > 1 && av)
-// 		return (0);
-// 	while (1)
-// 	{
-// 		t.i = -1;
-// 		t.j = 0;
-// 		t.tokens = 0;
-// 		t.prev = '\0';
-// 		tokens = NULL;
-// 		ft_putstr("42sh: ");
-// 		if (get_next_line(0, &line) <= 0)
-// 			return (1);
-// 		check_quotes(line, &t, &tokens);
-// 		tokens = parser(&tokens, NULL);
-// 		print_ast(tokens);
-// 		tokens = NULL;
-// 	}
-// 	return (0);
-// }
