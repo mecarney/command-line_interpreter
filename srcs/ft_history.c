@@ -6,7 +6,7 @@
 /*   By: fhong <fhong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 21:22:23 by fhong             #+#    #+#             */
-/*   Updated: 2018/10/26 22:02:53 by fhong            ###   ########.fr       */
+/*   Updated: 2018/10/27 02:16:55 by fuhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int			ft_isnumber(char *str)
 			return (0);
 	return (1);
 }
-void		history_help(void)
+int			history_help(int i)
 {
 	ft_putendl("Usage: history [flag][number]");
 	ft_putendl(" history : Show the whole history list");
@@ -30,6 +30,7 @@ void		history_help(void)
 	ft_putendl(" history -a  : Append history list to .42sh_history");
 	ft_putendl(" history -r  : Append .42sh_history to history list");
 	ft_putendl(" history -h  : help");
+	return (i);
 }
 
 static int	history_flag(char **ptr)
@@ -38,10 +39,7 @@ static int	history_flag(char **ptr)
 	char 	*line;
 
 	if (ptr[1][2] != '\0'|| !ft_strchr("char", ptr[1][1]))
-	{
-		history_help();
-		return (1);
-	}
+		return (history_help(1));
 	else if (ptr[1][1] == 'c')
 		ft_free_history();
 	else if (ptr[1][1] == 'a')
@@ -57,7 +55,7 @@ static int	history_flag(char **ptr)
 		close(fd);
 	}
 	else if (ptr[1][1] == 'h')
-		history_help();
+		history_help(0);
 	return (0);
 }
 
