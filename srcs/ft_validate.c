@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
-/*   Updated: 2018/10/27 11:42:53 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/10/27 12:08:15 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void	check_quotes(char *str, t_okenize *t, t_ast **tokens)
 
 	while (str[++t->i])
 		if (((str[t->i] == '\'' || str[t->i] == '\"') && t->i == 0) ||\
-			((t->i >= 1 && str[t->i - 1] != '\\') &&\
+			((t->i > 0 && str[t->i - 1] != '\\') &&\
 			(str[t->i] == '\'' || str[t->i] == '\"')))
 		{
 			ch = str[t->i++];
@@ -140,6 +140,6 @@ void	check_quotes(char *str, t_okenize *t, t_ast **tokens)
 		ft_history_add(str);
 		(str) ? tokenize(str, t, tokens) : 0;
 		if (t->prev && t->prev != ' ' && t->prev != '\t')
-			add_token(t, t->i, t->j, tokens, str);
+			add_token(t, t->i - 1, t->j, tokens, str);
 	}
 }
