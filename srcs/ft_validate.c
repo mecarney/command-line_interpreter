@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
-/*   Updated: 2018/10/26 19:47:05 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/10/27 12:08:15 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,8 @@ int		check_operator(char *str, t_okenize *t, t_ast **tokens)
 	t->i--;
 	while (t->i >= 0 && (str[t->i] == ' ' || str[t->i] == '\t'))
 		t->i--;
-	if (t->i >= 0 && ((is_operator(str[t->i]) && t->i == 0) ||\
-		(t->i >= 1 && str[t->i - 1] != '\\' && is_operator(str[t->i]))))
+	if ((t->i == 0 && str[t->i] != ';' && is_operator(str[t->i])) ||\
+		(t->i > 0  && str[t->i] != ';' && str[t->i - 1] != '\\' && is_operator(str[t->i])))
 	{
 		append_str(str, t, tokens, "operator> ");
 		return (1);
@@ -119,7 +119,7 @@ void	check_quotes(char *str, t_okenize *t, t_ast **tokens)
 
 	while (str[++t->i])
 		if (((str[t->i] == '\'' || str[t->i] == '\"') && t->i == 0) ||\
-			((t->i >= 1 && str[t->i - 1] != '\\') &&\
+			((t->i > 0 && str[t->i - 1] != '\\') &&\
 			(str[t->i] == '\'' || str[t->i] == '\"')))
 		{
 			ch = str[t->i++];
@@ -138,9 +138,13 @@ void	check_quotes(char *str, t_okenize *t, t_ast **tokens)
 		t->i = -1;
 		str = ft_check_history(str);
 		ft_history_add(str);
-		tokenize(str, t, tokens);
+		(str) ? tokenize(str, t, tokens) : 0;
 		if (t->prev && t->prev != ' ' && t->prev != '\t')
+<<<<<<< HEAD
 			add_token(t, t->i, t->j, tokens, str);
 		//ft_strdel(&str);
+=======
+			add_token(t, t->i - 1, t->j, tokens, str);
+>>>>>>> d003b09e666939aa9cb252f6c7fd89a62bde5772
 	}
 }

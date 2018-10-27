@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/10/27 08:52:09 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/10/27 10:34:46 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,14 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 	char	ch;
 
 	ch = str[t->i];
-	if (t->prev && t->prev != ' ' && t->prev != '\t')
+	if (t->prev && t->prev != ' ' && t->prev != '\t' && t->prev != '\n')
 		add_token(t, t->i - 1, t->j, tokens, str);
 	t->j = t->i++;
 	if (ch == '\\')
-		t->j = t->i++;
+		t->j = t->i;
 	else if (ch == '$')
 	{
-		t->j = (t->i > 1) ? t->i - 2 : 0;
+		t->j = (t->i > 0) ? t->i - 1 : 0;
 		while (str[t->i] && str[t->i] !=  ' ' && str[t->i] != '\t' && str[t->i] != '\n')
 			t->i++;
 	}
@@ -59,19 +59,22 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 				(str[t->i] == ch && str[t->i - 1] == '\\')))
 			t->i++; //check for $ with "
 	}
-	add_token(t, t->i, t->j + 1, tokens, str);
+	add_token(t, t->i, t->j, tokens, str);
 }
 
 int					is_operator(char a)
 {
-	if (a == '|' || a == '&' || a == ';' || a == '<' || a == '>')// || a == '(')
+	if (a == '|' || a == '&' || a == ';' || a == '<' || a == '>')
 		return (1);
 	return (0);
 }
 
 void 				tokenize(char *str, t_okenize *t, t_ast **tokens)
 {
-	while (str && str[++t->i] && str[t->i] != '#')
+	int			len;
+
+	len = ft_strlen(str);
+	while (str && len > ++t->i && str[t->i] != '#')
 	{
 		if (t->prev && is_operator(t->prev) && str[t->i] == t->prev)
 			add_token(t, t->i, t->i - 1, tokens, str);
@@ -81,7 +84,7 @@ void 				tokenize(char *str, t_okenize *t, t_ast **tokens)
 			t->prev = str[t->i];
 		}
 		else if (str[t->i] == '\\' || str[t->i] == '$' || str[t->i] == '`' ||\
-				str[t->i] == '\'' || str[t->i] == '\"')
+				str[t->i] == '\'' || str[t->i] == '\"')// || str[t->i] == '(')
 			quoting(str, t, tokens);
 		else if (is_operator(str[t->i]))
 		{
