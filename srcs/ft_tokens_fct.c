@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 13:01:24 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/25 22:04:29 by fhong            ###   ########.fr       */
+/*   Updated: 2018/10/27 08:20:56 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,24 @@ void		ft_tokens_redirect_append(t_ast *tokens, _Bool *ret)
 
 void		ft_tokens_redirect_fd(t_ast *tokens, _Bool *ret)
 {
-	(void)tokens;
-	(void)ret;
-	ft_putendl("Attend, Wait! : Redirect Fd");
+	int		file;
+	int		std_out;
+	int		stat_loc;
+	pid_t	child;
+
+	if ((file = open(tokens->r_child->val, O_RDONLY)) == -1)
+		*ret = ft_return_access("42sh", tokens->r_child->val);
+	else
+	{
+		std_out = dup(0);
+		dup2(file, 0);
+		if ((child = fork()) == 0)
+			exit(ft_tokens_exec(tokens->l_child));
+		else if (child < 0)
+			ft_putendl("ERROR: fork() failed");
+		close(file);
+		waitpid(child, &stat_loc, WUNTRACED);
+		dup2(std_out, 0);
+		*ret = stat_loc;
+	}
 }

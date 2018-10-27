@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 23:58:44 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/25 17:36:31 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/27 08:18:21 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ static void	ft_execute_cmd(char *path, char **ptr, int *ret)
 	pid_t	pid;
 
 	if ((pid = fork()) == 0)
-		execve(path, ptr, g_envp);
+		exit(execve(path, ptr, g_envp));
 	else if (pid < 0)
-		ft_putendl("ERROR: Fail to create new process");
+		ft_putendl("ERROR: fork() failed");
 	waitpid(pid, ret, WUNTRACED);
 	(ft_strcmp(path, ptr[0])) ? ft_strdel(&path) : NULL;
 }
