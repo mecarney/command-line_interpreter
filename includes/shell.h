@@ -44,6 +44,7 @@ typedef struct		s_builtin
 extern t_builtin	g_builtin[NBRBUILTIN];
 extern char			**g_envp;
 extern t_history	*g_history;
+extern char			*g_history_file;
 
 /*
 **	main.c
@@ -162,6 +163,7 @@ void				ft_free_history(void);
 
 int					ft_numlen(char *str);
 _Bool				ft_builtin_history(char **ptr);
+char				*get_history_file(void);
 
 /*
 ** ft_check_history

@@ -12,6 +12,7 @@
 
 #include "shell.h"
 
+char		*g_history_file;
 int			ft_numlen(char *str)
 {
 	int len;
@@ -36,6 +37,24 @@ int			history_help(int i)
 	return (i);
 }
 
+char				*get_history_file(void)
+{
+	int 	j;
+	char	*str;
+
+	j = ft_envar("HOME");
+	if (j != -1)
+	{
+		str = ft_strdup(&g_envp[j][5]);
+		if (str[ft_strlen(str) - 1] == '/')
+			str = free_join(str, ".42sh_history");
+		else
+			str = free_join(str, "/.42sh_history");
+		return (str);
+	}
+	return (NULL);
+}
+
 static int	history_flag(char **ptr)
 {
 	int		fd;
@@ -49,7 +68,7 @@ static int	history_flag(char **ptr)
 		ft_write_history();
 	else if (ptr[1][1] == 'r')
 	{
-		fd = open(".42sh_history", O_RDONLY | O_CREAT, 0666);
+		fd = open(g_history_file, O_RDONLY | O_CREAT, 0666);
 		while (get_next_line(fd, &line) > 0)
 		{
 			ft_history_add(line);
