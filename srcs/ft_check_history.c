@@ -57,7 +57,7 @@ char  *ft_check_history(char *str)
 		if (!ft_strncmp(mark, "!!", 2))
 			current = mark + 2;
 		else
-    	current += (ft_numlen(&mark[1]) + 1);
+    	current += (ft_numlen(&mark[1]) + 2);
   }
   cmd = free_join(cmd, current);
   //ft_strdel(&str);
