@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_validate.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcarney <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
-/*   Updated: 2018/10/26 15:54:52 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/10/26 19:47:40 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +110,10 @@ int		check_operator(char *str, t_okenize *t, t_ast **tokens)
 	while (str[t->i])
 		t->i++;
 	t->i--;
-	while (str[t->i] == ' ' || str[t->i] == '\t')
+	while (t->i >= 0 && (str[t->i] == ' ' || str[t->i] == '\t'))
 		t->i--;
-	if ((is_operator(str[t->i]) && t->i == 0) ||\
-		(t->i >= 1 && str[t->i - 1] != '\\' && is_operator(str[t->i])))
+	if (t->i >= 0 && ((is_operator(str[t->i]) && t->i == 0) ||\
+		(t->i >= 1 && str[t->i - 1] != '\\' && is_operator(str[t->i]))))
 	{
 		append_str(str, t, tokens, "operator> ");
 		return (1);
@@ -143,9 +143,11 @@ void	check_quotes(char *str, t_okenize *t, t_ast **tokens)
 	if (!(check_operator(str, t, tokens)))
 	{
 		t->i = -1;
+		str = ft_check_history(str);
 		ft_history_add(str);
 		tokenize(str, t, tokens);
 		if (t->prev && t->prev != ' ' && t->prev != '\t')
 			add_token(t, t->i, t->j, tokens, str);
+		ft_strdel(&str);
 	}
 }

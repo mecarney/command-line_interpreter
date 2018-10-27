@@ -6,14 +6,14 @@
 #    By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/09 11:32:00 by mjacques          #+#    #+#              #
-#    Updated: 2018/10/26 15:39:17 by mcarney          ###   ########.fr        #
+#    Updated: 2018/10/26 20:24:33 by fhong            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC			= gcc
 RM			= rm -rf
 NAME		= 42sh
-CFLAGS		= -Wall -Wextra -Werror -g
+CFLAGS		= -Wall -Wextra -Werror -g #-fsanitize=address
 LIBFT		= libft/libft.a
 INCLUDES	= -I includes/\
 			  -I libft/header
@@ -26,6 +26,7 @@ FUNCTIONS	= main.c\
 			  ft_command.c\
 			  ft_history.c\
 			  ft_historytools.c\
+				ft_check_history.c\
 			  ft_tokens_exec.c\
 			  ft_tokens_fct.c\
 			  ft_validate.c\

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tokenizer.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcarney <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/10/26 15:55:10 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/10/26 19:53:57 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int					is_operator(char a)
 
 void 				tokenize(char *str, t_okenize *t, t_ast **tokens)
 {
-	while (str[++t->i] && str[t->i] != '#')
+	while (str && str[++t->i] && str[t->i] != '#')
 	{
 		if (t->prev && is_operator(t->prev) && str[t->i] == t->prev)
 			add_token(t, t->i, t->i - 1, tokens, str);

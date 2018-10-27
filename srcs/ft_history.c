@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_history.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fhong <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: fhong <fhong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 21:22:23 by fhong             #+#    #+#             */
-/*   Updated: 2018/10/26 15:27:25 by fhong            ###   ########.fr       */
+/*   Updated: 2018/10/26 22:02:53 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ static int	history_flag(char **ptr)
 	else if (ptr[1][1] == 'r')
 	{
 		fd = open(".42sh_history", O_RDONLY | O_CREAT, 0666);
-		int j = 0;
-		while (get_next_line(fd, &line) > 0 &&  ++j < 10)
+		while (get_next_line(fd, &line) > 0)
 		{
 			ft_history_add(line);
 			ft_strdel(&line);
