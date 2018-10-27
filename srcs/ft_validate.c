@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
-/*   Updated: 2018/10/26 19:47:05 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/10/27 09:16:29 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,8 @@ int		check_operator(char *str, t_okenize *t, t_ast **tokens)
 	t->i--;
 	while (t->i >= 0 && (str[t->i] == ' ' || str[t->i] == '\t'))
 		t->i--;
-	if (t->i >= 0 && ((is_operator(str[t->i]) && t->i == 0) ||\
-		(t->i >= 1 && str[t->i - 1] != '\\' && is_operator(str[t->i]))))
+	if ((t->i == 0 && str[t->i] != ';' && is_operator(str[t->i])) ||\
+		(t->i > 0  && str[t->i] != ';' && str[t->i - 1] != '\\' && is_operator(str[t->i])))
 	{
 		append_str(str, t, tokens, "operator> ");
 		return (1);
@@ -141,6 +141,5 @@ void	check_quotes(char *str, t_okenize *t, t_ast **tokens)
 		tokenize(str, t, tokens);
 		if (t->prev && t->prev != ' ' && t->prev != '\t')
 			add_token(t, t->i, t->j, tokens, str);
-		ft_strdel(&str);
 	}
 }
