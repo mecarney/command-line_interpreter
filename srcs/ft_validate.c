@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
-/*   Updated: 2018/10/26 16:18:09 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/10/26 18:57:22 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,10 @@ int		check_operator(char *str, t_okenize *t, t_ast **tokens)
 	while (str[t->i])
 		t->i++;
 	t->i--;
-	while (str[t->i] == ' ' || str[t->i] == '\t')
+	while (t->i >= 0 && (str[t->i] == ' ' || str[t->i] == '\t'))
 		t->i--;
-	if ((is_operator(str[t->i]) && t->i == 0) ||\
-		(t->i >= 1 && str[t->i - 1] != '\\' && is_operator(str[t->i])))
+	if (t->i >= 0 && ((is_operator(str[t->i]) && t->i == 0) ||\
+		(t->i >= 1 && str[t->i - 1] != '\\' && is_operator(str[t->i]))))
 	{
 		append_str(str, t, tokens, "operator> ");
 		return (1);
@@ -132,6 +132,7 @@ void	check_quotes(char *str, t_okenize *t, t_ast **tokens)
 				return ;
 			}
 		}
+	t->i = 0;
 	if (!(check_operator(str, t, tokens)))
 	{
 		t->i = -1;
