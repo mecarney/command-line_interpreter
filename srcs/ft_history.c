@@ -17,12 +17,14 @@ int			ft_numlen(char *str)
 {
 	int len;
 
-	len = 0;
-	if (str[len] == '-')
+	len = -1;
+	if (str[len + 1] == '-')
 		len++;
-	while (str[len])
-		if (!ft_isdigit(str[len++]))
-			return (0);
+	if (!ft_isdigit(str[len + 1]))
+		return (0);
+	while (str[++len])
+		if (!ft_isdigit(str[len]))
+			break ;
 	return (len);
 }
 int			history_help(int i)

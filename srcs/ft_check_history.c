@@ -12,6 +12,13 @@
 
 #include "shell.h"
 
+int				is_whitespace(char c)
+{
+	if (c == ' ' || c == '\t' || c == '\v' || c == '\0')
+		return (1);
+	return (0);
+}
+
 char		*get_history(char *cmd)
 {
 	int				i;
@@ -19,13 +26,13 @@ char		*get_history(char *cmd)
 	t_history	*tmp;
 
 	i = -1;
-	if (cmd[0] == '!' && (cmd[1] == '!' || ft_numlen(&cmd[1])))
+	if (cmd[0] == '!' && !is_whitespace(cmd[1]))
 	{
 		index = (cmd[1] == '!') ? -1 : ft_atoi(&cmd[1]);
 		(g_history && index < 0) && (index = g_history->index + index + 1);
 		if (!g_history || index <= 0 || index > g_history->index)
 		{
-			ft_printf("sh: %s: event not found\n", cmd);
+			ft_printf("42sh: event not found: %s\n", cmd);
 			return (NULL);
 		}
 		tmp = g_history;
@@ -41,7 +48,7 @@ char	*ft_check_history_helper(char *current, char *mark, _Bool *flag)
 	if (!ft_strncmp(mark, "!!", 2))
 		(current = mark + 2) && (*flag = 1);
 	else if (ft_numlen(&mark[1]) != 0)
-		(current += (ft_numlen(&mark[1]) + 2)) && (*flag = 1);
+		(current = mark + ft_numlen(&mark[1]) + 1) && (*flag = 1);
 	else
 		current = mark + 1;
 	return (current);
