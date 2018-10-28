@@ -116,6 +116,7 @@ int		check_operator(char *str, t_okenize *t, t_ast **tokens)
 void	check_quotes(char *str, t_okenize *t, t_ast **tokens)
 {
 	char ch;
+	char *tmp;
 
 	while (str[++t->i])
 		if (((str[t->i] == '\'' || str[t->i] == '\"') && t->i == 0) ||\
@@ -136,10 +137,11 @@ void	check_quotes(char *str, t_okenize *t, t_ast **tokens)
 	if (!(check_operator(str, t, tokens)))
 	{
 		t->i = -1;
-		str = ft_check_history(str);
-		ft_history_add(str);
-		(str) ? tokenize(str, t, tokens) : 0;
+		tmp = ft_check_history(str);
+		ft_history_add(tmp);
+		(tmp) ? tokenize(tmp, t, tokens) : 0;
 		if (t->prev && t->prev != ' ' && t->prev != '\t')
-			add_token(t, t->i - 1, t->j, tokens, str);
+			add_token(t, t->i - 1, t->j, tokens, tmp);
+		(tmp != str) ? ft_strdel(&tmp) : 0;
 	}
 }

@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_environement.c                                  :+:      :+:    :+:   */
+/*   ft_environment.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 17:43:29 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/25 21:25:29 by fhong            ###   ########.fr       */
+/*   Updated: 2018/10/27 16:14:23 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static int	ft_isvariable(char **ptr)
+static int	ft_variable(char **ptr)
 {
 	int	i;
 
@@ -29,7 +29,7 @@ _Bool		ft_builtin_env(char **ptr)
 	int j;
 	int	on;
 
-	if ((j = ft_isvariable(ptr)) != 0)
+	if ((j = ft_variable(ptr)))
 	{
 		ft_printf("%s: %s: No such file or directory\n", ptr[0], ptr[j]);
 		return (1);
@@ -72,7 +72,7 @@ _Bool		ft_builtin_setenv(char **ptr)
 	char	*name;
 
 	ret = 1;
-	if (ptr[1] && ft_isvariable(ptr) == 0 && !ptr[2])
+	if (ptr[1] && !ptr[2] && !ft_variable(ptr))
 	{
 		name = ft_strmcpy(ptr[1], ENVNAME(ptr[1]));
 		i = ft_envar(name);
@@ -83,8 +83,7 @@ _Bool		ft_builtin_setenv(char **ptr)
 		ft_strdel(&name);
 		ret = 0;
 	}
-	else
-		ft_putendl("Usage: setenv name=[value]");
+	(ret) ? ft_putendl("Usage: setenv name=[value]") : NULL;
 	return (ret);
 }
 
@@ -94,18 +93,14 @@ _Bool		ft_builtin_unsetenv(char **ptr)
 	int	ret;
 
 	ret = 1;
-	if (!ptr[1] || (ptr[1] && ptr[2]) || !ft_isvariable(ptr))
-		ft_putendl("Usage: unsetenv name");
-	else
+	if (ptr[1] && !ptr[2] && ft_variable(ptr) && (i = ft_envar(ptr[1])) != -1)
 	{
-		i = ft_envar(ptr[1]);
-		if (i == -1)
-			return (1);
 		i -= 1;
 		while (g_envp[++i] && g_envp[i + 1])
 			g_envp[i] = free_str(g_envp[i], ft_strdup(g_envp[i + 1]));
 		ft_strdel(&g_envp[i]);
 		ret = 0;
 	}
+	(ret) ? ft_putendl("Usage: unsetenv name") : NULL;
 	return (ret);
 }

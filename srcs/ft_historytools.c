@@ -13,6 +13,7 @@
 #include "shell.h"
 
 t_history			*g_history;
+char					*g_history_file;
 static t_history	*new_history(char *command)
 {
 	t_history	*new_hist;
@@ -68,7 +69,7 @@ void	ft_write_history(void)
 	if (!g_history)
 		return ;
 	tmp = g_history;
-	fd = open(".42sh_history", O_WRONLY | O_CREAT, 0666);
+	fd = open(g_history_file, O_WRONLY | O_CREAT, 0666);
 	fd_base = dup(1);
 	dup2(fd, 1);
 	lseek(fd, 0, SEEK_END);

@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/27 08:22:50 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/27 16:30:05 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct		s_builtin
 extern t_builtin	g_builtin[NBRBUILTIN];
 extern char			**g_envp;
 extern t_history	*g_history;
+extern char			*g_history_file;
 
 /*
 **	main.c
@@ -147,6 +148,10 @@ void				ft_tokens_redirect(t_ast *tokens, _Bool *ret);
 void				ft_tokens_redirect_append(t_ast *tokens, _Bool *ret);
 void				ft_tokens_redirect_fd(t_ast *tokens, _Bool *ret);
 
+int					ft_check_operator(char *str);
+char				*ft_tokens_val(t_ast *tokens);
+
+
 /*
 ** ft_historytools.c
 */
@@ -160,8 +165,9 @@ void				ft_free_history(void);
 ** ft_history.c
 */
 
-int					ft_isnumber(char *str);
+int					ft_numlen(char *str);
 _Bool				ft_builtin_history(char **ptr);
+char				*get_history_file(void);
 
 /*
 ** ft_check_history

@@ -13,6 +13,7 @@
 #include "shell.h"
 
 char		**g_envp;
+char		*g_history_file;
 t_builtin	g_builtin[NBRBUILTIN] = {
 	{"cd", &ft_builtin_cd},
 	{"echo", &ft_builtin_echo},
@@ -32,6 +33,7 @@ int		main(int argc, char **argv, char **envp)
 	envp = ft_newenv(envp);
 	ret = 0;
 	g_history = NULL;
+	g_history_file = get_history_file();
 	while (42)
 		ft_init(&ret);
 	return (0);
@@ -55,6 +57,6 @@ void	ft_init(_Bool *ret)
 	check_quotes(line, &t, &tokens);
 	tokens = parser(&tokens, NULL);
 	*ret = ft_tokens_exec(tokens);
-	// ft_strdel(&line); I free it in "check_quotes()" and "ft_check_history"
+	ft_strdel(&line); //I free it in "check_quotes()" and "ft_check_history"
 	free_ast(tokens);
 }
