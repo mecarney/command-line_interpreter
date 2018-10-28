@@ -19,7 +19,7 @@ char		*get_history(char *cmd)
 	t_history	*tmp;
 
 	i = -1;
-	if (cmd[0] == '!')
+	if (cmd[0] == '!' && (cmd[1] == '!' || ft_numlen(&cmd[1])))
 	{
 		index = (cmd[1] == '!') ? -1 : ft_atoi(&cmd[1]);
 		(g_history && index < 0) && (index = g_history->index + index + 1);
@@ -33,7 +33,7 @@ char		*get_history(char *cmd)
 			tmp = tmp->next;
 		return (tmp->command);
 	}
-	return (NULL);
+	return ("!");
 }
 
 char  *ft_check_history(char *str)
@@ -56,11 +56,12 @@ char  *ft_check_history(char *str)
     cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
 		if (!ft_strncmp(mark, "!!", 2))
 			current = mark + 2;
-		else
+		else if (ft_numlen(&mark[1]) != 0)
     	current += (ft_numlen(&mark[1]) + 2);
+		else
+		current = mark + 1;
   }
   cmd = free_join(cmd, current);
-  //ft_strdel(&str);
 	ft_putendl(cmd);
   return (cmd);
 }
