@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 13:01:26 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/27 07:26:04 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/27 16:28:32 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,8 @@ _Bool		ft_tokens_exec(t_ast *tokens)
 	{
 		if (tokens->r_child)
 		{
-			i = -1;
-			while (++i < NBRTOKENS)
-				if (ft_strcmp(tokens->val, g_operator[i].value) == 0)
-					g_operator[i].fct(tokens, &ret);
+			if ((i = ft_check_operator(tokens->val)) != -1)
+				g_operator[i].fct(tokens, &ret);
 		}
 		else
 			ft_tokens_to_cmd(tokens, &ret);
