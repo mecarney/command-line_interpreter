@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_envptools.c                                     :+:      :+:    :+:   */
+/*   ft_envp_tools.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 17:40:01 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/26 16:26:49 by fhong            ###   ########.fr       */
+/*   Updated: 2018/10/28 23:01:48 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,6 @@ char		**ft_checkenv(char **cmd)
 					cmd[i] = free_str(cmd[i], ft_strdup(&g_envp[j][5]));
 	}
 	return (cmd);
-}
-
-void 		print_checkhistory(char **cmd)
-{
-	int i;
-
-	i = -1;
-	while (cmd[++i + 1])
-		ft_printf("%s ", cmd[i]);
-	ft_printf("%s\n", cmd[i]);
 }
 
 char		**ft_checkquote(char **cmd)

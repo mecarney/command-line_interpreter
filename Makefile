@@ -6,33 +6,24 @@
 #    By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/09 11:32:00 by mjacques          #+#    #+#              #
-#    Updated: 2018/10/28 19:48:03 by mjacques         ###   ########.fr        #
+#    Updated: 2018/10/28 23:48:43 by mjacques         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC			= gcc
 RM			= rm -rf
 NAME		= 42sh
-CFLAGS		= -Wall -Wextra -Werror -g #-fsanitize=address
+CFLAGS		= -Wall -Wextra -Werror -g
 LIBFT		= libft/libft.a
 INCLUDES	= -I includes/\
 			  -I libft/header
 
-FUNCTIONS	= main.c\
-			  ft_envptools.c\
-			  ft_builtins.c\
-			  ft_environment.c\
-			  ft_helper.c\
-			  ft_command.c\
-			  ft_history.c\
-			  ft_historytools.c\
-			  ft_check_history.c\
-			  ft_tokens_exec.c\
-			  ft_tokens_fct.c\
-			  ft_tokens_tools.c\
-			  ft_validate.c\
-			  ft_tokenizer.c\
-			  ft_ast.c
+BASE		= main.c
+BUILTINS	= ft_builtins.c ft_envp.c ft_envp_tools.c ft_helper.c
+EXECUTE		= ft_command.c ft_tokens_exec.c ft_tokens_fct.c ft_tokens_tools.c
+PARSER		= ft_validate.c ft_tokenizer.c ft_ast.c
+HISTORY		= ft_history.c ft_historytools.c ft_check_history.c
+FUNCTIONS	= $(BASE) $(BUILTINS) $(EXECUTE) $(PARSER) $(HISTORY)
 
 FILES		= $(addprefix srcs/, $(FUNCTIONS))
 OBJECTS		= $(FILES:.c=.o)

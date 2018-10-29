@@ -6,13 +6,13 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 17:42:49 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/26 15:52:14 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/10/28 22:55:16 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-_Bool		ft_builtin_exit(char **ptr)
+_Bool			ft_builtin_exit(char **ptr)
 {
 	ft_ptrdel(g_envp);
 	g_envp = NULL;
@@ -25,16 +25,7 @@ _Bool		ft_builtin_exit(char **ptr)
 	return (0);
 }
 
-static void	ft_putstrecho(char *str)
-{
-	int i;
-
-	i = -1;
-	while (str[++i])
-		(str[i] == '\'') ? NULL : ft_putchar(str[i]);
-}
-
-_Bool		ft_builtin_echo(char **ptr)
+_Bool			ft_builtin_echo(char **ptr)
 {
 	int	i;
 
@@ -43,7 +34,7 @@ _Bool		ft_builtin_echo(char **ptr)
 		i = (ft_strcmp(ptr[1], "-n")) ? 0 : 1;
 		while (ptr[++i])
 		{
-			ft_putstrecho(ptr[i]);
+			ft_putstr(ptr[i]);
 			(ptr[i + 1]) ? ft_putchar(' ') : NULL;
 		}
 		(!ft_strcmp(ptr[1], "-n")) ? NULL : ft_putchar('\n');
@@ -53,7 +44,7 @@ _Bool		ft_builtin_echo(char **ptr)
 	return (0);
 }
 
-_Bool		ft_builtin_cd(char **ptr)
+_Bool			ft_builtin_cd(char **ptr)
 {
 	int		j;
 	int		ret;
@@ -77,5 +68,38 @@ _Bool		ft_builtin_cd(char **ptr)
 	}
 	else
 		ft_putendl("Usage: cd [directory]");
+	return (ret);
+}
+
+static _Bool	ft_change_pwd(void)
+{
+	int		j;
+	char	*pwd;
+	char	*tmp;
+	char	cwd[PATH_MAX + 1];
+
+	j = ft_envar("PWD");
+	pwd = (j != -1) ? ft_strdup(&g_envp[j][4]) : NULL;
+	tmp = ft_strdup(getcwd(cwd, PATH_MAX));
+	ft_setenv("OLDPWD", pwd);
+	ft_strdel(&pwd);
+	ft_setenv("PWD", tmp);
+	ft_strdel(&tmp);
+	return (0);
+}
+
+_Bool			ft_change_dir(char *str, int on)
+{
+	int	ret;
+
+	ret = 1;
+	if (!chdir(str))
+	{
+		(on) ? ft_putendl(str) : NULL;
+		ret = ft_change_pwd();
+	}
+	else
+		ret = ft_return_access("cd", str);
+	ft_strdel(&str);
 	return (ret);
 }
