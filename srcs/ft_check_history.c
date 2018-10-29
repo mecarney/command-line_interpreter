@@ -14,7 +14,7 @@
 
 int				is_whitespace(char c)
 {
-	if (c == ' ' || c == '\t' || c == '\v' || c == '\0')
+	if (c == ' ' || c == '\t' || c == '\v' || c == '\0' || c == '\'' || c == '\"')
 		return (1);
 	return (0);
 }
@@ -69,6 +69,7 @@ char  *ft_check_history(char *str)
 	current = str;
   while (current && (mark = ft_strchr(current, '!')))
   {
+		((mark - 1) && *(mark - 1) == '\\') && (mark++);
 		tmp = ft_strsub(current, 0, mark - current);
 		cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
 		(tmp) ? ft_strdel(&tmp) : 0;
