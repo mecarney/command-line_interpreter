@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 23:58:44 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/27 08:18:21 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/28 19:29:51 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int			ft_run_cmd(char **cmd)
 		ret = g_builtin[ret].fct(cmd);
 	else
 	{
-		if ((ret = access(cmd[0], X_OK)) == 0  && ft_strchr(cmd[0], '/'))
+		if ((ret = access(cmd[0], X_OK)) == 0 && ft_strchr(cmd[0], '/'))
 			path = cmd[0];
 		else
 			path = ft_check_path(cmd, &ret);

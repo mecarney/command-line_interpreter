@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_historytools.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fhong <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: fhong <fhong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 21:55:53 by fhong             #+#    #+#             */
-/*   Updated: 2018/10/26 09:09:54 by fuhong           ###   ########.fr       */
+/*   Updated: 2018/10/28 23:07:56 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
 t_history			*g_history;
-char					*g_history_file;
+char				*g_history_file;
 static t_history	*new_history(char *command)
 {
 	t_history	*new_hist;
@@ -76,6 +76,16 @@ void	ft_write_history(void)
 	ft_print_history(tmp, tmp->index, 0);
 	dup2(fd_base, 1);
 	close(fd);
+}
+
+void 	print_checkhistory(char **cmd)
+{
+	int i;
+
+	i = -1;
+	while (cmd[++i + 1])
+		ft_printf("%s ", cmd[i]);
+	ft_printf("%s\n", cmd[i]);
 }
 
 void	ft_free_history(void)
