@@ -6,7 +6,7 @@
 #    By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/09 11:32:00 by mjacques          #+#    #+#              #
-#    Updated: 2018/10/27 12:48:17 by fuhong           ###   ########.fr        #
+#    Updated: 2018/10/28 19:48:03 by mjacques         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,15 +34,14 @@ FUNCTIONS	= main.c\
 			  ft_tokenizer.c\
 			  ft_ast.c
 
-SRCPATH		= srcs/
-FILES		= $(addprefix $(SRCPATH), $(FUNCTIONS))
+FILES		= $(addprefix srcs/, $(FUNCTIONS))
 OBJECTS		= $(FILES:.c=.o)
 
 .PHONY: all clean fclean re
 
 all: $(NAME)
 
-$(SRCPATH)%.o: $(SRCPATH)%.c
+%.o: %.c
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(NAME): $(OBJECTS) $(LIBFT)

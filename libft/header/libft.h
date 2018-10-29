@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 11:39:42 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/17 22:28:52 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/28 20:55:48 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,5 @@ size_t				ft_wstrlen(wchar_t *str);
 uint32_t			swap_int32(uint32_t x);
 uint64_t			swap_int64(uint64_t x);
 
-char				**ft_strsplitspaces(char const *s);
 void				ft_error(char *str);
 #endif
