@@ -58,8 +58,7 @@ _Bool				ft_builtin_setenv(char **ptr);
 _Bool				ft_builtin_unsetenv(char **ptr);
 
 char				**ft_newenv(char **envp);
-char				**ft_checkenv(char **cmd);
-char				**ft_checkquote(char **cmd);
+char				**ft_check_expand(char **cmd);
 int					ft_envar(char *name);
 void				ft_setenv(char *name, char *value);
 

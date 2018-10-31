@@ -20,7 +20,8 @@ INCLUDES	= -I includes/\
 
 BASE		= main.c
 BUILTINS	= ft_builtins.c ft_envp.c ft_envp_tools.c ft_helper.c
-EXECUTE		= ft_command.c ft_tokens_exec.c ft_tokens_fct.c ft_tokens_tools.c
+EXECUTE		= ft_command.c ft_tokens_exec.c ft_tokens_fct.c ft_tokens_tools.c\
+			      ft_expand.c
 PARSER		= ft_validate.c ft_tokenizer.c ft_ast.c ft_check_backquote.c
 HISTORY		= ft_history.c ft_historytools.c ft_check_history.c
 FUNCTIONS	= $(BASE) $(BUILTINS) $(EXECUTE) $(PARSER) $(HISTORY)
