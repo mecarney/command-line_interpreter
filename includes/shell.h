@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/28 23:47:58 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/30 21:29:38 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,7 @@ _Bool				ft_builtin_setenv(char **ptr);
 _Bool				ft_builtin_unsetenv(char **ptr);
 
 char				**ft_newenv(char **envp);
-char				**ft_checkenv(char **cmd);
-char				**ft_checkquote(char **cmd);
+char				**ft_check_expand(char **cmd);
 int					ft_envar(char *name);
 void				ft_setenv(char *name, char *value);
 
