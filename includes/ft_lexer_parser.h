@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/28 23:46:13 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/28 23:47:18 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/31 15:23:23 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,12 @@ int					check_operator(char *str, t_okenize *t, t_ast **tokens);
 void				check_quotes(char *str, t_okenize *t, t_ast **tokens);
 int					ft_strfind(const char *s1, const char *s2);
 void				free_ast(t_ast *tokens);
+void				ft_dup_fd(int fd_origin, int fd_new, int io);
+
+/*
+** ft_check_backquote.c
+*/
+
+char  *ft_check_backquote(char *str);
 
 #endif

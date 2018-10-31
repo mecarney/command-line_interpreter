@@ -66,10 +66,11 @@ void		ft_tokens_semicolon(t_ast *tokens, _Bool *ret)
 	*ret = ft_tokens_exec(tokens->r_child);
 }
 
-static void	ft_dup_fd(int fd_origin, int fd_new, int io)
+void	ft_dup_fd(int fd_origin, int fd_new, int io)
 {
 	close(fd_origin);
 	dup2(fd_new, io);
+	close(fd_new);
 }
 
 void		ft_tokens_pipe(t_ast *tokens, _Bool *ret)
