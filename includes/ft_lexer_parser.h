@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/28 23:46:13 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/31 15:23:23 by fhong            ###   ########.fr       */
+/*   Updated: 2018/10/31 16:44:49 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void				ft_dup_fd(int fd_origin, int fd_new, int io);
 ** ft_check_backquote.c
 */
 
-char  *ft_check_backquote(char *str);
+char  				*get_backquote(char *str);
+char  				*ft_check_backquote(char *str);
 
 #endif

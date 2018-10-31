@@ -6,13 +6,13 @@
 /*   By: fhong <fhong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/30 21:19:54 by fhong             #+#    #+#             */
-/*   Updated: 2018/10/31 15:40:48 by fhong            ###   ########.fr       */
+/*   Updated: 2018/10/31 16:44:19 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-char  *get_pipe_stdin(int *fd)
+static char  *get_pipe_stdin(int *fd)
 {
   int   fd_base;
   char  *line;
@@ -36,7 +36,7 @@ char  *get_pipe_stdin(int *fd)
   return (new_str);
 }
 
-char  *get_backquote(char *str)
+char  		*get_backquote(char *str)
 {
   int   stat_loc;
   int   fd[2];
@@ -56,7 +56,7 @@ char  *get_backquote(char *str)
   return (get_pipe_stdin(fd));
 }
 
-char  *ft_check_backquote(char *str)
+char  		*ft_check_backquote(char *str)
 {
   char  *current;
   char  *mark;

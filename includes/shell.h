@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/31 15:19:18 by fhong            ###   ########.fr       */
+/*   Updated: 2018/10/31 16:45:15 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,7 @@ typedef struct		s_hist
 
 extern t_history	*g_history;
 extern char			*g_history_file;
-# define STDOUTPUT 1 // for normal print history or write the command in .42sh_history
-
+# define STDOUTPUT 1
 
 void				ft_history_add(char *command);
 void				ft_print_history(t_history *history, int index, int io);

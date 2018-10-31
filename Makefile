@@ -6,7 +6,7 @@
 #    By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/09 11:32:00 by mjacques          #+#    #+#              #
-#    Updated: 2018/10/31 15:43:02 by fhong            ###   ########.fr        #
+#    Updated: 2018/10/31 16:43:24 by mjacques         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ BUILTINS	= ft_builtins.c ft_envp.c ft_envp_tools.c ft_helper.c
 EXECUTE		= ft_command.c ft_tokens_exec.c ft_tokens_fct.c ft_tokens_tools.c\
 			      ft_expand.c
 PARSER		= ft_validate.c ft_tokenizer.c ft_ast.c ft_check_backquote.c
-HISTORY		= ft_history.c ft_historytools.c ft_check_history.c
+HISTORY		= ft_history.c ft_history_tools.c ft_history_check.c
 FUNCTIONS	= $(BASE) $(BUILTINS) $(EXECUTE) $(PARSER) $(HISTORY)
 
 FILES		= $(addprefix srcs/, $(FUNCTIONS))
