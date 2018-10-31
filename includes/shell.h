@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/28 23:47:58 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/31 15:19:18 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ extern t_builtin	g_builtin[NBRBUILTIN];
 extern char			**g_envp;
 
 void				ft_init(_Bool *ret);
+void				ft_run_shell(_Bool *ret, char *line);
 
 /*
 **	BUILTINS

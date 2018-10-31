@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
-/*   Updated: 2018/10/27 12:08:15 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/10/31 14:42:49 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,9 @@ int		check_operator(char *str, t_okenize *t, t_ast **tokens)
 
 void	check_quotes(char *str, t_okenize *t, t_ast **tokens)
 {
-	char ch;
-	char *tmp;
+	char	ch;
+	char	*tmp;
+	char	*tmp1;
 
 	while (str[++t->i])
 		if (((str[t->i] == '\'' || str[t->i] == '\"') && t->i == 0) ||\
@@ -139,9 +140,11 @@ void	check_quotes(char *str, t_okenize *t, t_ast **tokens)
 		t->i = -1;
 		tmp = ft_check_history(str);
 		ft_history_add(tmp);
-		(tmp) ? tokenize(tmp, t, tokens) : 0;
+		tmp1 = ft_check_backquote(tmp);
+		(tmp1) ? tokenize(tmp1, t, tokens) : 0;
 		if (t->prev && t->prev != ' ' && t->prev != '\t')
-			add_token(t, t->i - 1, t->j, tokens, tmp);
+			add_token(t, t->i - 1, t->j, tokens, tmp1);
+		(tmp1 != str && tmp1 != tmp) ? ft_strdel(&tmp1) : 0;
 		(tmp != str) ? ft_strdel(&tmp) : 0;
 	}
 }
