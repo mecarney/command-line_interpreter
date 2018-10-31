@@ -6,7 +6,7 @@
 /*   By: fhong <fhong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:21:52 by fhong             #+#    #+#             */
-/*   Updated: 2018/10/27 11:41:55 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/10/30 17:13:12 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ char		*get_history(char *cmd)
 		(g_history && index < 0) && (index = g_history->index + index + 1);
 		if (!g_history || index <= 0 || index > g_history->index)
 		{
-			ft_printf("42sh: event not found: %s\n", cmd);
+			if (index == 0)
+				ft_printf("42sh: event not found: %s\n", &cmd[1]);
+			else
+				ft_printf("42sh: event not found: %d\n", ft_atoi(&cmd[1]));
 			return (NULL);
 		}
 		tmp = g_history;
