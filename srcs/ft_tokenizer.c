@@ -6,11 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2018/11/01 14:29:30 by mjacques         ###   ########.fr       */
-=======
-/*   Updated: 2018/11/01 14:24:12 by mcarney          ###   ########.fr       */
->>>>>>> 90df672dc426d92bed4e78dfdb7562683dbb9246
+/*   Updated: 2018/11/01 14:35:14 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +33,7 @@ void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str, int exp
 	}
 	t->j = t->i;
 	t->prev = '\0';
-<<<<<<< HEAD
 	new->expand = expand;
-=======
-	(*tokens)->expand = expand;
->>>>>>> 90df672dc426d92bed4e78dfdb7562683dbb9246
 }
 
 void				quoting(char *str, t_okenize *t, t_ast **tokens)
@@ -60,6 +52,7 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 	}
 	else if (ch == '$' || ch == '~')
 	{
+		expand = 1;
 		if (!(t->prev))
 			t->j = t->i;
 		if (str[t->i + 1] && str[t->i] == '(')
@@ -82,7 +75,7 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 		while (str[t->i] && (str[t->i] != ch ||\
 				(str[t->i] == ch && str[t->i - 1] == '\\')))
 		{
-			// (ch == '"' && str[t->i] == '$') ? expand = 1 : 0;
+			(ch == '"' && str[t->i] == '$') ? expand = 1 : 0;
 			t->i++;
 		}
 	}
@@ -93,10 +86,7 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 	else if (ch == '\'' || ch == '\"')
 		add_token(t, t->i - 1, t->j + 1, tokens, str, expand);
 	else
-	{
-		expand = (ch == '$' || ch == '~') ?  1 : 0;
 		add_token(t, t->i - 1, t->j, tokens, str, expand);
-	}
 }
 
 int					is_operator(char a)
