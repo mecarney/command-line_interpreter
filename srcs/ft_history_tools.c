@@ -6,7 +6,7 @@
 /*   By: fhong <fhong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 21:55:53 by fhong             #+#    #+#             */
-/*   Updated: 2018/10/31 16:43:05 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/31 17:22:33 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 t_history			*g_history;
 char				*g_history_file;
+
 static t_history	*new_history(char *command)
 {
 	t_history	*new_hist;
@@ -25,7 +26,7 @@ static t_history	*new_history(char *command)
 	return (new_hist);
 }
 
-void	ft_history_add(char *command)
+void				ft_history_add(char *command)
 {
 	int			i;
 	t_history	*new_hist;
@@ -47,7 +48,7 @@ void	ft_history_add(char *command)
 	}
 }
 
-void	ft_print_history(t_history *history, int index, int io)
+void				ft_print_history(t_history *history, int index, int io)
 {
 	t_history	*tmp;
 
@@ -60,7 +61,7 @@ void	ft_print_history(t_history *history, int index, int io)
 		ft_printf("%s\n", tmp->command, io);
 }
 
-void	ft_write_history(void)
+void				ft_write_history(void)
 {
 	int			fd;
 	int			fd_base;
@@ -78,17 +79,7 @@ void	ft_write_history(void)
 	close(fd);
 }
 
-void 	print_checkhistory(char **cmd)
-{
-	int i;
-
-	i = -1;
-	while (cmd[++i + 1])
-		ft_printf("%s ", cmd[i]);
-	ft_printf("%s\n", cmd[i]);
-}
-
-void	ft_free_history(void)
+void				ft_free_history(void)
 {
 	t_history	*tmp;
 

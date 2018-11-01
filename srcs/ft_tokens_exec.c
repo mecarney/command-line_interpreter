@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 13:01:26 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/30 21:29:19 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/31 17:24:30 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void		ft_tokens_semicolon(t_ast *tokens, _Bool *ret)
 	*ret = ft_tokens_exec(tokens->r_child);
 }
 
-void	ft_dup_fd(int fd_origin, int fd_new, int io)
+void		ft_dup_fd(int fd_origin, int fd_new, int io)
 {
 	close(fd_origin);
 	dup2(fd_new, io);

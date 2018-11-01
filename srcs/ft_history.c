@@ -6,16 +6,17 @@
 /*   By: fhong <fhong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 21:22:23 by fhong             #+#    #+#             */
-/*   Updated: 2018/10/27 02:16:55 by fuhong           ###   ########.fr       */
+/*   Updated: 2018/10/31 17:25:52 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
 char		*g_history_file;
+
 int			ft_numlen(char *str)
 {
-	int len;
+	int	len;
 
 	len = -1;
 	if (str[len + 1] == '-')
@@ -27,7 +28,8 @@ int			ft_numlen(char *str)
 			break ;
 	return (len);
 }
-int			history_help(int i)
+
+static int	history_help(int i)
 {
 	ft_putendl("Usage: history [flag][number]");
 	ft_putendl(" history : Show the whole history list");
@@ -39,9 +41,9 @@ int			history_help(int i)
 	return (i);
 }
 
-char				*get_history_file(void)
+char		*get_history_file(void)
 {
-	int 	j;
+	int		j;
 	char	*str;
 
 	j = ft_envar("HOME");
@@ -60,9 +62,9 @@ char				*get_history_file(void)
 static int	history_flag(char **ptr)
 {
 	int		fd;
-	char 	*line;
+	char	*line;
 
-	if (ptr[1][2] != '\0'|| !ft_strchr("char", ptr[1][1]))
+	if (ptr[1][2] != '\0' || !ft_strchr("char", ptr[1][1]))
 		return (history_help(1));
 	else if (ptr[1][1] == 'c')
 		ft_free_history();
