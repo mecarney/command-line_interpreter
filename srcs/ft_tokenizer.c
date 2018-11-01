@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/01 14:35:14 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/01 14:38:36 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 		while (str[t->i] && (str[t->i] != ch ||\
 				(str[t->i] == ch && str[t->i - 1] == '\\')))
 		{
-			(ch == '"' && str[t->i] == '$') ? expand = 1 : 0;
+			(ch == '"' && str[t->i - 1] != '\\' && str[t->i] == '$') ? expand = 1 : 0;
 			t->i++;
 		}
 	}
