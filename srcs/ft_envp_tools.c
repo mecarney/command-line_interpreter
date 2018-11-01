@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_envptools.c                                     :+:      :+:    :+:   */
+/*   ft_envp_tools.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 17:40:01 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/26 16:26:49 by fhong            ###   ########.fr       */
+/*   Updated: 2018/10/30 23:17:18 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,60 +23,6 @@ char		**ft_newenv(char **envp)
 		g_envp[size] = ft_strdup(envp[size]);
 	g_envp[size] = NULL;
 	return (g_envp);
-}
-
-char		**ft_checkenv(char **cmd)
-{
-	int		i;
-	int		j;
-	int		len;
-
-	i = -1;
-	while (cmd[++i])
-	{
-		len = ft_strlen(cmd[i]);
-		if (cmd[i][0] == '$' && (j = -1) == -1)
-			while (g_envp[++j])
-				if (!ft_strncmp(g_envp[j], &cmd[i][1], ENVNAME(g_envp[j])))
-					cmd[i] = free_str(cmd[i], ft_strdup(&g_envp[j][len]));
-		if (!ft_strcmp(cmd[i], "~") && (j = -1) == -1)
-			while (g_envp[++j])
-				if (ft_strncmp(g_envp[j], "HOME", 4) == 0)
-					cmd[i] = free_str(cmd[i], ft_strdup(&g_envp[j][5]));
-	}
-	return (cmd);
-}
-
-void 		print_checkhistory(char **cmd)
-{
-	int i;
-
-	i = -1;
-	while (cmd[++i + 1])
-		ft_printf("%s ", cmd[i]);
-	ft_printf("%s\n", cmd[i]);
-}
-
-char		**ft_checkquote(char **cmd)
-{
-	int		i;
-	int		j;
-	int		k;
-	char	*str;
-
-	i = -1;
-	while (cmd[++i])
-	{
-		str = ft_strnew(ft_strlen(cmd[i]));
-		j = -1;
-		k = -1;
-		while (cmd[i][++j])
-			if (cmd[i][j] != '\"')
-				str[++k] = cmd[i][j];
-		cmd[i] = free_str(cmd[i], ft_strdup(str));
-		ft_strdel(&str);
-	}
-	return (cmd);
 }
 
 int			ft_envar(char *name)

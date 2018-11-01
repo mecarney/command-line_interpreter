@@ -6,43 +6,34 @@
 #    By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/09 11:32:00 by mjacques          #+#    #+#              #
-#    Updated: 2018/10/27 12:48:17 by fuhong           ###   ########.fr        #
+#    Updated: 2018/10/31 17:37:35 by fhong            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC			= gcc
 RM			= rm -rf
 NAME		= 42sh
-CFLAGS		= -Wall -Wextra -Werror -g #-fsanitize=address
+CFLAGS		= -Wall -Wextra -Werror -g
 LIBFT		= libft/libft.a
 INCLUDES	= -I includes/\
 			  -I libft/header
 
-FUNCTIONS	= main.c\
-			  ft_envptools.c\
-			  ft_builtins.c\
-			  ft_environment.c\
-			  ft_helper.c\
-			  ft_command.c\
-			  ft_history.c\
-			  ft_historytools.c\
-			  ft_check_history.c\
-			  ft_tokens_exec.c\
-			  ft_tokens_fct.c\
-			  ft_tokens_tools.c\
-			  ft_validate.c\
-			  ft_tokenizer.c\
-			  ft_ast.c
+BASE		= main.c
+BUILTINS	= ft_builtins.c ft_envp.c ft_envp_tools.c ft_helper.c
+EXECUTE		= ft_command.c ft_tokens_exec.c ft_tokens_fct.c ft_tokens_tools.c\
+			      ft_expand.c
+PARSER		= ft_validate.c ft_tokenizer.c ft_ast.c ft_check_backquote.c
+HISTORY		= ft_history.c ft_history_tools.c ft_history_check.c
+FUNCTIONS	= $(BASE) $(BUILTINS) $(EXECUTE) $(PARSER) $(HISTORY)
 
-SRCPATH		= srcs/
-FILES		= $(addprefix $(SRCPATH), $(FUNCTIONS))
+FILES		= $(addprefix srcs/, $(FUNCTIONS))
 OBJECTS		= $(FILES:.c=.o)
 
 .PHONY: all clean fclean re
 
 all: $(NAME)
 
-$(SRCPATH)%.o: $(SRCPATH)%.c
+%.o: %.c
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(NAME): $(OBJECTS) $(LIBFT)

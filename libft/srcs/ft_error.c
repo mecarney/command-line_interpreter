@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mjacques <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/17 22:47:33 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/17 22:47:36 by mjacques         ###   ########.fr       */
+/*   Created: 2018/10/28 20:57:43 by mjacques          #+#    #+#             */
+/*   Updated: 2018/10/28 20:57:45 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,5 @@
 void	ft_error(char *str)
 {
 	ft_putendl(str);
-	exit(-1);
+	exit(EXIT_FAILURE);
 }

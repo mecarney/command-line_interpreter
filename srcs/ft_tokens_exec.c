@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 13:01:26 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/27 16:28:32 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/31 17:24:30 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ void		ft_tokens_to_cmd(t_ast *tokens, _Bool *ret)
 		command[++i] = ft_strdup(tokens->val);
 		tokens = tokens->l_child;
 	}
-	command = ft_checkquote(command);
-	command = ft_checkenv(command);
+	command = ft_check_expand(command);
 	*ret = ft_run_cmd(command);
 	ft_ptrdel(command);
 }
@@ -67,10 +66,11 @@ void		ft_tokens_semicolon(t_ast *tokens, _Bool *ret)
 	*ret = ft_tokens_exec(tokens->r_child);
 }
 
-static void	ft_dup_fd(int fd_origin, int fd_new, int io)
+void		ft_dup_fd(int fd_origin, int fd_new, int io)
 {
 	close(fd_origin);
 	dup2(fd_new, io);
+	close(fd_new);
 }
 
 void		ft_tokens_pipe(t_ast *tokens, _Bool *ret)
