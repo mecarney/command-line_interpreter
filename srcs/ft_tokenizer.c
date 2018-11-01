@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/01 15:04:07 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/01 15:12:00 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 {
 	char	ch;
 	int		expand;
+	char	*tmp;
+	char	*tmp2;
 
 	expand = 0;
 	ch = (str[t->i] != '(') ? str[t->i] : ')';
@@ -81,7 +83,10 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 	}
 	if (ch == '`')
 	{
-		add_token(t, ft_strlen(get_backquote(ft_strsub(str, t->j + 1, t->i - (t->j + 1)))), 0, tokens, get_backquote(ft_strsub(str, t->j + 1, t->i - (t->j + 1))), 0);
+		tmp = ft_strsub(str, t->j + 1, t->i - (t->j + 1));
+		tmp2 = get_backquote(tmp);
+		add_token(t, ft_strlen(tmp2), 0, tokens, tmp2, 0);
+		free(tmp2);
 	}
 	else if (ch == '\'' || ch == '\"')
 		add_token(t, t->i - 1, t->j + 1, tokens, str, expand);
