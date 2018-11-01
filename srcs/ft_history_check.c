@@ -6,7 +6,7 @@
 /*   By: fhong <fhong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:21:52 by fhong             #+#    #+#             */
-/*   Updated: 2018/10/31 17:48:02 by fhong            ###   ########.fr       */
+/*   Updated: 2018/10/31 18:04:46 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ static char	*get_history(char *cmd)
 	t_history	*tmp;
 
 	i = -1;
-	if (cmd[0] == '!' && cmd[1] &&cmd[1] != '\'' && cmd[1] != '\"' &&
+	if (cmd[0] == '!' && cmd[1] && cmd[1] != '\'' && cmd[1] != '\"' &&
 		!ISSPACE(cmd[1]) && !ISSPACE2(cmd[1]))
-		{
+	{
 		index = (cmd[1] == '!') ? -1 : ft_atoi(&cmd[1]);
 		(g_history && index < 0) && (index = g_history->index + index + 1);
 		if (!g_history || index <= 0 || index > g_history->index)
