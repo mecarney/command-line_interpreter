@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:15:18 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/31 16:48:35 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/11/01 14:21:54 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	ft_run_shell(_Bool *ret, char *line)
 
 	t.i = -1;
 	t.j = 0;
-	t.tokens = 0;
 	t.prev = '\0';
 	tokens = NULL;
 	check_quotes(line, &t, &tokens);

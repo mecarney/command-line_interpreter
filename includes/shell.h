@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/31 18:47:35 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/01 14:21:33 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,7 @@ typedef struct		s_okenize
 {
 	int				i;
 	int				j;
-	int				tokens;
 	char			prev;
-	int				expand;
 }					t_okenize;
 
 typedef struct		s_ast
@@ -84,6 +82,7 @@ typedef struct		s_ast
 	struct s_ast	*parent;
 	struct s_ast	*l_child;
 	struct s_ast	*r_child;
+	int				expand;
 }					t_ast;
 
 t_ast				*search(t_ast **tokens, int *n, char *str, size_t len);
