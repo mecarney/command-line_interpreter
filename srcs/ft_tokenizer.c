@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/01 15:47:01 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/01 16:13:01 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,12 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 		expand = 1;
 		if (!(t->prev))
 			t->j = t->i;
-		if (str[t->i + 1] && str[t->i] == '(')
+		if (str[t->i + 1] && str[t->i + 1] == '(')
 		{
+			expand = 2;
 			while (str[t->i] && (str[t->i] != ')' ||\
 					(str[t->i] == ')' && str[t->i - 1] == '\\')))
 				t->i++;
-			expand = 2;
 		}
 		else
 		{
@@ -84,7 +84,7 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 	}
 	if (ch == '`' || expand == 2)
 	{
-		tmp = ft_strsub(str, t->j + expand, t->i - (t->j + 1));
+		tmp = ft_strsub(str, t->j + expand, t->i - (t->j + expand));
 		tmp2 = get_backquote(tmp);
 		add_token(t, ft_strlen(tmp2), 0, tokens, tmp2, 0);
 		free(tmp2);
