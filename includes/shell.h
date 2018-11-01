@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/01 14:20:43 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/11/01 14:32:26 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ typedef struct		s_okenize
 {
 	int				i;
 	int				j;
-	int				tokens;
 	char			prev;
 }					t_okenize;
 

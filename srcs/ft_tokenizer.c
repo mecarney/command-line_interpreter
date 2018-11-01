@@ -6,7 +6,11 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2018/11/01 14:29:30 by mjacques         ###   ########.fr       */
+=======
+/*   Updated: 2018/11/01 14:24:12 by mcarney          ###   ########.fr       */
+>>>>>>> 90df672dc426d92bed4e78dfdb7562683dbb9246
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +36,12 @@ void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str, int exp
 		old->l_child = new;
 	}
 	t->j = t->i;
-	t->tokens++;
 	t->prev = '\0';
+<<<<<<< HEAD
 	new->expand = expand;
+=======
+	(*tokens)->expand = expand;
+>>>>>>> 90df672dc426d92bed4e78dfdb7562683dbb9246
 }
 
 void				quoting(char *str, t_okenize *t, t_ast **tokens)
