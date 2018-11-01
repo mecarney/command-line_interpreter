@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/01 14:38:36 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/01 15:04:07 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 	}
 	if (ch == '`')
 	{
-		add_token(t, ft_strlen(get_backquote(ft_strsub(str, t->j + 1, t->i - 1))), 0, tokens, get_backquote(ft_strsub(str, t->j + 1, t->i - 1)), 0);
+		add_token(t, ft_strlen(get_backquote(ft_strsub(str, t->j + 1, t->i - (t->j + 1)))), 0, tokens, get_backquote(ft_strsub(str, t->j + 1, t->i - (t->j + 1))), 0);
 	}
 	else if (ch == '\'' || ch == '\"')
 		add_token(t, t->i - 1, t->j + 1, tokens, str, expand);
@@ -105,7 +105,7 @@ void 				tokenize(char *str, t_okenize *t, t_ast **tokens)
 	{
 		if (t->prev && is_operator(t->prev) && str[t->i] == t->prev)
 			add_token(t, t->i, t->i - 1, tokens, str, 0);
-		else if (t->prev && is_operator(t->prev))// && is_operator(str[t->i]))
+		else if (t->prev && is_operator(t->prev))
 		{
 			add_token(t, t->i - 1, t->i - 1, tokens, str, 0);
 			t->prev = str[t->i];

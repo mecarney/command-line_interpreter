@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/30 23:17:33 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/01 14:23:27 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/11/01 15:04:44 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void		ft_check_expand(t_ast *tokens)
 	tmp = tokens;
 	while (tmp)
 	{
-		ft_printf("Ex: %d | Str: %s\n", tmp->expand, tmp->val);
 		if (tmp->expand)
 		{
 			if (tmp->val[0] && tmp->val[0] == '~')
