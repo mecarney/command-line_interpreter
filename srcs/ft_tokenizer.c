@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/10/31 18:05:18 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/01 12:50:33 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str, int exp
 	if (!(new = (t_ast *)malloc(sizeof(t_ast))))
 		ft_error("Malloc error");
 	new->val = ft_strsub(str, j, i - j + 1);
-	ft_printf("%s\n", new->val);
 	new->l_child = NULL;
 	new->r_child = NULL;
 	if (!(*tokens))
@@ -45,19 +44,18 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 
 	expand = 0;
 	ch = (str[t->i] != '(') ? str[t->i] : ')';
-	if (t->prev && t->prev != ' ' && t->prev != '\t' && t->prev != '\n')
-		add_token(t, t->i - 1, t->j, tokens, str, expand);
-	t->j = t->i++;
 	if (ch == '\\')
 	{
-		t->j = t->i;
+		if (!(t->prev))
+			t->j = t->i;
 		while (str[t->i] && str[t->i] !=  ' ' && str[t->i] != '\t' && str[t->i] != '\n')
 			t->i++;
 	}
 	else if (ch == '$' || ch == '~')
 	{
 		expand = 1;
-		t->j = (t->i > 0) ? t->i - 1 : 0;
+		if (!(t->prev))
+			t->j = t->i;
 		if (str[t->i + 1] && str[t->i] == '(')
 		{
 			while (str[t->i] && (str[t->i] != ')' ||\
@@ -72,6 +70,9 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 	}
 	else
 	{
+		if (t->prev && t->prev != ' ' && t->prev != '\t' && t->prev != '\n')
+			add_token(t, t->i - 1, t->j, tokens, str, expand);
+		t->j = t->i++;
 		while (str[t->i] && (str[t->i] != ch ||\
 				(str[t->i] == ch && str[t->i - 1] == '\\')))
 		{
@@ -79,7 +80,12 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 			t->i++;
 		}
 	}
-	add_token(t, t->i, t->j, tokens, str, expand);
+	if (ch == '`')
+	{
+		add_token(t, ft_strlen(get_backquote(ft_strsub(str, t->j + 1, t->i - 1))), 0, tokens, get_backquote(ft_strsub(str, t->j + 1, t->i - 1)), 0);
+	}
+	else
+		add_token(t, t->i, t->j, tokens, str, expand);
 }
 
 int					is_operator(char a)

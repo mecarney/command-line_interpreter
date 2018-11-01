@@ -6,11 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/31 18:10:50 by mcarney          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
->>>>>>> 45fef8f63c50019acf93cad977ed6d17a6913a0d
+/*   Updated: 2018/10/31 18:47:35 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +14,6 @@
 # define SHELL_H
 
 # include "libft.h"
-# include "ft_lexer_parser.h"
 
 # define SHELLNAME	"\033[1m42sh% \033[0m"
 # define NBRBUILTIN 7
@@ -160,5 +155,9 @@ _Bool				ft_builtin_history(char **ptr);
 char				*get_history_file(void);
 
 char				*ft_check_history(char *str);
+
+char				*ft_check_backquote(char *str);
+void				ft_dup_fd(int fd_origin, int fd_new, int io);
+char				*get_backquote(char *str);
 
 #endif
