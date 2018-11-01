@@ -6,13 +6,13 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/10/27 10:34:46 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/10/31 18:05:18 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str)
+void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str, int expand)
 {
 	t_ast			*new;
 	t_ast			*old;
@@ -21,6 +21,7 @@ void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str)
 	if (!(new = (t_ast *)malloc(sizeof(t_ast))))
 		ft_error("Malloc error");
 	new->val = ft_strsub(str, j, i - j + 1);
+	ft_printf("%s\n", new->val);
 	new->l_child = NULL;
 	new->r_child = NULL;
 	if (!(*tokens))
@@ -34,32 +35,51 @@ void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str)
 	t->j = t->i;
 	t->tokens++;
 	t->prev = '\0';
+	t->expand = expand;
 }
 
 void				quoting(char *str, t_okenize *t, t_ast **tokens)
 {
 	char	ch;
+	int		expand;
 
-	ch = str[t->i];
+	expand = 0;
+	ch = (str[t->i] != '(') ? str[t->i] : ')';
 	if (t->prev && t->prev != ' ' && t->prev != '\t' && t->prev != '\n')
-		add_token(t, t->i - 1, t->j, tokens, str);
+		add_token(t, t->i - 1, t->j, tokens, str, expand);
 	t->j = t->i++;
 	if (ch == '\\')
-		t->j = t->i;
-	else if (ch == '$')
 	{
-		t->j = (t->i > 0) ? t->i - 1 : 0;
+		t->j = t->i;
 		while (str[t->i] && str[t->i] !=  ' ' && str[t->i] != '\t' && str[t->i] != '\n')
 			t->i++;
 	}
-	// else if (ch == '`')
+	else if (ch == '$' || ch == '~')
+	{
+		expand = 1;
+		t->j = (t->i > 0) ? t->i - 1 : 0;
+		if (str[t->i + 1] && str[t->i] == '(')
+		{
+			while (str[t->i] && (str[t->i] != ')' ||\
+					(str[t->i] == ')' && str[t->i - 1] == '\\')))
+				t->i++;
+		}
+		else
+		{
+			while (str[t->i] && str[t->i] !=  ' ' && str[t->i] != '\t' && str[t->i] != '\n'  && str[t->i] != '\"'  && str[t->i] != '`'  && str[t->i] != '\'')
+				t->i++;
+		}
+	}
 	else
 	{
 		while (str[t->i] && (str[t->i] != ch ||\
 				(str[t->i] == ch && str[t->i - 1] == '\\')))
-			t->i++; //check for $ with "
+		{
+			(ch == '"' && str[t->i] == '$') ? expand = 1 : 0;
+			t->i++;
+		}
 	}
-	add_token(t, t->i, t->j, tokens, str);
+	add_token(t, t->i, t->j, tokens, str, expand);
 }
 
 int					is_operator(char a)
@@ -77,24 +97,25 @@ void 				tokenize(char *str, t_okenize *t, t_ast **tokens)
 	while (str && len > ++t->i && str[t->i] != '#')
 	{
 		if (t->prev && is_operator(t->prev) && str[t->i] == t->prev)
-			add_token(t, t->i, t->i - 1, tokens, str);
+			add_token(t, t->i, t->i - 1, tokens, str, 0);
 		else if (t->prev && is_operator(t->prev))// && is_operator(str[t->i]))
 		{
-			add_token(t, t->i - 1, t->i - 1, tokens, str);
+			add_token(t, t->i - 1, t->i - 1, tokens, str, 0);
 			t->prev = str[t->i];
 		}
 		else if (str[t->i] == '\\' || str[t->i] == '$' || str[t->i] == '`' ||\
-				str[t->i] == '\'' || str[t->i] == '\"')// || str[t->i] == '(')
+				str[t->i] == '\'' || str[t->i] == '\"' || str[t->i] == '(' ||\
+				str[t->i] == '~')
 			quoting(str, t, tokens);
 		else if (is_operator(str[t->i]))
 		{
 			if (t->prev && t->prev != ' ' && t->prev != '\t' && t->prev != '\n')
-				add_token(t, t->i - 1, t->j, tokens, str);
+				add_token(t, t->i - 1, t->j, tokens, str, 0);
 			t->prev = str[t->i];
 			t->j = t->i;
 		}
 		else if (t->prev && (str[t->i] == ' ' || str[t->i] == '\t' || str[t->i] == '\n') && (t->prev != ' ' && t->prev != '\t' && t->prev != '\n'))
-			add_token(t, t->i - 1, t->j, tokens, str);
+			add_token(t, t->i - 1, t->j, tokens, str, 0);
 		else
 		{
 			(t->prev == ' ' || t->prev == '\t' || t->prev == '\n') ? t->prev = '\0' : 0;

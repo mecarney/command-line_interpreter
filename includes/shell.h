@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/28 17:51:33 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/10/31 17:42:20 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct		s_okenize
 	int				j;
 	int				tokens;
 	char			prev;
+	int				expand;
 }					t_okenize;
 
 typedef struct		s_ast
@@ -112,7 +113,7 @@ typedef struct		s_ast
 
 t_ast				*search(t_ast **tokens, int *n, char *str, size_t len);
 t_ast				*parser(t_ast **tokens, t_ast *parent);
-void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str);
+void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str, int expand);
 void				quoting(char *str, t_okenize *t, t_ast **tokens);
 int					is_operator(char a);
 void				tokenize(char *str, t_okenize *t, t_ast **tokens);
