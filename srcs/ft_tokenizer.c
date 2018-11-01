@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/01 16:13:01 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/01 16:31:49 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,14 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 	ch = (str[t->i] != '(') ? str[t->i] : ')';
 	if (ch == '\\')
 	{
-		if (!(t->prev))
-			t->j = t->i;
+		(!(t->prev)) ? t->j = t->i : 0;
 		while (str[t->i] && str[t->i] !=  ' ' && str[t->i] != '\t' && str[t->i] != '\n')
 			t->i++;
 	}
 	else if (ch == '$' || ch == '~')
 	{
 		expand = 1;
-		if (!(t->prev))
-			t->j = t->i;
+		(!(t->prev)) ? t->j = t->i : 0;
 		if (str[t->i + 1] && str[t->i + 1] == '(')
 		{
 			expand = 2;
@@ -65,10 +63,8 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 				t->i++;
 		}
 		else
-		{
 			while (str[t->i] && str[t->i] !=  ' ' && str[t->i] != '\t' && str[t->i] != '\n'  && str[t->i] != '\"'  && str[t->i] != '`'  && str[t->i] != '\'')
 				t->i++;
-		}
 	}
 	else
 	{
