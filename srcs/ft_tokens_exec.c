@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 13:01:26 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/31 17:24:30 by fhong            ###   ########.fr       */
+/*   Updated: 2018/11/01 14:22:12 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void		ft_tokens_to_cmd(t_ast *tokens, _Bool *ret)
 		command[++i] = ft_strdup(tokens->val);
 		tokens = tokens->l_child;
 	}
-	command = ft_check_expand(command);
 	*ret = ft_run_cmd(command);
 	ft_ptrdel(command);
 }
@@ -55,7 +54,10 @@ _Bool		ft_tokens_exec(t_ast *tokens)
 				g_operator[i].fct(tokens, &ret);
 		}
 		else
+		{
+			ft_check_expand(tokens);
 			ft_tokens_to_cmd(tokens, &ret);
+		}
 	}
 	return (ret);
 }

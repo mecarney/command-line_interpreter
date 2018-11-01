@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/30 23:17:33 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/31 16:21:30 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/11/01 14:23:27 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,22 @@ static char	*ft_check_dollar(char *cmd, char *dollar)
 	return (cmd);
 }
 
-char		**ft_check_expand(char **cmd)
+void		ft_check_expand(t_ast *tokens)
 {
-	int		i;
+	t_ast	*tmp;
 	char	*position;
 
-	i = 0;
-	while (cmd[++i])
+	tmp = tokens;
+	while (tmp)
 	{
-		if (cmd[i][0] && cmd[i][0] == '~')
-			cmd[i] = ft_check_tilde(cmd[i]);
-		while ((position = ft_strchr(cmd[i], '$')))
-			cmd[i] = ft_check_dollar(cmd[i], position);
+		ft_printf("Ex: %d | Str: %s\n", tmp->expand, tmp->val);
+		if (tmp->expand)
+		{
+			if (tmp->val[0] && tmp->val[0] == '~')
+				tmp->val = ft_check_tilde(tmp->val);
+			while ((position = ft_strchr(tmp->val, '$')))
+				tmp->val = ft_check_dollar(tmp->val, position);
+		}
+		tmp = tmp->l_child;
 	}
-	return (cmd);
 }

@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/31 18:47:35 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/01 14:20:43 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ _Bool				ft_builtin_setenv(char **ptr);
 _Bool				ft_builtin_unsetenv(char **ptr);
 
 char				**ft_newenv(char **envp);
-char				**ft_check_expand(char **cmd);
 int					ft_envar(char *name);
 void				ft_setenv(char *name, char *value);
 
@@ -75,12 +74,12 @@ typedef struct		s_okenize
 	int				j;
 	int				tokens;
 	char			prev;
-	int				expand;
 }					t_okenize;
 
 typedef struct		s_ast
 {
 	char			*val;
+	int				expand;
 	struct s_ast	*parent;
 	struct s_ast	*l_child;
 	struct s_ast	*r_child;
@@ -99,6 +98,8 @@ int					check_operator(char *str, t_okenize *t, t_ast **tokens);
 void				check_quotes(char *str, t_okenize *t, t_ast **tokens);
 int					ft_strfind(const char *s1, const char *s2);
 void				free_ast(t_ast *tokens);
+
+void				ft_check_expand(t_ast *tokens);
 
 /*
 **	ft_operator.c
