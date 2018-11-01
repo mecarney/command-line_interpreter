@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/01 12:50:33 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/01 14:08:11 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str, int exp
 	if (!(new = (t_ast *)malloc(sizeof(t_ast))))
 		ft_error("Malloc error");
 	new->val = ft_strsub(str, j, i - j + 1);
+	ft_printf("%s\n", new->val);
 	new->l_child = NULL;
 	new->r_child = NULL;
 	if (!(*tokens))
@@ -84,8 +85,10 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 	{
 		add_token(t, ft_strlen(get_backquote(ft_strsub(str, t->j + 1, t->i - 1))), 0, tokens, get_backquote(ft_strsub(str, t->j + 1, t->i - 1)), 0);
 	}
+	else if (ch == '\'' || ch == '\"')
+		add_token(t, t->i - 1, t->j + 1, tokens, str, expand);
 	else
-		add_token(t, t->i, t->j, tokens, str, expand);
+		add_token(t, t->i - 1, t->j, tokens, str, expand);
 }
 
 int					is_operator(char a)
