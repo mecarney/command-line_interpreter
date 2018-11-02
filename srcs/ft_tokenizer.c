@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/02 10:56:02 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/02 16:35:28 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str, int exp
 	if (!(new = (t_ast *)malloc(sizeof(t_ast))))
 		ft_error("Malloc error");
 	new->val = ft_strsub(str, j, i - j + 1);
-	// ft_printf("token: %s|\n", new->val);
 	new->l_child = NULL;
 	new->r_child = NULL;
 	if (!(*tokens))
@@ -43,19 +42,40 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 	int		expand;
 	char	*tmp;
 	char	*tmp2;
+	int		i;
+	int		j;
 
 	expand = 0;
 	ch = (str[t->i] != '(') ? str[t->i] : ')';
 	if (ch == '\\')
 	{
-		(!(t->prev)) ? t->j = ++t->i : 0;
+		i = t->i;
+		j = i;
+		while (str[i] && str[i] == '\\')
+			i++;
+		i = i - t->i;
+		expand = (i % 2) ? 0 : 1;
+		i = (i > 1) ? i / 2 + !(expand) : 1;
+		(!(t->prev)) ? t->j = t->i + i : 0;
 		while (str[t->i] && !(whitespace))
 			t->i++;
+		if (t->prev)
+		{
+			tmp = ft_strsub(str, t->j, j - t->j);
+			tmp2 = ft_strsub(str, j + i, t->i - (j + i));
+			tmp = free_join(tmp, tmp2);
+			add_token(t, ft_strlen(tmp), 0, tokens, tmp, expand, 0);
+			free(tmp);
+			free(tmp2);
+		}
+		else
+			add_token(t, t->i - 1, t->j, tokens, str, expand, 0);
+		return ;
 	}
 	else if (ch == '$' || ch == '~')
 	{
 		expand = 1;
-		t->j = t->i;
+		(!(t->prev)) ? t->j = t->i : 0;
 		if (str[t->i + 1] && str[t->i + 1] == '(')
 		{
 			expand = 2;
