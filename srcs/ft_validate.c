@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/01 16:36:23 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/01 16:59:11 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int					ft_strfind(const char *s1, const char *s2)
 	return (!(str1[i]));
 }
 
-void	free_ast(t_ast *tokens)
+void		free_ast(t_ast *tokens)
 {
 	t_ast	*tmp;
 
@@ -68,7 +68,7 @@ void	free_ast(t_ast *tokens)
 	free(tokens);
 }
 
-int		ft_len_cmd(t_ast *tokens)
+int			ft_len_cmd(t_ast *tokens)
 {
 	int		len;
 
@@ -81,10 +81,10 @@ int		ft_len_cmd(t_ast *tokens)
 	return (len);
 }
 
-void 		append_str(char *str, t_okenize *t, t_ast **tokens, char *msg)
+void		append_str(char *str, t_okenize *t, t_ast **tokens, char *msg)
 {
-	char *tmp;
-	char *line;
+	char	*tmp;
+	char	*line;
 
 	t->i = -1;
 	ft_putstr(msg);
@@ -97,7 +97,7 @@ void 		append_str(char *str, t_okenize *t, t_ast **tokens, char *msg)
 	free(tmp);
 }
 
-int		check_operator(char *str, t_okenize *t, t_ast **tokens)
+int			check_operator(char *str, t_okenize *t, t_ast **tokens)
 {
 	while (str[t->i])
 		t->i++;
@@ -105,7 +105,8 @@ int		check_operator(char *str, t_okenize *t, t_ast **tokens)
 	while (t->i >= 0 && (str[t->i] == ' ' || str[t->i] == '\t'))
 		t->i--;
 	if ((t->i == 0 && str[t->i] != ';' && is_operator(str[t->i])) ||\
-		(t->i > 0  && str[t->i] != ';' && str[t->i - 1] != '\\' && is_operator(str[t->i])))
+		(t->i > 0 && str[t->i] != ';' && str[t->i - 1] != '\\' &&\
+		is_operator(str[t->i])))
 	{
 		append_str(str, t, tokens, "operator> ");
 		return (1);
@@ -113,15 +114,17 @@ int		check_operator(char *str, t_okenize *t, t_ast **tokens)
 	return (0);
 }
 
-void	check_quotes(char *str, t_okenize *t, t_ast **tokens)
+void		check_quotes(char *str, t_okenize *t, t_ast **tokens)
 {
 	char	ch;
 	char	*tmp;
 
 	while (str[++t->i])
-		if (((str[t->i] == '\'' || str[t->i] == '\"'  || str[t->i] == '`'  || str[t->i] == '(') && t->i == 0) ||\
+		if (((str[t->i] == '\'' || str[t->i] == '\"' || str[t->i] == '`' ||\
+			str[t->i] == '(') && t->i == 0) ||\
 			((t->i > 0 && str[t->i - 1] != '\\') &&\
-			(str[t->i] == '\'' || str[t->i] == '\"'  || str[t->i] == '`'  || str[t->i] == '(')))
+			(str[t->i] == '\'' || str[t->i] == '\"' || str[t->i] == '`' ||\
+			str[t->i] == '(')))
 		{
 			ch = (str[t->i++] != '(') ? str[t->i - 1] : ')';
 			while (str[t->i] && (str[t->i] != ch || (str[t->i] == ch &&\

@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 13:01:26 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/01 16:22:59 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/01 17:07:54 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,12 @@ _Bool		ft_tokens_exec(t_ast *tokens)
 		{
 			if ((i = ft_check_operator(tokens->val)) != -1)
 				g_operator[i].fct(tokens, &ret);
+			return (ret);
 		}
-		else
-		{
-			ft_check_expand(tokens);
-			ft_tokens_to_cmd(tokens, &ret);
-		}
+		if (ft_strcmp(tokens->val, ";") == 0)
+			tokens = tokens->l_child;
+		ft_check_expand(tokens);
+		ft_tokens_to_cmd(tokens, &ret);
 	}
 	return (ret);
 }
