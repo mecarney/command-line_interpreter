@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/01 20:38:56 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/02 10:56:02 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,9 @@ void 				tokenize(char *str, t_okenize *t, t_ast **tokens, int len)
 			add_token(t, t->i - 1, t->j, tokens, str, 0, 0);
 		else
 		{
-			t->prev = (prev_whitespace) ? '\0' : str[t->i];
+			(prev_whitespace) ? t->prev = '\0' : 0;
 			(!(t->prev)) ? t->j = t->i : 0;
+			t->prev = str[t->i];
 		}
 	}
 }
