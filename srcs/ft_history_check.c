@@ -6,7 +6,7 @@
 /*   By: fhong <fhong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:21:52 by fhong             #+#    #+#             */
-/*   Updated: 2018/10/31 18:04:46 by fhong            ###   ########.fr       */
+/*   Updated: 2018/11/02 16:55:41 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char		*ft_check_history(char *str)
 		tmp = ft_strsub(current, 0, mark - current);
 		cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
 		(tmp) ? ft_strdel(&tmp) : 0;
-		tmp = get_history(mark);
+		tmp = (*mark == '!') ? get_history(mark) : ft_strdup("");
 		cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
 		current = ft_check_history_helper(current, mark, &flag);
 	}

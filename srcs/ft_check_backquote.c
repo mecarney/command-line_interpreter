@@ -6,7 +6,7 @@
 /*   By: fhong <fhong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/30 21:19:54 by fhong             #+#    #+#             */
-/*   Updated: 2018/11/01 20:03:54 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/02 16:45:24 by fhong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,31 +55,3 @@ char		*get_backquote(char *str)
 	ft_strdel(&str);
 	return (get_pipe_stdin(fd));
 }
-
-// char		*ft_check_backquote(char *str)
-// {
-// 	char	*current;
-// 	char	*mark;
-// 	char	*tmp;
-// 	char	*cmd;
-// 	_Bool	flag;
-//
-// 	if (!str || !ft_strchr(str, '`'))
-// 		return (str);
-// 	flag = 0;
-// 	cmd = NULL;
-// 	current = str;
-// 	while (current && (mark = ft_strchr(current, '`')))
-// 	{
-// 		tmp = ft_strsub(current, 0, mark - current);
-// 		cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
-// 		(tmp) ? ft_strdel(&tmp) : 0;
-// 		tmp = ft_strsub(mark, 1, ft_strchr(&mark[1], '`') - mark - 1);
-// 		tmp = get_backquote(tmp);
-// 		cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
-// 		current = ft_strchr(&mark[1], '`') + 1;
-// 		(tmp) ? ft_strdel(&tmp) : 0;
-// 	}
-// 	cmd = free_join(cmd, current);
-// 	return (cmd);
-// }
