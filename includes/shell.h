@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/02 19:41:53 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/02 20:37:35 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,11 @@ _Bool				ft_return_access(const char *name, char *str);
 **	lexer_parser.c
 */
 
-# define whitespace str[t->i] == ' ' || str[t->i] == '\t' || str[t->i] == '\n'
+# define whitespace (str[t->i] == ' ' || str[t->i] == '\t' ||\
+					str[t->i] == '\n') && !(count_backslashes(t, str))
 # define prev_whitespace t->prev == ' ' || t->prev == '\t' || t->prev == '\n'
-# define quote str[t->i] == '`' || str[t->i] == '\'' || str[t->i] == '\"'
+# define quote (str[t->i] == '`' || str[t->i] == '\'' || str[t->i] == '\"')\
+				&& !(count_backslashes(t, str))
 # define special_char str[t->i] == '\\' || str[t->i] == '$'|| str[t->i] == '~'
 
 typedef struct		s_okenize

@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/02 20:22:43 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/02 20:38:28 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str, int exp
 	if (!(new = (t_ast *)malloc(sizeof(t_ast))))
 		ft_error("Malloc error");
 	new->val = ft_strsub(str, j, i - j + 1);
-	// ft_printf("token: %s\n", new->val);
 	new->l_child = NULL;
 	new->r_child = NULL;
 	if (!(*tokens))
@@ -134,7 +133,7 @@ void 				tokenize(char *str, t_okenize *t, t_ast **tokens, int len)
 			add_token(t, t->i, t->i - 1, tokens, str, 0, 0);
 		else if (t->prev && is_operator(t->prev))
 			add_token(t, t->i - 1, t->i - 1, tokens, str, 0, 1);
-		else if (special_char || quote )
+		else if (special_char || (quote))
 			quoting(str, t, tokens);
 		else if (is_operator(str[t->i]))
 		{
