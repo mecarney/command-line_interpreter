@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/02 16:35:28 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/02 20:22:43 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str, int exp
 	if (!(new = (t_ast *)malloc(sizeof(t_ast))))
 		ft_error("Malloc error");
 	new->val = ft_strsub(str, j, i - j + 1);
+	// ft_printf("token: %s\n", new->val);
 	new->l_child = NULL;
 	new->r_child = NULL;
 	if (!(*tokens))
@@ -46,7 +47,8 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 	int		j;
 
 	expand = 0;
-	ch = (str[t->i] != '(') ? str[t->i] : ')';
+	// ch = (str[t->i] != '(') ? str[t->i] : ')';
+	ch = str[t->i];
 	if (ch == '\\')
 	{
 		i = t->i;
@@ -57,8 +59,10 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 		expand = (i % 2) ? 0 : 1;
 		i = (i > 1) ? i / 2 + !(expand) : 1;
 		(!(t->prev)) ? t->j = t->i + i : 0;
-		while (str[t->i] && !(whitespace))
-			t->i++;
+		t->i++;
+		if (!(str[t->i] && ((whitespace) || (quote))))
+			while (str[t->i] && !(whitespace) && !(quote))
+				t->i++;
 		if (t->prev)
 		{
 			tmp = ft_strsub(str, t->j, j - t->j);
@@ -69,7 +73,7 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 			free(tmp2);
 		}
 		else
-			add_token(t, t->i - 1, t->j, tokens, str, expand, 0);
+			add_token(t, t->i, t->j, tokens, str, expand, 0);
 		return ;
 	}
 	else if (ch == '$' || ch == '~')
@@ -81,6 +85,8 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 			expand = 2;
 			while (str[t->i] && (str[t->i] != ')' ||\
 					(str[t->i] == ')' && str[t->i - 1] == '\\')))
+			// while (str[t->i] && (str[t->i] != ')' &&\
+			// 		!(count_backslashes(t, str))))
 				t->i++;
 		}
 		else

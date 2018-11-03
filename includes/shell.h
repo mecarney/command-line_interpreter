@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/02 16:35:57 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/02 19:41:53 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,7 @@ _Bool				ft_return_access(const char *name, char *str);
 # define whitespace str[t->i] == ' ' || str[t->i] == '\t' || str[t->i] == '\n'
 # define prev_whitespace t->prev == ' ' || t->prev == '\t' || t->prev == '\n'
 # define quote str[t->i] == '`' || str[t->i] == '\'' || str[t->i] == '\"'
-# define special_char str[t->i] == '\\' || str[t->i] == '$'||\
-						str[t->i] == '(' || str[t->i] == '~'
+# define special_char str[t->i] == '\\' || str[t->i] == '$'|| str[t->i] == '~'
 
 typedef struct		s_okenize
 {
@@ -92,6 +91,7 @@ typedef struct		s_ast
 
 t_ast				*search(t_ast **tokens, int *n, char *str, size_t len);
 t_ast				*parser(t_ast **tokens, t_ast *parent);
+int					count_backslashes(t_okenize *t, char *str);
 void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str, int expand, int prev);
 void				quoting(char *str, t_okenize *t, t_ast **tokens);
 int					is_operator(char a);

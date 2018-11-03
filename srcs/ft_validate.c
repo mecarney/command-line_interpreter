@@ -6,11 +6,21 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/02 15:37:10 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/02 20:20:49 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
+
+int					count_backslashes(t_okenize *t, char *str)
+{
+	int				i;
+
+	i = t->i - 1;
+	while (str[i] && str[i] == '\\')
+		i--;
+	return ((t->i - i + 1) % 2);
+}
 
 int					ft_strfind(const char *s1, const char *s2)
 {
@@ -104,9 +114,8 @@ int			check_operator(char *str, t_okenize *t, t_ast **tokens)
 	t->i--;
 	while (t->i >= 0 && (str[t->i] == ' ' || str[t->i] == '\t'))
 		t->i--;
-	if ((t->i == 0 && str[t->i] != ';' && is_operator(str[t->i])) ||\
-		(t->i > 0 && str[t->i] != ';' && str[t->i - 1] != '\\' &&\
-		is_operator(str[t->i])))
+	if (str[t->i] && str[t->i] != ';' && is_operator(str[t->i]) &&\
+		!(count_backslashes(t, str)))
 	{
 		append_str(str, t, tokens, "operator> ");
 		return (1);
@@ -120,15 +129,13 @@ void		check_quotes(char *str, t_okenize *t, t_ast **tokens)
 	char	*tmp;
 
 	while (str[++t->i])
-		if (((str[t->i] == '\'' || str[t->i] == '\"' || str[t->i] == '`' ||\
-			str[t->i] == '(') && t->i == 0) ||\
-			((t->i > 0 && str[t->i - 1] != '\\') &&\
-			(str[t->i] == '\'' || str[t->i] == '\"' || str[t->i] == '`' ||\
-			str[t->i] == '(')))
+		if (((str[t->i] == '\'' || str[t->i] == '\"' || str[t->i] == '`') &&\
+			!(count_backslashes(t, str))) || (str[t->i - 1] &&\
+			str[t->i - 1] == '$' && str[t->i] == '('))
 		{
 			ch = (str[t->i++] != '(') ? str[t->i - 1] : ')';
 			while (str[t->i] && (str[t->i] != ch || (str[t->i] == ch &&\
-					(t->i >= 1 && str[t->i - 1] == '\\'))))
+					count_backslashes(t, str))))
 				t->i++;
 			if (!(str[t->i]))
 			{
