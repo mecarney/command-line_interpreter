@@ -57,7 +57,8 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 		expand = (i % 2) ? 0 : 1;
 		i = (i > 1) ? i / 2 + !(expand) : 1;
 		(!(t->prev)) ? t->j = t->i + i : 0;
-		while (str[t->i] && !(whitespace))
+		(str[++t->i] && (whitespace)) ? t->i++ : 0;
+		while (str[t->i] && !(whitespace) && str[t->i] != '\\')
 			t->i++;
 		if (t->prev)
 		{
