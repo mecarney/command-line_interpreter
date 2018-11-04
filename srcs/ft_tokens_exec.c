@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 13:01:26 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/01 17:07:54 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/02 18:56:23 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ t_operator	g_operator[NBRTOKENS] = {
 	{"|", &ft_tokens_pipe},
 	{">", &ft_tokens_redirect},
 	{">>", &ft_tokens_redirect_append},
-	{"<", &ft_tokens_redirect_fd}
+	{"<", &ft_tokens_redirect_fd},
+	{"<<", &ft_tokens_here_doc}
 };
 
 void		ft_tokens_to_cmd(t_ast *tokens, _Bool *ret)
