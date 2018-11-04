@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 16:23:43 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/04 13:38:03 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/11/04 15:02:51 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,46 @@ _Bool		ft_tokens_file(int fd)
 	return (0);
 }
 
+static char	*ft_streplace(char *str, char old, char new)
+{
+	int i;
+
+	i = -1;
+	while(str[++i])
+		if (str[i] == old)
+			str[i] = new;
+	return (str);
+}
+
+static char	*ft_get_backquote(char *str)
+{
+ 	char	*current;
+ 	char	*mark;
+ 	char	*tmp;
+ 	char	*cmd;
+ 	_Bool	flag;
+
+ 	if (!str || !ft_strchr(str, '`'))
+ 		return (str);
+ 	flag = 0;
+ 	cmd = NULL;
+ 	current = str;
+ 	while (current && (mark = ft_strchr(current, '`')))
+ 	{
+ 		tmp = ft_strsub(current, 0, mark - current);
+ 		cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
+ 		(tmp) ? ft_strdel(&tmp) : 0;
+ 		tmp = ft_strsub(mark, 1, ft_strchr(&mark[1], '`') - mark - 1);
+ 		tmp = get_backquote(tmp);
+		tmp = ft_streplace(tmp, ' ', '\n');
+ 		cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
+ 		current = ft_strchr(&mark[1], '`') + 1;
+ 		(tmp) ? ft_strdel(&tmp) : 0;
+ 	}
+ 	cmd = free_join(cmd, current);
+ 	return (cmd);
+ }
+
 static int	ft_get_document(char *word, int *fd)
 {
 	char	*line;
@@ -62,6 +102,7 @@ static int	ft_get_document(char *word, int *fd)
 	}
 	ft_strdel(&line);
 	text = ft_expand(text, 0);
+	text = ft_get_backquote(text);
 	ft_dup_fd(fd[0], fd[1], 1);
 	ft_putstr(text);
 	ft_strdel(&text);
