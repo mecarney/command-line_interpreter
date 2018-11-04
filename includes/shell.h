@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/02 16:35:57 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/04 12:46:22 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ void				check_quotes(char *str, t_okenize *t, t_ast **tokens);
 int					ft_strfind(const char *s1, const char *s2);
 void				free_ast(t_ast *tokens);
 
+char				*ft_expand(char *str, _Bool tilde);
 void				ft_check_expand(t_ast *tokens);
 
 /*
@@ -116,7 +117,7 @@ typedef struct		s_operator
 	void			(*fct)(t_ast *tokens, _Bool *ret);
 }					t_operator;
 
-# define NBRTOKENS 7
+# define NBRTOKENS 8
 extern t_operator	g_operator[NBRTOKENS];
 
 int					ft_run_cmd(char **cmd);
@@ -133,6 +134,7 @@ void				ft_tokens_redirect(t_ast *tokens, _Bool *ret);
 void				ft_tokens_redirect_append(t_ast *tokens, _Bool *ret);
 void				ft_tokens_redirect_fd(t_ast *tokens, _Bool *ret);
 
+void				ft_tokens_here_doc(t_ast *tokens, _Bool *ret);
 int					ft_check_operator(char *str);
 char				*ft_tokens_val(t_ast *tokens);
 _Bool				ft_tokens_file(int fd);
