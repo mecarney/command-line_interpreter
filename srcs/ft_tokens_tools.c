@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 16:23:43 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/04 12:53:16 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/11/04 13:38:03 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ static int	ft_get_document(char *word, int *fd)
 	text = NULL;
 	while (42)
 	{
-		ft_putstr("> ");
 		if (get_next_line(0, &line) > 0)
 		{
 			text = (!text) ? ft_strnew(0) : free_append(text, '\n');
@@ -78,7 +77,7 @@ void		ft_tokens_here_doc(t_ast *tokens, _Bool *ret)
 
 	pipe(fd);
 	if ((child_left = fork()) == 0)
-		exit(ft_get_document(tokens->r_child->val, fd));
+		exit(ft_get_document(ft_tokens_val(tokens->r_child), fd));
 	else if (child_left < 0)
 		ft_putendl("ERROR: fork() failed");
 	if ((child_right = fork()) == 0)
