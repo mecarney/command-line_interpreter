@@ -73,6 +73,7 @@ _Bool				ft_return_access(const char *name, char *str);
 # define quote str[t->i] == '`' || str[t->i] == '\'' || str[t->i] == '\"'
 # define special_char str[t->i] == '\\' || str[t->i] == '$'||\
 						str[t->i] == '(' || str[t->i] == '~'
+# define operator str[t->i] == '|' || str[t->i] == '&' || str[t->i] == ';' || str[t->i] == '<' || str[t->i] == '>'
 
 typedef struct		s_okenize
 {

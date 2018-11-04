@@ -21,6 +21,7 @@ void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str, int exp
 	if (!(new = (t_ast *)malloc(sizeof(t_ast))))
 		ft_error("Malloc error");
 	new->val = ft_strsub(str, j, i - j + 1);
+	// ft_printf("%s\n", new->val);
 	new->l_child = NULL;
 	new->r_child = NULL;
 	if (!(*tokens))
@@ -58,9 +59,9 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 		i = (i > 1) ? i / 2 + !(expand) : 1;
 		(!(t->prev)) ? t->j = t->i + i : 0;
 		(str[++t->i] && (whitespace)) ? t->i++ : 0;
-		while (str[t->i] && !(whitespace) && str[t->i] != '\\')
+		while (str[t->i] && !(whitespace || special_char || quote || operator))
 			t->i++;
-		if (t->prev)
+		if (t->prev && (t->j < t->i))
 		{
 			tmp = ft_strsub(str, t->j, j - t->j);
 			tmp2 = ft_strsub(str, j + i, t->i - (j + i));
@@ -69,8 +70,9 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 			free(tmp);
 			free(tmp2);
 		}
-		else
+		else if (t->j < t->i)
 			add_token(t, t->i - 1, t->j, tokens, str, expand, 0);
+		t->i--;
 		return ;
 	}
 	else if (ch == '$' || ch == '~')
