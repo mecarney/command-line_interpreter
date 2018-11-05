@@ -6,13 +6,13 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/05 13:30:59 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/05 13:43:09 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/05 15:42:50 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-int					count_backslashes(t_okenize *t, char *str)
+int		count_backslashes(t_okenize *t, char *str)
 {
 	int				i;
 
@@ -22,7 +22,7 @@ int					count_backslashes(t_okenize *t, char *str)
 	return ((t->i - i + 1) % 2);
 }
 
-int					ft_strfind(const char *s1, const char *s2)
+int		ft_strfind(const char *s1, const char *s2)
 {
 	size_t			i;
 	size_t			j;
@@ -51,7 +51,7 @@ int					ft_strfind(const char *s1, const char *s2)
 	return (!(str1[i]));
 }
 
-void				free_ast(t_ast *tokens)
+void	free_ast(t_ast *tokens)
 {
 	t_ast			*tmp;
 
@@ -78,7 +78,7 @@ void				free_ast(t_ast *tokens)
 	free(tokens);
 }
 
-int					ft_len_cmd(t_ast *tokens)
+int		ft_len_cmd(t_ast *tokens)
 {
 	int				len;
 
@@ -89,4 +89,17 @@ int					ft_len_cmd(t_ast *tokens)
 		tokens = tokens->l_child;
 	}
 	return (len);
+}
+
+void	ft_check_expand(t_ast *tokens)
+{
+	t_ast	*tmp;
+
+	tmp = tokens;
+	while (tmp)
+	{
+		if (tmp->expand)
+			tmp->val = ft_expand(tmp->val, 1);
+		tmp = tmp->l_child;
+	}
 }
