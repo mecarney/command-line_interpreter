@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/02 20:38:28 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/04 19:10:16 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,33 +46,34 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 	int		j;
 
 	expand = 0;
-	// ch = (str[t->i] != '(') ? str[t->i] : ')';
 	ch = str[t->i];
 	if (ch == '\\')
 	{
 		i = t->i;
-		j = i;
+		j = t->i;
 		while (str[i] && str[i] == '\\')
 			i++;
-		i = i - t->i;
-		expand = (i % 2) ? 0 : 1;
+		i -= t->i;
+		expand = !(i % 2);
+		t->i += i;
 		i = (i > 1) ? i / 2 + !(expand) : 1;
-		(!(t->prev)) ? t->j = t->i + i : 0;
-		t->i++;
-		if (!(str[t->i] && ((whitespace) || (quote))))
-			while (str[t->i] && !(whitespace) && !(quote))
-				t->i++;
+		(!(t->prev)) ? t->j = t->i - i : 0;
+		(str[++t->i] && (whitespace)) ? t->i++ : 0;
+		while (str[t->i] && !(whitespace || quote || str[t->i] == '\\'))
+			t->i++;
+		t->i--;
 		if (t->prev)
 		{
 			tmp = ft_strsub(str, t->j, j - t->j);
 			tmp2 = ft_strsub(str, j + i, t->i - (j + i));
+			ft_printf("sub1: %s\nsub2: %s\n", tmp, tmp2);
 			tmp = free_join(tmp, tmp2);
 			add_token(t, ft_strlen(tmp), 0, tokens, tmp, expand, 0);
 			free(tmp);
 			free(tmp2);
 		}
 		else
-			add_token(t, t->i, t->j, tokens, str, expand, 0);
+			add_token(t, t->i, t->j + !(expand), tokens, str, expand, 0);
 		return ;
 	}
 	else if (ch == '$' || ch == '~')
@@ -118,24 +119,17 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 		add_token(t, t->i - 1, t->j, tokens, str, expand, 0);
 }
 
-int					is_operator(char a)
-{
-	if (a == '|' || a == '&' || a == ';' || a == '<' || a == '>')
-		return (1);
-	return (0);
-}
-
 void 				tokenize(char *str, t_okenize *t, t_ast **tokens, int len)
 {
 	while (str && len > ++t->i && str[t->i] != '#')
 	{
-		if (t->prev && is_operator(t->prev) && str[t->i] == t->prev)
+		if (t->prev && (prev_operator) && str[t->i] == t->prev)
 			add_token(t, t->i, t->i - 1, tokens, str, 0, 0);
-		else if (t->prev && is_operator(t->prev))
+		else if (t->prev && (prev_operator))
 			add_token(t, t->i - 1, t->i - 1, tokens, str, 0, 1);
-		else if (special_char || (quote))
+		else if (special_char || quote)
 			quoting(str, t, tokens);
-		else if (is_operator(str[t->i]))
+		else if (operator)
 		{
 			if (t->prev && !(prev_whitespace))
 				add_token(t, t->i - 1, t->j, tokens, str, 0, 1);

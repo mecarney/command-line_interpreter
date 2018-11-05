@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/02 20:43:25 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/04 18:09:41 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,10 @@ _Bool				ft_return_access(const char *name, char *str);
 # define prev_whitespace t->prev == ' ' || t->prev == '\t' || t->prev == '\n'
 # define quote str[t->i] == '`' || str[t->i] == '\'' || str[t->i] == '\"'
 # define special_char str[t->i] == '\\' || str[t->i] == '$'|| str[t->i] == '~'
+// # define special_char str[t->i] == '\\' || str[t->i] == '$'||\
+// 						str[t->i] == '(' || str[t->i] == '~'
+# define operator str[t->i] == '|' || str[t->i] == '&' || str[t->i] == ';' || str[t->i] == '<' || str[t->i] == '>'
+# define prev_operator t->prev == '|' || t->prev == '&' || t->prev == ';' || t->prev == '<' || t->prev == '>'
 
 typedef struct		s_okenize
 {
@@ -94,7 +98,6 @@ t_ast				*parser(t_ast **tokens, t_ast *parent);
 int					count_backslashes(t_okenize *t, char *str);
 void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str, int expand, int prev);
 void				quoting(char *str, t_okenize *t, t_ast **tokens);
-int					is_operator(char a);
 void 				tokenize(char *str, t_okenize *t, t_ast **tokens, int len);
 void				defaults(t_okenize *t);
 void				print_ast(t_ast *tokens);
