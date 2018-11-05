@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/04 19:10:16 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/04 19:29:24 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,13 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 		i = (i > 1) ? i / 2 + !(expand) : 1;
 		(!(t->prev)) ? t->j = t->i - i : 0;
 		(str[++t->i] && (whitespace)) ? t->i++ : 0;
-		while (str[t->i] && !(whitespace || quote || str[t->i] == '\\'))
+		while (str[t->i] && !(whitespace || quote || special_char))
 			t->i++;
-		t->i--;
+		(whitespace || quote || special_char) ? t->i-- : 0;
 		if (t->prev)
 		{
 			tmp = ft_strsub(str, t->j, j - t->j);
 			tmp2 = ft_strsub(str, j + i, t->i - (j + i));
-			ft_printf("sub1: %s\nsub2: %s\n", tmp, tmp2);
 			tmp = free_join(tmp, tmp2);
 			add_token(t, ft_strlen(tmp), 0, tokens, tmp, expand, 0);
 			free(tmp);
@@ -84,9 +83,7 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 		{
 			expand = 2;
 			while (str[t->i] && (str[t->i] != ')' ||\
-					(str[t->i] == ')' && str[t->i - 1] == '\\')))
-			// while (str[t->i] && (str[t->i] != ')' &&\
-			// 		!(count_backslashes(t, str))))
+					(str[t->i] == ')' && (count_backslashes(t, str)))))
 				t->i++;
 		}
 		else

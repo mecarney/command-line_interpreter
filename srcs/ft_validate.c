@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/04 19:04:49 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/04 19:28:04 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ int			check_operator(char *str, t_okenize *t, t_ast **tokens)
 	if (str[t->i] && str[t->i] != ';' && (operator) &&\
 		!(count_backslashes(t, str)))
 	{
+		ft_printf("%c ", str[t->i]);
 		append_str(str, t, tokens, "operator> ");
 		return (1);
 	}
@@ -132,12 +133,13 @@ void		check_quotes(char *str, t_okenize *t, t_ast **tokens)
 		if (((quote) || (str[t->i] && str[t->i] == '$' &&\
 			str[t->i + 1] == '(')) && !(count_backslashes(t, str)))
 		{
-			ch = (str[t->i++] != '(') ? str[t->i - 1] : ')';
+			ch = (str[++t->i] != '(') ? str[t->i - 1] : ')';
 			while (str[t->i] && (str[t->i] != ch || (str[t->i] == ch &&\
 					count_backslashes(t, str))))
 				t->i++;
 			if (!(str[t->i]))
 			{
+				ft_printf("%c ", ch);
 				append_str(str, t, tokens, "quote> ");
 				return ;
 			}
