@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 13:01:24 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/28 17:52:32 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/11/04 18:26:46 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void		ft_tokens_redirect(t_ast *tokens, _Bool *ret)
 	if ((file = ft_tokens_val(tokens->r_child)))
 		fd_new = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (fd_new == -1)
-		*ret = ft_return_access("42sh", tokens->r_child->val);
+		*ret = ft_return_access("42sh", file);
 	else
 	{
 		dup2(fd_new, 1);
@@ -61,7 +61,7 @@ void		ft_tokens_redirect_append(t_ast *tokens, _Bool *ret)
 	if ((file = ft_tokens_val(tokens->r_child)))
 		fd_new = open(file, O_WRONLY | O_CREAT, 0666);
 	if (fd_new == -1)
-		*ret = ft_return_access("42sh", tokens->r_child->val);
+		*ret = ft_return_access("42sh", file);
 	else
 	{
 		dup2(fd_new, 1);
@@ -83,7 +83,7 @@ void		ft_tokens_redirect_fd(t_ast *tokens, _Bool *ret)
 	pid_t	child;
 
 	if ((fd_new = open(ft_tokens_val(tokens->r_child), O_RDONLY)) == -1)
-		*ret = ft_return_access("42sh", tokens->r_child->val);
+		*ret = ft_return_access("42sh", ft_tokens_val(tokens->r_child));
 	else
 	{
 		if (!tokens->l_child)

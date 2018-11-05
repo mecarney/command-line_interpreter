@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 17:42:49 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/28 22:55:16 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/11/04 18:20:27 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,10 @@ _Bool			ft_builtin_cd(char **ptr)
 {
 	int		j;
 	int		ret;
+	int		on;
 	char	*str;
 
+	on = 0;
 	ret = 1;
 	if (!ptr[1])
 	{
@@ -60,11 +62,11 @@ _Bool			ft_builtin_cd(char **ptr)
 	else if (ptr[1] && !ptr[2])
 	{
 		j = ft_envar("OLDPWD");
-		if (!ft_strcmp(ptr[1], "-"))
+		if (!ft_strcmp(ptr[1], "-") && (on = 1))
 			str = (j != -1) ? ft_strdup(&g_envp[j][7]) : NULL;
 		else
 			str = ft_strdup(ptr[1]);
-		ret = ft_change_dir(str, 0);
+		ret = ft_change_dir(str, on);
 	}
 	else
 		ft_putendl("Usage: cd [directory]");
@@ -99,7 +101,7 @@ _Bool			ft_change_dir(char *str, int on)
 		ret = ft_change_pwd();
 	}
 	else
-		ret = ft_return_access("cd", str);
+		(!str) ? ft_putchar('\n') : ft_return_access("cd", str);
 	ft_strdel(&str);
 	return (ret);
 }
