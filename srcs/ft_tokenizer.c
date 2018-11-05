@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/04 19:29:24 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/04 19:32:56 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,9 @@ void				quoting(char *str, t_okenize *t, t_ast **tokens)
 			add_token(t, t->i - 1, t->j, tokens, str, 0, 0);
 		t->j = t->i++;
 		while (str[t->i] && (str[t->i] != ch ||\
-				(str[t->i] == ch && str[t->i - 1] == '\\')))
+				(str[t->i] == ch && !(count_backslashes(t, str)))))
 		{
-			(ch == '"' && str[t->i - 1] != '\\' && str[t->i] == '$') ? expand = 1 : 0;
+			(ch == '"' && str[t->i] == '$' && !(count_backslashes(t, str))) ? expand = 1 : 0;
 			t->i++;
 		}
 	}
