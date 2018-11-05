@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 16:23:43 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/04 15:02:51 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/11/04 16:36:51 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ static char	*ft_get_backquote(char *str)
  		(tmp) ? ft_strdel(&tmp) : 0;
  	}
  	cmd = free_join(cmd, current);
+	ft_strdel(&str);
  	return (cmd);
  }
 

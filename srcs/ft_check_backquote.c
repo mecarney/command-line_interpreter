@@ -6,7 +6,7 @@
 /*   By: fhong <fhong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/30 21:19:54 by fhong             #+#    #+#             */
-/*   Updated: 2018/11/04 14:48:33 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/11/04 16:37:07 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,14 @@ char		*get_backquote(char *str)
 {
 	int		stat_loc;
 	int		fd[2];
+	_Bool	ret;
 	pid_t	pid;
 
 	pipe(fd);
 	if ((pid = fork()) == 0)
 	{
 		ft_dup_fd(fd[0], fd[1], 1);
-		ft_run_shell(NULL, str);
+		ft_run_shell(&ret, str);
 		exit(1);
 	}
 	else if (pid < 0)
