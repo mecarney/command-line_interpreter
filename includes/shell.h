@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/04 19:37:03 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/05 14:43:17 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,17 +72,10 @@ _Bool				ft_return_access(const char *name, char *str);
 # define prev_whitespace t->prev == ' ' || t->prev == '\t' || t->prev == '\n'
 # define quote str[t->i] == '`' || str[t->i] == '\'' || str[t->i] == '\"'
 # define special_char str[t->i] == '\\' || str[t->i] == '$'|| str[t->i] == '~'
-// # define special_char str[t->i] == '\\' || str[t->i] == '$'||\
-// 						str[t->i] == '(' || str[t->i] == '~'
-# define operator str[t->i] == '|' || str[t->i] == '&' || str[t->i] == ';' || str[t->i] == '<' || str[t->i] == '>'
-# define prev_operator t->prev == '|' || t->prev == '&' || t->prev == ';' || t->prev == '<' || t->prev == '>'
-
-typedef struct		s_okenize
-{
-	int				i;
-	int				j;
-	char			prev;
-}					t_okenize;
+# define operator str[t->i] == '|' || str[t->i] == '&' || str[t->i] == ';' ||\
+				str[t->i] == '<' || str[t->i] == '>'
+# define prev_operator t->prev == '|' || t->prev == '&' || t->prev == ';' ||\
+						t->prev == '<' || t->prev == '>'
 
 typedef struct		s_ast
 {
@@ -93,12 +86,23 @@ typedef struct		s_ast
 	struct s_ast	*r_child;
 }					t_ast;
 
+typedef struct		s_okenize
+{
+	int				i;
+	int				j;
+	int				expand;
+	int				bs_index;
+	int				number_bs;
+	char			prev;
+	t_ast			*tokens;
+}					t_okenize;
+
 t_ast				*search(t_ast **tokens, int *n, char *str, size_t len);
 t_ast				*parser(t_ast **tokens, t_ast *parent);
 int					count_backslashes(t_okenize *t, char *str);
-void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str, int expand, int prev);
-void				quoting(char *str, t_okenize *t, t_ast **tokens);
-void 				tokenize(char *str, t_okenize *t, t_ast **tokens, int len);
+void				add_token(t_okenize *t, int i, int j, char *str);
+void				quoting(char *str, t_okenize *t);
+void 				tokenize(char *str, t_okenize *t, int len);
 void				defaults(t_okenize *t);
 void				print_ast(t_ast *tokens);
 void				append_str(char *str, t_okenize *t, t_ast **tokens, char *msg);

@@ -6,7 +6,7 @@
 #    By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/09 11:32:00 by mjacques          #+#    #+#              #
-#    Updated: 2018/10/31 17:37:35 by fhong            ###   ########.fr        #
+#    Updated: 2018/11/05 13:32:40 by mcarney          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ LIBFT		= libft/libft.a
 INCLUDES	= -I includes/\
 			  -I libft/header
 
-BASE		= main.c
+BASE		= main.c ft_util.c
 BUILTINS	= ft_builtins.c ft_envp.c ft_envp_tools.c ft_helper.c
 EXECUTE		= ft_command.c ft_tokens_exec.c ft_tokens_fct.c ft_tokens_tools.c\
 			      ft_expand.c
