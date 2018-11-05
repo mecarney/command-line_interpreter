@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/04 19:37:15 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/04 21:16:17 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,13 +96,24 @@ void		append_str(char *str, t_okenize *t, t_ast **tokens, char *msg)
 	char	*tmp;
 	char	*line;
 
-	t->i = -1;
+	tmp = NULL;
 	ft_putstr(msg);
 	if (get_next_line(0, &line) <= 0)
 		ft_error("gnl error");
-	tmp = ft_strappend(str, '\n');
-	tmp = free_join(tmp, line);
-	ft_strdel(&line);
+	ft_printf("%s, %d char:%c\n", str, t->i, str[t->i]);
+	if (str[t->i] != '\\')
+	{
+		tmp = ft_strappend(str, '\n');
+		tmp = free_join(tmp, line);
+		ft_strdel(&line);
+	}
+	else
+	{
+		tmp = ft_strsub(str, 0, t->i);
+		tmp = free_join(tmp, line);
+		ft_strdel(&line);
+	}
+	t->i = -1;
 	check_quotes(tmp, t, tokens);
 	free(tmp);
 }
@@ -114,7 +125,7 @@ int			check_operator(char *str, t_okenize *t, t_ast **tokens)
 	t->i--;
 	while (t->i >= 0 && (whitespace))
 		t->i--;
-	if (str[t->i] && str[t->i] != ';' && (operator) &&\
+	if (str[t->i] && str[t->i] != ';' && (operator || str[t->i] == '\\') &&\
 		!(count_backslashes(t, str)))
 	{
 		ft_printf("%c ", str[t->i]);
