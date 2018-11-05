@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 17:40:01 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/02 16:31:04 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/11/05 10:21:27 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,18 @@ char		**ft_newenv(char **envp)
 
 int			ft_envar(char *name)
 {
-	int i;
+	int		i;
+	char	*variable;
 
 	i = -1;
 	while (g_envp[++i])
-		if (!ft_strncmp(g_envp[i], name, ENVNAME(g_envp[i])))
+	{
+		variable = ft_strmcpy(g_envp[i], ENVNAME(g_envp[i]));
+		if (ft_strcmp(variable, name) == 0)
 			break ;
+		ft_strdel(&variable);
+	}
+	ft_strdel(&variable);
 	i = (g_envp[i]) ? i : -1;
 	return (i);
 }
