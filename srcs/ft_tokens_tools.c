@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 16:23:43 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/04 16:36:51 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/11/05 09:41:04 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,26 +87,27 @@ static char	*ft_get_backquote(char *str)
 static int	ft_get_document(char *word, int *fd)
 {
 	char	*line;
-	char	*text;
+	char	*document;
 
-	text = NULL;
+	document = NULL;
 	while (42)
 	{
+		ft_putstr_fd("> ", 0);
 		if (get_next_line(0, &line) > 0)
 		{
-			text = (!text) ? ft_strnew(0) : free_append(text, '\n');
+			document = (!document) ? ft_strnew(0) : free_append(document, '\n');
 			if (ft_strcmp(word, line) == 0)
 				break ;
-			text = free_join(text, line);
+			document = free_join(document, line);
 			ft_strdel(&line);
 		}
 	}
 	ft_strdel(&line);
-	text = ft_expand(text, 0);
-	text = ft_get_backquote(text);
+	document = ft_expand(document, 0);
+	document = ft_get_backquote(document);
 	ft_dup_fd(fd[0], fd[1], 1);
-	ft_putstr(text);
-	ft_strdel(&text);
+	ft_putstr(document);
+	ft_strdel(&document);
 	return (0);
 }
 
