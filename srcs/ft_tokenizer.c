@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/06 13:24:53 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/06 13:45:29 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void				add_token(t_okenize *t, int i, int j, char *str)
 	if (!(new = (t_ast *)malloc(sizeof(t_ast))))
 		ft_error("Malloc error");
 	new->val = ft_strsub(str, j, i - j + 1);
+	ft_printf("|%s|\n", new->val);
 	new->l_child = NULL;
 	new->r_child = NULL;
 	if (!(t->tokens))
@@ -97,7 +98,6 @@ void				handle_quotation(char *str, t_okenize *t)
 			quoting(str, t) : t->i++;
 	if (ch == '`')
 	{
-		(!(t->expand)) ? t->expand = 1 : 0;
 		tmp = ft_strsub(str, t->j + t->expand, t->i - (t->j + t->expand));
 		tmp2 = get_backquote(tmp);
 		(tmp2) ? add_token(t, ft_strlen(tmp2), 0, tmp2) : 0;
