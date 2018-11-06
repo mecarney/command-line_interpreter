@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/30 23:17:33 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/04 12:55:06 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/11/05 15:42:31 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,17 +87,4 @@ char		*ft_expand(char *str, _Bool tilde)
 		str = ft_check_dollar(str, &pos);
 	}
 	return (str);
-}
-
-void		ft_check_expand(t_ast *tokens)
-{
-	t_ast	*tmp;
-
-	tmp = tokens;
-	while (tmp)
-	{
-		if (tmp->expand)
-			tmp->val = ft_expand(tmp->val, 1);
-		tmp = tmp->l_child;
-	}
 }
