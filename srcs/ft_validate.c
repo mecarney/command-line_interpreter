@@ -6,89 +6,61 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/04 21:16:17 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/05 15:25:03 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-int					count_backslashes(t_okenize *t, char *str)
+void		sub_tokenize(char *str, t_okenize *t)
 {
-	int				i;
-
-	i = t->i - 1;
-	while (str[i] && str[i] == '\\')
-		i--;
-	return ((t->i - i + 1) % 2);
-}
-
-int					ft_strfind(const char *s1, const char *s2)
-{
-	size_t			i;
-	size_t			j;
-	unsigned char	*str1;
-	unsigned char	*str2;
-
-	i = 0;
-	j = 0;
-	if (ft_strlen(s1) > ft_strlen(s2))
-		return (0);
-	str1 = (unsigned char *)s1;
-	str2 = (unsigned char *)s2;
-	while (str1[i] && str2[j])
+	if (operator)
 	{
-		if (str1[i] == str2[j])
+		if (t->prev && !(prev_whitespace))
 		{
-			i++;
-			j++;
+			add_token(t, t->i - 1, t->j, str);
+			t->prev = str[t->i];
 		}
-		else
-		{
-			j = j - i + 1;
-			i = 0;
-		}
+		t->prev = str[t->i];
+		t->j = t->i;
 	}
-	return (!(str1[i]));
-}
-
-void		free_ast(t_ast *tokens)
-{
-	t_ast	*tmp;
-
-	if (!(tokens))
-		return ;
-	if (!(tokens->r_child))
+	else if (t->prev && (whitespace) && !(prev_whitespace))
 	{
-		while (tokens->l_child)
-		{
-			tmp = tokens;
-			tokens = tokens->l_child;
-			ft_strdel(&tmp->val);
-			free(tmp);
-		}
+		add_token(t, t->i - 1, t->j, str);
+		t->prev = '\0';
 	}
 	else
 	{
-		if (tokens->l_child)
-			free_ast(tokens->l_child);
-		if (tokens->r_child)
-			free_ast(tokens->r_child);
+		(prev_whitespace) ? t->prev = '\0' : 0;
+		(!(t->prev)) ? t->j = t->i : 0;
+		t->prev = str[t->i];
 	}
-	ft_strdel(&tokens->val);
-	free(tokens);
 }
 
-int			ft_len_cmd(t_ast *tokens)
+void		tokenize(char *str, t_okenize *t, int len)
 {
-	int		len;
-
-	len = 0;
-	while (tokens)
+	while (str && len > ++t->i && str[t->i] != '#')
 	{
-		len++;
-		tokens = tokens->l_child;
+		if (t->prev && (prev_operator) && str[t->i] == t->prev)
+		{
+			add_token(t, t->i, t->i - 1, str);
+			t->prev = '\0';
+		}
+		else if (t->prev && (prev_operator))
+		{
+			add_token(t, t->i - 1, t->i - 1, str);
+			t->prev = str[t->i];
+		}
+		else if (special_char || quote)
+			quoting(str, t);
+		else
+			sub_tokenize(str, t);
 	}
-	return (len);
+	if (t->prev && !(prev_whitespace))
+	{
+		add_token(t, t->i - 1, t->j, str);
+		t->prev = '\0';
+	}
 }
 
 void		append_str(char *str, t_okenize *t, t_ast **tokens, char *msg)
@@ -100,7 +72,6 @@ void		append_str(char *str, t_okenize *t, t_ast **tokens, char *msg)
 	ft_putstr(msg);
 	if (get_next_line(0, &line) <= 0)
 		ft_error("gnl error");
-	ft_printf("%s, %d char:%c\n", str, t->i, str[t->i]);
 	if (str[t->i] != '\\')
 	{
 		tmp = ft_strappend(str, '\n');
@@ -120,6 +91,8 @@ void		append_str(char *str, t_okenize *t, t_ast **tokens, char *msg)
 
 int			check_operator(char *str, t_okenize *t, t_ast **tokens)
 {
+	char	*tmp;
+
 	while (str[t->i])
 		t->i++;
 	t->i--;
@@ -132,13 +105,17 @@ int			check_operator(char *str, t_okenize *t, t_ast **tokens)
 		append_str(str, t, tokens, "operator> ");
 		return (1);
 	}
+	t->i = -1;
+	tmp = ft_check_history(str);
+	ft_history_add(tmp);
+	(tmp) ? tokenize(tmp, t, ft_strlen(tmp)) : 0;
+	(tmp != str) ? ft_strdel(&tmp) : 0;
 	return (0);
 }
 
 void		check_quotes(char *str, t_okenize *t, t_ast **tokens)
 {
 	char	ch;
-	char	*tmp;
 
 	while (str[++t->i])
 		if (((quote) || (str[t->i] && str[t->i] == '$' &&\
@@ -156,13 +133,5 @@ void		check_quotes(char *str, t_okenize *t, t_ast **tokens)
 			}
 		}
 	t->i = 0;
-	if (!(check_operator(str, t, tokens)))
-	{
-		t->i = -1;
-		tmp = ft_check_history(str);
-		ft_history_add(tmp);
-		(tmp) ? tokenize(tmp, t, tokens, ft_strlen(tmp)) : 0;
-		(t->prev && !(prev_whitespace)) ? add_token(t, t->i - 1, t->j, tokens, tmp, 0, 0) : 0;
-		(tmp != str) ? ft_strdel(&tmp) : 0;
-	}
+	check_operator(str, t, tokens);
 }

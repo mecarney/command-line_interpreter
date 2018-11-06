@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:15:18 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/02 12:59:55 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/05 15:25:07 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,16 @@ t_builtin	g_builtin[NBRBUILTIN] = {
 void	ft_run_shell(_Bool *ret, char *line)
 {
 	t_okenize	t;
-	t_ast		*tokens;
 
 	t.i = -1;
 	t.j = 0;
+	t.expand = 0;
 	t.prev = '\0';
-	tokens = NULL;
-	check_quotes(line, &t, &tokens);
-	tokens = parser(&tokens, NULL);
-	*ret = ft_tokens_exec(tokens);
-	free_ast(tokens);
+	t.tokens = NULL;
+	check_quotes(line, &t, &t.tokens);
+	t.tokens = parser(&t.tokens, NULL);
+	*ret = ft_tokens_exec(t.tokens);
+	free_ast(t.tokens);
 }
 
 int		main(int argc, char **argv, char **envp)

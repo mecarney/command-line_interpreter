@@ -6,25 +6,25 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/04 20:04:40 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/05 14:49:46 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str, int expand, int prev)
+void				add_token(t_okenize *t, int i, int j, char *str)
 {
 	t_ast			*new;
 	t_ast			*old;
 
-	old = *tokens;
+	old = t->tokens;
 	if (!(new = (t_ast *)malloc(sizeof(t_ast))))
 		ft_error("Malloc error");
 	new->val = ft_strsub(str, j, i - j + 1);
 	new->l_child = NULL;
 	new->r_child = NULL;
-	if (!(*tokens))
-		*tokens = new;
+	if (!(t->tokens))
+		t->tokens = new;
 	else
 	{
 		while (old->l_child)
@@ -32,114 +32,109 @@ void				add_token(t_okenize *t, int i, int j, t_ast **tokens, char *str, int exp
 		old->l_child = new;
 	}
 	t->j = t->i;
-	t->prev = (prev) ? str[t->i] : '\0';
-	new->expand = expand;
+	new->expand = t->expand;
+	t->expand = 0;
 }
 
-void				quoting(char *str, t_okenize *t, t_ast **tokens)
+void				handle_backslash(char *str, t_okenize *t)
 {
-	char	ch;
-	int		expand;
-	char	*tmp;
-	char	*tmp2;
-	int		i;
-	int		j;
+	t->number_bs = t->i;
+	t->bs_index = t->i;
+	while (str[t->number_bs] && str[t->number_bs] == '\\')
+		t->number_bs++;
+	t->number_bs -= t->i;
+	t->expand = !(t->number_bs % 2);
+	t->i += t->number_bs;
+	t->number_bs = (t->number_bs > 1) ? t->number_bs / 2 + !(t->expand) : 1;
+	(!(t->prev)) ? t->j = t->i - t->number_bs : 0;
+	(str[++t->i] && (whitespace)) ? t->i++ : 0;
+	while (str[t->i] && !(whitespace || quote || special_char))
+		t->i++;
+	(whitespace || quote || special_char) ? t->i-- : 0;
+}
 
-	expand = 0;
-	ch = str[t->i];
-	if (ch == '\\')
+void				handle_dollar_tilde(char *str, t_okenize *t)
+{
+	char			*tmp;
+	char			*tmp2;
+
+	t->expand = 1;
+	(!(t->prev)) ? t->j = t->i : 0;
+	if (str[t->i + 1] && str[t->i + 1] == '(')
 	{
-		i = t->i;
-		j = t->i;
-		while (str[i] && str[i] == '\\')
-			i++;
-		i -= t->i;
-		expand = !(i % 2);
-		t->i += i;
-		i = (i > 1) ? i / 2 + !(expand) : 1;
-		(!(t->prev)) ? t->j = t->i - i : 0;
-		(str[++t->i] && (whitespace)) ? t->i++ : 0;
-		while (str[t->i] && !(whitespace || quote || special_char))
+		t->expand = 2;
+		while (str[t->i] && (str[t->i] != ')' ||\
+				(str[t->i] == ')' && (count_backslashes(t, str)))))
 			t->i++;
-		(whitespace || quote || special_char) ? t->i-- : 0;
-		if (t->prev)
-		{
-			tmp = ft_strsub(str, t->j, j - t->j);
-			tmp2 = ft_strsub(str, j + i, t->i - (j + i));
-			tmp = free_join(tmp, tmp2);
-			add_token(t, ft_strlen(tmp), 0, tokens, tmp, expand, 0);
-			free(tmp);
-			free(tmp2);
-		}
-		else
-			add_token(t, t->i, t->j + !(expand), tokens, str, expand, 0);
-		return ;
-	}
-	else if (ch == '$' || ch == '~')
-	{
-		expand = 1;
-		(!(t->prev)) ? t->j = t->i : 0;
-		if (str[t->i + 1] && str[t->i + 1] == '(')
-		{
-			expand = 2;
-			while (str[t->i] && (str[t->i] != ')' ||\
-					(str[t->i] == ')' && (count_backslashes(t, str)))))
-				t->i++;
-		}
-		else
-			while (str[t->i] && !(whitespace) && !(quote) && str[t->i] != '\'')
-				t->i++;
 	}
 	else
-	{
-		if (t->prev && !(prev_whitespace))
-			add_token(t, t->i - 1, t->j, tokens, str, 0, 0);
-		t->j = t->i++;
-		while (str[t->i] && (str[t->i] != ch ||\
-				(str[t->i] == ch && !(count_backslashes(t, str)))))
-		{
-			(ch == '"' && str[t->i] == '$' && !(count_backslashes(t, str))) ? expand = 1 : 0;
+		while (str[t->i] && !(whitespace) && !(quote) && str[t->i] != '\'')
 			t->i++;
-		}
-	}
-	if (ch == '`' || expand == 2)
+	if (t->expand == 2)
 	{
-		(!(expand)) ? expand = 1 : 0;
-		tmp = ft_strsub(str, t->j + expand, t->i - (t->j + expand));
+		(!(t->expand)) ? t->expand = 1 : 0;
+		tmp = ft_strsub(str, t->j + t->expand, t->i - (t->j + t->expand));
 		tmp2 = get_backquote(tmp);
-		(tmp2) ? add_token(t, ft_strlen(tmp2), 0, tokens, tmp2, 0, 0) : 0;
+		(tmp2) ? add_token(t, ft_strlen(tmp2), 0, tmp2) : 0;
+		(tmp2) ? free(tmp2) : 0;
+	}
+	else
+		add_token(t, t->i - 1, t->j, str);
+}
+
+void				handle_quotation(char *str, t_okenize *t)
+{
+	char			ch;
+	char			*tmp;
+	char			*tmp2;
+
+	ch = str[t->i];
+	if (t->prev && !(prev_whitespace))
+		add_token(t, t->i - 1, t->j, str);
+	t->j = t->i++;
+	while (str[t->i] && (str[t->i] != ch ||\
+			(str[t->i] == ch && (count_backslashes(t, str)))))
+	{
+		if (ch == '"' && str[t->i] == '$' && !(count_backslashes(t, str)))
+			t->expand = 1;
+		t->i++;
+	}
+	if (ch == '`')
+	{
+		(!(t->expand)) ? t->expand = 1 : 0;
+		tmp = ft_strsub(str, t->j + t->expand, t->i - (t->j + t->expand));
+		tmp2 = get_backquote(tmp);
+		(tmp2) ? add_token(t, ft_strlen(tmp2), 0, tmp2) : 0;
 		(tmp2) ? free(tmp2) : 0;
 	}
 	else if (ch == '\'' || ch == '\"')
-		add_token(t, t->i - 2, t->j + 1, tokens, str, expand, 0);
-	else
-		add_token(t, t->i - 1, t->j, tokens, str, expand, 0);
+		add_token(t, t->i - 1, t->j + 1, str);
 }
 
-void 				tokenize(char *str, t_okenize *t, t_ast **tokens, int len)
+void				quoting(char *str, t_okenize *t)
 {
-	while (str && len > ++t->i && str[t->i] != '#')
+	char			ch;
+	char			*tmp;
+	char			*tmp2;
+
+	ch = str[t->i];
+	if (ch == '\\')
+		handle_backslash(str, t);
+	else if (ch == '$' || ch == '~')
+		handle_dollar_tilde(str, t);
+	else
+		handle_quotation(str, t);
+	if (ch == '\\' && t->prev)
 	{
-		if (t->prev && (prev_operator) && str[t->i] == t->prev)
-			add_token(t, t->i, t->i - 1, tokens, str, 0, 0);
-		else if (t->prev && (prev_operator))
-			add_token(t, t->i - 1, t->i - 1, tokens, str, 0, 1);
-		else if (special_char || quote)
-			quoting(str, t, tokens);
-		else if (operator)
-		{
-			if (t->prev && !(prev_whitespace))
-				add_token(t, t->i - 1, t->j, tokens, str, 0, 1);
-			t->prev = str[t->i];
-			t->j = t->i;
-		}
-		else if (t->prev && (whitespace) && !(prev_whitespace))
-			add_token(t, t->i - 1, t->j, tokens, str, 0, 0);
-		else
-		{
-			(prev_whitespace) ? t->prev = '\0' : 0;
-			(!(t->prev)) ? t->j = t->i : 0;
-			t->prev = str[t->i];
-		}
+		tmp = ft_strsub(str, t->j, t->bs_index - t->j);
+		tmp2 = ft_strsub(str, t->bs_index + t->number_bs,\
+						t->i - (t->bs_index + t->number_bs) + 1);
+		tmp = free_join(tmp, tmp2);
+		add_token(t, ft_strlen(tmp), 0, tmp);
+		free(tmp);
+		free(tmp2);
 	}
+	else if (ch == '\\')
+		add_token(t, t->i, t->j + !(t->expand), str);
+	t->prev = '\0';
 }
