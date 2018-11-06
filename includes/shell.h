@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/05 16:08:06 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/06 13:16:56 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct		s_okenize
 t_ast				*search(t_ast **tokens, int *n, char *str, size_t len);
 t_ast				*parser(t_ast **tokens, t_ast *parent);
 int					count_backslashes(t_okenize *t, char *str);
+void				handle_backslash(char *str, t_okenize *t);
 void				add_token(t_okenize *t, int i, int j, char *str);
 void				quoting(char *str, t_okenize *t);
 void 				tokenize(char *str, t_okenize *t, int len);

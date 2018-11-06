@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/05 14:49:46 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/06 13:24:53 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,26 +60,24 @@ void				handle_dollar_tilde(char *str, t_okenize *t)
 
 	t->expand = 1;
 	(!(t->prev)) ? t->j = t->i : 0;
-	if (str[t->i + 1] && str[t->i + 1] == '(')
+	if (str[t->i] == '$' && str[t->i + 1] && str[t->i + 1] == '(')
 	{
 		t->expand = 2;
 		while (str[t->i] && (str[t->i] != ')' ||\
 				(str[t->i] == ')' && (count_backslashes(t, str)))))
 			t->i++;
-	}
-	else
-		while (str[t->i] && !(whitespace) && !(quote) && str[t->i] != '\'')
-			t->i++;
-	if (t->expand == 2)
-	{
-		(!(t->expand)) ? t->expand = 1 : 0;
 		tmp = ft_strsub(str, t->j + t->expand, t->i - (t->j + t->expand));
 		tmp2 = get_backquote(tmp);
 		(tmp2) ? add_token(t, ft_strlen(tmp2), 0, tmp2) : 0;
 		(tmp2) ? free(tmp2) : 0;
 	}
 	else
+	{
+		while (str[t->i] && !(whitespace || quote) &&\
+				!(count_backslashes(t, str)))
+			t->i++;
 		add_token(t, t->i - 1, t->j, str);
+	}
 }
 
 void				handle_quotation(char *str, t_okenize *t)
@@ -91,14 +89,12 @@ void				handle_quotation(char *str, t_okenize *t)
 	ch = str[t->i];
 	if (t->prev && !(prev_whitespace))
 		add_token(t, t->i - 1, t->j, str);
-	t->j = t->i++;
+	t->j = ++t->i;
+	t->prev = t->i;
 	while (str[t->i] && (str[t->i] != ch ||\
 			(str[t->i] == ch && (count_backslashes(t, str)))))
-	{
-		if (ch == '"' && str[t->i] == '$' && !(count_backslashes(t, str)))
-			t->expand = 1;
-		t->i++;
-	}
+		((ch == '"' || ch == '`') && (special_char || quote)) ?\
+			quoting(str, t) : t->i++;
 	if (ch == '`')
 	{
 		(!(t->expand)) ? t->expand = 1 : 0;
@@ -108,7 +104,7 @@ void				handle_quotation(char *str, t_okenize *t)
 		(tmp2) ? free(tmp2) : 0;
 	}
 	else if (ch == '\'' || ch == '\"')
-		add_token(t, t->i - 1, t->j + 1, str);
+		add_token(t, t->i - 1, t->j, str);
 }
 
 void				quoting(char *str, t_okenize *t)
