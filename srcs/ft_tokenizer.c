@@ -6,13 +6,13 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/06 13:45:29 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/08 18:05:43 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void				add_token(t_okenize *t, int i, int j, char *str)
+void				add_token(t_info *t, int i, int j, char *str)
 {
 	t_ast			*new;
 	t_ast			*old;
@@ -21,7 +21,6 @@ void				add_token(t_okenize *t, int i, int j, char *str)
 	if (!(new = (t_ast *)malloc(sizeof(t_ast))))
 		ft_error("Malloc error");
 	new->val = ft_strsub(str, j, i - j + 1);
-	ft_printf("|%s|\n", new->val);
 	new->l_child = NULL;
 	new->r_child = NULL;
 	if (!(t->tokens))
@@ -32,12 +31,13 @@ void				add_token(t_okenize *t, int i, int j, char *str)
 			old = old->l_child;
 		old->l_child = new;
 	}
-	t->j = t->i;
 	new->expand = t->expand;
+	t->j = t->i;
 	t->expand = 0;
+	t->prev = '\0';
 }
 
-void				handle_backslash(char *str, t_okenize *t)
+void				handle_backslash(char *str, t_info *t)
 {
 	t->number_bs = t->i;
 	t->bs_index = t->i;
@@ -48,71 +48,75 @@ void				handle_backslash(char *str, t_okenize *t)
 	t->i += t->number_bs;
 	t->number_bs = (t->number_bs > 1) ? t->number_bs / 2 + !(t->expand) : 1;
 	(!(t->prev)) ? t->j = t->i - t->number_bs : 0;
-	(str[++t->i] && (whitespace)) ? t->i++ : 0;
-	while (str[t->i] && !(whitespace || quote || special_char))
+	(str[++t->i] && (WHITESPACE)) ? t->i++ : 0;
+	while (str[t->i] && !(WHITESPACE || QUOTE || SPECIAL_CHAR))
 		t->i++;
-	(whitespace || quote || special_char) ? t->i-- : 0;
+	(WHITESPACE || QUOTE || SPECIAL_CHAR) ? t->i-- : 0;
 }
 
-void				handle_dollar_tilde(char *str, t_okenize *t)
+void				handle_dollar_tilde(char *str, t_info *t)
 {
 	char			*tmp;
-	char			*tmp2;
 
-	t->expand = 1;
+	t->expand = !(count_backslashes(t->i, str));
 	(!(t->prev)) ? t->j = t->i : 0;
 	if (str[t->i] == '$' && str[t->i + 1] && str[t->i + 1] == '(')
 	{
-		t->expand = 2;
+		t->i++;
 		while (str[t->i] && (str[t->i] != ')' ||\
-				(str[t->i] == ')' && (count_backslashes(t, str)))))
+				(str[t->i] == ')' && (count_backslashes(t->i, str)))))
 			t->i++;
-		tmp = ft_strsub(str, t->j + t->expand, t->i - (t->j + t->expand));
-		tmp2 = get_backquote(tmp);
-		(tmp2) ? add_token(t, ft_strlen(tmp2), 0, tmp2) : 0;
-		(tmp2) ? free(tmp2) : 0;
+		t->expand = 2;
+		tmp = ft_strsub(str, t->j + 2, t->i - (t->j + 2));
+		add_token(t, t->i - (t->j + 2), 0, tmp);
+		free(tmp);
 	}
 	else
 	{
-		while (str[t->i] && !(whitespace || quote) &&\
-				!(count_backslashes(t, str)))
+		while (str[t->i] && !(WHITESPACE || QUOTE) &&\
+				!(count_backslashes(t->i, str)))
 			t->i++;
 		add_token(t, t->i - 1, t->j, str);
 	}
 }
 
-void				handle_quotation(char *str, t_okenize *t)
+void				handle_quotation(char *str, t_info *t)
 {
 	char			ch;
 	char			*tmp;
-	char			*tmp2;
 
 	ch = str[t->i];
-	if (t->prev && !(prev_whitespace))
-		add_token(t, t->i - 1, t->j, str);
 	t->j = ++t->i;
-	t->prev = t->i;
-	while (str[t->i] && (str[t->i] != ch ||\
-			(str[t->i] == ch && (count_backslashes(t, str)))))
-		((ch == '"' || ch == '`') && (special_char || quote)) ?\
-			quoting(str, t) : t->i++;
+	while (str[t->i] && (str[t->i] != ch))
+	{
+		t->prev = str[t->i];
+		if ((ch == '"' || ch == '`') && (SPECIAL_CHAR || QUOTE))
+		{
+			quoting(str, t);
+			t->j = t->i + 1;
+			(str[t->i] == ch) ? t->i-- : 0;
+		}
+		t->i++;
+	}
 	if (ch == '`')
 	{
-		tmp = ft_strsub(str, t->j + t->expand, t->i - (t->j + t->expand));
-		tmp2 = get_backquote(tmp);
-		(tmp2) ? add_token(t, ft_strlen(tmp2), 0, tmp2) : 0;
-		(tmp2) ? free(tmp2) : 0;
+		t->expand = 2;
+		tmp = ft_strsub(str, t->j, t->i - (t->j));
+		add_token(t, t->i - t->j, 0, tmp);
+		free(tmp);
 	}
-	else if (ch == '\'' || ch == '\"')
+	else if (t->i - 1 > t->j && (ch == '\'' || ch == '\"'))
 		add_token(t, t->i - 1, t->j, str);
 }
 
-void				quoting(char *str, t_okenize *t)
+void				quoting(char *str, t_info *t)
 {
 	char			ch;
 	char			*tmp;
 	char			*tmp2;
 
+	(t->prev) ? add_token(t, t->i - 1, t->j, str) : 0;
+	t->j = t->i + 1;
 	ch = str[t->i];
 	if (ch == '\\')
 		handle_backslash(str, t);
@@ -132,5 +136,4 @@ void				quoting(char *str, t_okenize *t)
 	}
 	else if (ch == '\\')
 		add_token(t, t->i, t->j + !(t->expand), str);
-	t->prev = '\0';
 }

@@ -6,64 +6,51 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/06 13:17:32 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/08 18:04:29 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void		sub_tokenize(char *str, t_okenize *t)
+void		sub_tokenize(char *str, t_info *t)
 {
-	if (operator)
+	if (OPERATOR)
 	{
-		if (t->prev && !(prev_whitespace))
-		{
+		if (t->prev && !(PREV_WHITESPACE))
 			add_token(t, t->i - 1, t->j, str);
-			t->prev = str[t->i];
-		}
 		t->prev = str[t->i];
 		t->j = t->i;
 	}
-	else if (t->prev && (whitespace) && !(prev_whitespace))
-	{
+	else if (t->prev && (WHITESPACE) && !(PREV_WHITESPACE))
 		add_token(t, t->i - 1, t->j, str);
-		t->prev = '\0';
-	}
 	else
 	{
-		(prev_whitespace) ? t->prev = '\0' : 0;
+		(PREV_WHITESPACE) ? t->prev = '\0' : 0;
 		(!(t->prev)) ? t->j = t->i : 0;
 		t->prev = str[t->i];
 	}
 }
 
-void		tokenize(char *str, t_okenize *t, int len)
+void		tokenize(char *str, t_info *t, int len)
 {
 	while (str && len > ++t->i && str[t->i] != '#')
 	{
-		if (t->prev && (prev_operator) && str[t->i] == t->prev)
-		{
+		if (t->prev && (PREV_OPERATOR) && str[t->i] == t->prev)
 			add_token(t, t->i, t->i - 1, str);
-			t->prev = '\0';
-		}
-		else if (t->prev && (prev_operator))
+		else if (t->prev && (PREV_OPERATOR))
 		{
 			add_token(t, t->i - 1, t->i - 1, str);
 			t->prev = str[t->i];
 		}
-		else if (special_char || quote)
+		else if (SPECIAL_CHAR || QUOTE)
 			quoting(str, t);
 		else
 			sub_tokenize(str, t);
 	}
-	if (t->prev && !(prev_whitespace))
-	{
-		add_token(t, t->i - 1, t->j, str);
-		t->prev = '\0';
-	}
+	(t->prev && !(PREV_WHITESPACE)) ? add_token(t, t->i - 1, t->j, str) : 0;
 }
 
-void		append_str(char *str, t_okenize *t, t_ast **tokens, char *msg)
+void		append_str(char *str, t_info *t, t_ast **tokens, char *msg)
 {
 	char	*tmp;
 	char	*line;
@@ -89,17 +76,17 @@ void		append_str(char *str, t_okenize *t, t_ast **tokens, char *msg)
 	free(tmp);
 }
 
-int			check_operator(char *str, t_okenize *t, t_ast **tokens)
+int			check_operator(char *str, t_info *t, t_ast **tokens)
 {
 	char	*tmp;
 
 	while (str[t->i])
 		t->i++;
 	t->i--;
-	while (t->i >= 0 && (whitespace))
+	while (t->i >= 0 && (WHITESPACE))
 		t->i--;
-	if (str[t->i] && str[t->i] != ';' && (operator || str[t->i] == '\\') &&\
-		!(count_backslashes(t, str)))
+	if (str[t->i] && str[t->i] != ';' && (OPERATOR || str[t->i] == '\\') &&\
+		!(count_backslashes(t->i, str)))
 	{
 		ft_printf("%c ", str[t->i]);
 		append_str(str, t, tokens, "operator> ");
@@ -113,18 +100,22 @@ int			check_operator(char *str, t_okenize *t, t_ast **tokens)
 	return (0);
 }
 
-void		check_quotes(char *str, t_okenize *t, t_ast **tokens)
+void		check_quotes(char *str, t_info *t, t_ast **tokens)
 {
 	char	ch;
 
 	while (str[++t->i])
-		if (((quote) || (str[t->i] && str[t->i] == '$' &&\
-			str[t->i + 1] == '(')) && !(count_backslashes(t, str)))
+		if (((QUOTE) || (str[t->i] && str[t->i] == '$' &&\
+			str[t->i + 1] == '(')) && !(count_backslashes(t->i, str)))
 		{
 			ch = (str[++t->i] != '(') ? str[t->i - 1] : ')';
-			while (str[t->i] && (str[t->i] != ch || (str[t->i] == ch &&\
-					count_backslashes(t, str))))
-				t->i++;
+			if (ch == '\'')
+				while (str[t->i] && str[t->i] != ch)
+					t->i++;
+			else
+				while (str[t->i] && (str[t->i] != ch || (str[t->i] == ch &&\
+						count_backslashes(t->i, str))))
+					t->i++;
 			if (!(str[t->i]))
 			{
 				ft_printf("%c ", ch);

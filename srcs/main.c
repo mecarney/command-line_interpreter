@@ -26,7 +26,7 @@ t_builtin	g_builtin[NBRBUILTIN] = {
 
 void	ft_run_shell(_Bool *ret, char *line)
 {
-	t_okenize	t;
+	t_info	t;
 
 	t.i = -1;
 	t.j = 0;

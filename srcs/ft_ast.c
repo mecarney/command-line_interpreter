@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:59 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/01 16:40:53 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/06 18:47:30 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ t_ast		*parser(t_ast **tokens, t_ast *parent)
 	(n) ? old = search(tokens, &n, "&&||", 2) : 0;
 	(n) ? old = search(tokens, &n, "|", 1) : 0;
 	(n) ? old = search(tokens, &n, "<<", 1) : 0;
-	(n) ? old = search(tokens, &n, "&>>", 1) : 0;
+	(n) ? old = search(tokens, &n, ">>", 1) : 0;
 	if (n == 0)
 	{
 		old->r_child = parser(&old->l_child, old);

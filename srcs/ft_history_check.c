@@ -6,7 +6,7 @@
 /*   By: fhong <fhong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:21:52 by fhong             #+#    #+#             */
-/*   Updated: 2018/11/02 16:55:41 by fhong            ###   ########.fr       */
+/*   Updated: 2018/11/07 18:34:03 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ static char	*ft_check_history_helper(char *current, char *mark, _Bool *flag)
 char		*ft_check_history(char *str)
 {
 	char	*current;
-	char	*mark;
+	int		mark;
+	int		tmp_mark;
 	char	*tmp;
 	char	*cmd;
 	_Bool	flag;
@@ -70,16 +71,44 @@ char		*ft_check_history(char *str)
 	flag = 0;
 	cmd = NULL;
 	current = str;
-	while (current && (mark = ft_strchr(current, '!')))
+	mark = 0;
+	tmp_mark = mark;
+
+	while (current && current[mark])
 	{
-		((mark - 1) && *(mark - 1) == '\\') && (mark++);
-		tmp = ft_strsub(current, 0, mark - current);
-		cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
-		(tmp) ? ft_strdel(&tmp) : 0;
-		tmp = (*mark == '!') ? get_history(mark) : ft_strdup("");
-		cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
-		current = ft_check_history_helper(current, mark, &flag);
+		if (current[mark] == '\'' && !(count_backslashes(mark, current)))
+		{
+			mark++;
+			while (current[mark] && (current[mark] != '\'' || (current[mark] == '\'' && count_backslashes(mark, current))))
+				mark++;
+			tmp = ft_strsub(current, tmp_mark, mark);
+			cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
+			tmp_mark = mark;
+		}
+		else if (current[mark] == '!' && !(count_backslashes(mark, current)))
+		{
+			tmp = ft_strsub(current, 0, mark);
+			cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
+			(tmp) ? ft_strdel(&tmp) : 0;
+			tmp = (current[mark] == '!') ? get_history((current + mark)) : ft_strdup("");
+			cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
+			current = ft_check_history_helper(current, (current + mark), &flag);
+			mark++;
+			tmp_mark = mark;
+		}
+		else
+			mark++;
 	}
+	// while (current && (mark = ft_strchr(current, '!')))
+	// {
+	// 	(mark - 1 && count_backslashes(mark - current, current) && mark++);
+	// 	tmp = ft_strsub(current, 0, mark - current);
+	// 	cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
+	// 	(tmp) ? ft_strdel(&tmp) : 0;
+	// 	tmp = (*mark == '!') ? get_history(mark) : ft_strdup("");
+	// 	cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
+	// 	current = ft_check_history_helper(current, mark, &flag);
+	// }
 	cmd = free_join(cmd, current);
 	(flag) ? (ft_putendl(cmd)) : 0;
 	return (cmd);

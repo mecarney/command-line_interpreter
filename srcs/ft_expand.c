@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/30 23:17:33 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/05 15:42:31 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/11/07 17:36:21 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,6 @@ char		*ft_expand(char *str, _Bool tilde)
 		pos = (position - str);
 		str = ft_check_dollar(str, &pos);
 	}
+	str = ft_check_history(str);
 	return (str);
 }

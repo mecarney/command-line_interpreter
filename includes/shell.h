@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/06 13:16:56 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/08 18:05:05 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,14 @@ _Bool				ft_return_access(const char *name, char *str);
 **	lexer_parser.c
 */
 
-# define whitespace str[t->i] == ' ' || str[t->i] == '\t' || str[t->i] == '\n'
-# define prev_whitespace t->prev == ' ' || t->prev == '\t' || t->prev == '\n'
-# define quote str[t->i] == '`' || str[t->i] == '\'' || str[t->i] == '\"'
-# define special_char str[t->i] == '\\' || str[t->i] == '$'|| str[t->i] == '~'
-# define operator str[t->i] == '|' || str[t->i] == '&' || str[t->i] == ';' ||\
-				str[t->i] == '<' || str[t->i] == '>'
-# define prev_operator t->prev == '|' || t->prev == '&' || t->prev == ';' ||\
-						t->prev == '<' || t->prev == '>'
+# define WHITESPACE str[t->i] == ' ' || str[t->i] == '\t' || str[t->i] == '\n'
+# define PREV_WHITESPACE t->prev == ' ' || t->prev == '\t' || t->prev == '\n'
+# define QUOTE str[t->i] == '`' || str[t->i] == '\'' || str[t->i] == '\"'
+# define SPECIAL_CHAR str[t->i] == '\\' || str[t->i] == '$'|| str[t->i] == '~'
+# define OPERATOR str[t->i] == '|' || str[t->i] == ';' || str[t->i] == '<' ||\
+					str[t->i] == '>'
+# define PREV_OPERATOR t->prev == '|' || t->prev == ';' || t->prev == '<' ||\
+						t->prev == '>'
 
 typedef struct		s_ast
 {
@@ -86,7 +86,7 @@ typedef struct		s_ast
 	struct s_ast	*r_child;
 }					t_ast;
 
-typedef struct		s_okenize
+typedef struct		s_info
 {
 	int				i;
 	int				j;
@@ -95,20 +95,20 @@ typedef struct		s_okenize
 	int				number_bs;
 	char			prev;
 	t_ast			*tokens;
-}					t_okenize;
+}					t_info;
 
 t_ast				*search(t_ast **tokens, int *n, char *str, size_t len);
 t_ast				*parser(t_ast **tokens, t_ast *parent);
-int					count_backslashes(t_okenize *t, char *str);
-void				handle_backslash(char *str, t_okenize *t);
-void				add_token(t_okenize *t, int i, int j, char *str);
-void				quoting(char *str, t_okenize *t);
-void 				tokenize(char *str, t_okenize *t, int len);
-void				defaults(t_okenize *t);
+int					count_backslashes(int index, char *str);
+void				handle_backslash(char *str, t_info *t);
+void				add_token(t_info *t, int i, int j, char *str);
+void				quoting(char *str, t_info *t);
+void				tokenize(char *str, t_info *t, int len);
+void				defaults(t_info *t);
 void				print_ast(t_ast *tokens);
-void				append_str(char *str, t_okenize *t, t_ast **tokens, char *msg);
-int					check_operator(char *str, t_okenize *t, t_ast **tokens);
-void				check_quotes(char *str, t_okenize *t, t_ast **tokens);
+void				append_str(char *str, t_info *t, t_ast **tokens, char *msg);
+int					check_operator(char *str, t_info *t, t_ast **tokens);
+void				check_quotes(char *str, t_info *t, t_ast **tokens);
 int					ft_strfind(const char *s1, const char *s2);
 void				free_ast(t_ast *tokens);
 
@@ -125,6 +125,7 @@ typedef struct		s_operator
 }					t_operator;
 
 # define NBRTOKENS 8
+
 extern t_operator	g_operator[NBRTOKENS];
 
 int					ft_run_cmd(char **cmd);
@@ -153,7 +154,7 @@ typedef struct		s_hist
 {
 	int				index;
 	char			*command;
-	struct s_hist 	*next;
+	struct s_hist	*next;
 }					t_history;
 
 extern t_history	*g_history;
