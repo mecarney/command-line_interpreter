@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/09 17:29:59 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/09 17:43:49 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,10 @@ void		tokenize(char *str, t_info *t, int len)
 		}
 		else if (t->prev && (PREV_OPERATOR))
 		{
+			t->operator = 1;
 			add_token(t, t->i - 1, t->i - 1, str);
 			t->prev = str[t->i];
+			t->operator = 0;
 		}
 		else if (SPECIAL_CHAR || QUOTE)
 			quoting(str, t);
