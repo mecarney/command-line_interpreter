@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/05 13:30:59 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/09 16:15:05 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/09 16:32:59 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ void	ft_check_expand(t_ast *tokens)
 			tmp->val = get_backquote(tmp->val);
 		else if ((*tmp->val) && tmp->expand == 1)
 			tmp->val = ft_expand(tmp->val, 1);
+		if (!(tmp->val))
+			ft_error("Null expansion");
 		tmp = tmp->l_child;
 	}
 }
