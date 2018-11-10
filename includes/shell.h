@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/09 17:31:13 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/10 12:24:53 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,9 @@ _Bool				ft_return_access(const char *name, char *str);
 # define QUOTE str[t->i] == '`' || str[t->i] == '\'' || str[t->i] == '\"'
 # define SPECIAL_CHAR str[t->i] == '\\' || str[t->i] == '$' || str[t->i] == '~'
 # define OPERATOR str[t->i] == '|' || str[t->i] == ';' || str[t->i] == '<' ||\
-					str[t->i] == '>'
+					str[t->i] == '>' || str[t->i] == '&'
 # define PREV_OPERATOR t->prev == '|' || t->prev == ';' || t->prev == '<' ||\
-						t->prev == '>'
+						t->prev == '>' || t->prev == '&'
 
 typedef struct		s_ast
 {
