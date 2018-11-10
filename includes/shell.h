@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/10 14:41:01 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/10 14:48:31 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,10 @@ _Bool				ft_return_access(const char *name, char *str);
 # define PREV_WHITESPACE t->prev == ' ' || t->prev == '\t' || t->prev == '\n'
 # define QUOTE str[t->i] == '`' || str[t->i] == '\'' || str[t->i] == '\"'
 # define SPECIAL_CHAR str[t->i] == '\\' || str[t->i] == '$' || str[t->i] == '~'
-# define OPERATOR str[t->i] == '|' || str[t->i] == ';' || str[t->i] == '<' ||\
-					str[t->i] == '>' || str[t->i] == '&'
-# define PREV_OPERATOR t->prev == '|' || t->prev == ';' || t->prev == '<' ||\
-						t->prev == '>' || t->prev == '&'
+# define OPERATOR str[t->i] == '|' || str[t->i] == ';' || MORE_OP
+# define MORE_OP str[t->i] == '<' || str[t->i] == '>' || str[t->i] == '&'
+# define PREV_OPERATOR t->prev == '|' || t->prev == ';' || MORE_P_OP
+# define MORE_P_OP t->prev == '<' || t->prev == '>' || t->prev == '&'
 
 typedef struct		s_ast
 {
