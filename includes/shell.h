@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/10 12:24:53 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/10 12:38:10 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,8 @@ void				add_token(t_info *t, int i, int j, char *str);
 void				quoting(char *str, t_info *t);
 void				tokenize(char *str, t_info *t, int len);
 void				defaults(t_info *t);
-void				print_ast(t_ast *tokens);
+// void				free_ast(t_ast *tokens);
+void				ft_restart(t_ast *tokens, char *msg);
 void				append_str(char *str, t_info *t, t_ast **tokens, char *msg);
 int					check_operator(char *str, t_info *t, t_ast **tokens);
 void				check_quotes(char *str, t_info *t, t_ast **tokens);
