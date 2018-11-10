@@ -6,23 +6,11 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:59 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/10 12:44:07 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/10 14:35:09 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-
-// void		free_ast(t_ast *tokens)
-// {
-// 	if (!(tokens))
-// 		return ;
-// 	if (tokens->l_child)
-// 		free_ast(tokens->l_child);
-// 	if (tokens->r_child)
-// 		free_ast(tokens->r_child);
-// 	ft_strdel(&tokens->val);
-// 	free(tokens);
-// }
 
 t_ast		*search(t_ast **tokens, int *n, char *str, size_t len)
 {

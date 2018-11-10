@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/09 17:43:49 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/10 14:35:27 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void		append_str(char *str, t_info *t, t_ast **tokens, char *msg)
 	tmp = NULL;
 	ft_putstr_fd(msg, 2);
 	if (get_next_line(0, &line) <= 0)
-		ft_error("gnl error");
+		ft_restart(*tokens, "read error");
 	if (str[t->i] != '\\')
 	{
 		tmp = ft_strappend(str, '\n');
