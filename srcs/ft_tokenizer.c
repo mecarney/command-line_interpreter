@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/09 17:31:39 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/10 12:08:56 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,6 @@ void				add_token(t_info *t, int i, int j, char *str)
 	t->prev = '\0';
 }
 
-void				handle_backslash(char *str, t_info *t)
-{
-	t->number_bs = t->i;
-	t->bs_index = t->i;
-	while (str[t->number_bs] && str[t->number_bs] == '\\')
-		t->number_bs++;
-	t->number_bs -= t->i;
-	t->expand = !(t->number_bs % 2);
-	t->i += t->number_bs;
-	t->number_bs = (t->number_bs > 1) ? t->number_bs / 2 + !(t->expand) : 1;
-	(!(t->prev)) ? t->j = t->i - t->number_bs : 0;
-	(str[++t->i] && (WHITESPACE)) ? t->i++ : 0;
-	while (str[t->i] && !(WHITESPACE || QUOTE || SPECIAL_CHAR))
-		t->i++;
-	(WHITESPACE || QUOTE || SPECIAL_CHAR) ? t->i-- : 0;
-}
-
 void				handle_dollar_tilde(char *str, t_info *t)
 {
 	char			*tmp;
@@ -82,6 +65,29 @@ void				handle_dollar_tilde(char *str, t_info *t)
 				!(count_backslashes(t->i, str)))
 			t->i++;
 		add_token(t, t->i - 1, t->j, str);
+	}
+}
+
+void				handle_backslash(char *str, t_info *t)
+{
+	t->number_bs = t->i;
+	t->bs_index = t->i;
+	while (str[t->number_bs] && str[t->number_bs] == '\\')
+		t->number_bs++;
+	t->number_bs -= t->i;
+	t->expand = !(t->number_bs % 2);
+	t->i += t->number_bs;
+	t->number_bs = (t->number_bs > 1) ? t->number_bs / 2 + !(t->expand) : 1;
+	(!(t->prev)) ? t->j = t->i - t->number_bs : 0;
+	if (t->expand && str[t->i] && str[t->i] == '$' &&\
+		str[t->i + 1] && str[t->i + 1] == '(')
+		t->i--;
+	else
+	{
+		(str[++t->i] && (WHITESPACE)) ? t->i++ : 0;
+		while (str[t->i] && !(WHITESPACE || QUOTE || SPECIAL_CHAR))
+			t->i++;
+		(WHITESPACE || QUOTE || SPECIAL_CHAR) ? t->i-- : 0;
 	}
 }
 
