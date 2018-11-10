@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/08 18:05:05 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/09 17:31:13 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ _Bool				ft_return_access(const char *name, char *str);
 # define WHITESPACE str[t->i] == ' ' || str[t->i] == '\t' || str[t->i] == '\n'
 # define PREV_WHITESPACE t->prev == ' ' || t->prev == '\t' || t->prev == '\n'
 # define QUOTE str[t->i] == '`' || str[t->i] == '\'' || str[t->i] == '\"'
-# define SPECIAL_CHAR str[t->i] == '\\' || str[t->i] == '$'|| str[t->i] == '~'
+# define SPECIAL_CHAR str[t->i] == '\\' || str[t->i] == '$' || str[t->i] == '~'
 # define OPERATOR str[t->i] == '|' || str[t->i] == ';' || str[t->i] == '<' ||\
 					str[t->i] == '>'
 # define PREV_OPERATOR t->prev == '|' || t->prev == ';' || t->prev == '<' ||\
@@ -81,6 +81,7 @@ typedef struct		s_ast
 {
 	char			*val;
 	int				expand;
+	int				operator;
 	struct s_ast	*parent;
 	struct s_ast	*l_child;
 	struct s_ast	*r_child;
@@ -91,6 +92,7 @@ typedef struct		s_info
 	int				i;
 	int				j;
 	int				expand;
+	int				operator;
 	int				bs_index;
 	int				number_bs;
 	char			prev;

@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/09 16:15:26 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/09 17:29:59 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,11 @@ void		tokenize(char *str, t_info *t, int len)
 	while (str && len > ++t->i && str[t->i] != '#')
 	{
 		if (t->prev && (PREV_OPERATOR) && str[t->i] == t->prev)
+		{
+			t->operator = 1;
 			add_token(t, t->i, t->i - 1, str);
+			t->operator = 0;
+		}
 		else if (t->prev && (PREV_OPERATOR))
 		{
 			add_token(t, t->i - 1, t->i - 1, str);

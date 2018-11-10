@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/09 16:46:15 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/09 17:31:39 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void				add_token(t_info *t, int i, int j, char *str)
 			old->l_child = new;
 		}
 		new->expand = t->expand;
+		new->operator = t->operator;
 	}
 	t->j = t->i;
 	t->expand = 0;
@@ -63,7 +64,8 @@ void				handle_dollar_tilde(char *str, t_info *t)
 
 	t->expand = !(count_backslashes(t->i, str));
 	(!(t->prev)) ? t->j = t->i : 0;
-	if (str[t->i] == '$' && str[t->i + 1] && str[t->i + 1] == '(')
+	if (str[t->i] == '$' && !(count_backslashes(t->i, str)) &&\
+		str[t->i + 1] && str[t->i + 1] == '(')
 	{
 		t->i++;
 		while (str[t->i] && (str[t->i] != ')' ||\

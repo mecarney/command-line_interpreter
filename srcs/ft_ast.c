@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:59 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/06 18:47:30 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/09 17:28:23 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ t_ast		*search(t_ast **tokens, int *n, char *str, size_t len)
 	prev = NULL;
 	while (old)
 	{
-		if (ft_strlen(old->val) >= len && ft_strfind(old->val, str))
+		if (old->operator && ft_strlen(old->val) >= len &&\
+			ft_strfind(old->val, str))
 		{
 			if (prev)
 				prev->l_child = NULL;
