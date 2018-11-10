@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/08 18:05:43 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/09 16:22:29 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,24 @@ void				add_token(t_info *t, int i, int j, char *str)
 	t_ast			*new;
 	t_ast			*old;
 
-	old = t->tokens;
-	if (!(new = (t_ast *)malloc(sizeof(t_ast))))
-		ft_error("Malloc error");
-	new->val = ft_strsub(str, j, i - j + 1);
-	new->l_child = NULL;
-	new->r_child = NULL;
-	if (!(t->tokens))
-		t->tokens = new;
-	else
+	if (i - j >= 0)
 	{
-		while (old->l_child)
-			old = old->l_child;
-		old->l_child = new;
+		old = t->tokens;
+		if (!(new = (t_ast *)malloc(sizeof(t_ast))))
+			ft_error("Malloc error");
+		new->val = ft_strsub(str, j, i - j + 1);
+		new->l_child = NULL;
+		new->r_child = NULL;
+		if (!(t->tokens))
+			t->tokens = new;
+		else
+		{
+			while (old->l_child)
+				old = old->l_child;
+			old->l_child = new;
+		}
+		new->expand = t->expand;
 	}
-	new->expand = t->expand;
 	t->j = t->i;
 	t->expand = 0;
 	t->prev = '\0';
@@ -90,7 +93,7 @@ void				handle_quotation(char *str, t_info *t)
 	while (str[t->i] && (str[t->i] != ch))
 	{
 		t->prev = str[t->i];
-		if ((ch == '"' || ch == '`') && (SPECIAL_CHAR || QUOTE))
+		if ((ch == '"' || ch == '`') && (SPECIAL_CHAR || str[t->i] == '`'))
 		{
 			quoting(str, t);
 			t->j = t->i + 1;
