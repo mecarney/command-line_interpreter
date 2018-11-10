@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/09 16:22:29 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/09 16:46:15 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void				handle_quotation(char *str, t_info *t)
 		add_token(t, t->i - t->j, 0, tmp);
 		free(tmp);
 	}
-	else if (t->i - 1 > t->j && (ch == '\'' || ch == '\"'))
+	else if (ch == '\'' || ch == '\"')
 		add_token(t, t->i - 1, t->j, str);
 }
 
