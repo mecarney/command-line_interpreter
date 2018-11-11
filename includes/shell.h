@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/10 14:48:31 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/11 10:03:15 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,11 @@ typedef struct		s_builtin
 extern t_builtin	g_builtin[NBRBUILTIN];
 extern char			**g_envp;
 
-void				ft_init(_Bool *ret);
 void				ft_run_shell(_Bool *ret, char *line);
 
 /*
 **	BUILTINS
 */
-_Bool				ft_builtin(char **ptr);
 _Bool				ft_builtin_exit(char **ptr);
 _Bool				ft_builtin_cd(char **ptr);
 _Bool				ft_builtin_echo(char **ptr);
@@ -99,19 +97,13 @@ typedef struct		s_info
 	t_ast			*tokens;
 }					t_info;
 
-t_ast				*search(t_ast **tokens, int *n, char *str, size_t len);
 t_ast				*parser(t_ast **tokens, t_ast *parent);
 int					count_backslashes(int index, char *str);
-void				handle_backslash(char *str, t_info *t);
 void				add_token(t_info *t, int i, int j, char *str);
 void				quoting(char *str, t_info *t);
 void				tokenize(char *str, t_info *t, int len);
-void				defaults(t_info *t);
 void				ft_restart(t_ast *tokens, char *msg);
-void				append_str(char *str, t_info *t, t_ast **tokens, char *msg);
-int					check_operator(char *str, t_info *t, t_ast **tokens);
 void				check_quotes(char *str, t_info *t, t_ast **tokens);
-int					ft_strfind(const char *s1, const char *s2);
 void				free_ast(t_ast *tokens);
 
 char				*ft_expand(char *str, _Bool tilde);
@@ -133,7 +125,6 @@ extern t_operator	g_operator[NBRTOKENS];
 int					ft_run_cmd(char **cmd);
 
 int					ft_len_cmd(t_ast *tokens);
-void				ft_tokens_to_cmd(t_ast *tokens, _Bool *ret);
 _Bool				ft_tokens_exec(t_ast *tokens);
 void				ft_tokens_semicolon(t_ast *tokens, _Bool *ret);
 void				ft_tokens_pipe(t_ast *tokens, _Bool *ret);
@@ -147,7 +138,6 @@ void				ft_tokens_redirect_fd(t_ast *tokens, _Bool *ret);
 void				ft_tokens_here_doc(t_ast *tokens, _Bool *ret);
 int					ft_check_operator(char *str);
 char				*ft_tokens_val(t_ast *tokens);
-_Bool				ft_tokens_file(int fd);
 
 /*
 ** HISTORY
@@ -175,7 +165,6 @@ char				*get_history_file(void);
 
 char				*ft_check_history(char *str);
 
-char				*ft_check_backquote(char *str);
 void				ft_dup_fd(int fd_origin, int fd_new, int io);
 char				*get_backquote(char *str);
 

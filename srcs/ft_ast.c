@@ -6,13 +6,13 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:59 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/11 09:11:14 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/11 10:08:05 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void		free_ast(t_ast *tokens)
+void			free_ast(t_ast *tokens)
 {
 	t_ast			*tmp;
 
@@ -39,7 +39,7 @@ void		free_ast(t_ast *tokens)
 	free(tokens);
 }
 
-int			ft_strfind(const char *s1, const char *s2)
+static int		ft_strfind(const char *s1, const char *s2)
 {
 	size_t			i;
 	size_t			j;
@@ -68,7 +68,7 @@ int			ft_strfind(const char *s1, const char *s2)
 	return (!(str1[i]));
 }
 
-t_ast		*search(t_ast **tokens, int *n, char *str, size_t len)
+static t_ast	*search(t_ast **tokens, int *n, char *str, size_t len)
 {
 	t_ast			*old;
 	t_ast			*prev;
@@ -96,7 +96,7 @@ t_ast		*search(t_ast **tokens, int *n, char *str, size_t len)
 	return (*tokens);
 }
 
-t_ast		*parser(t_ast **tokens, t_ast *parent)
+t_ast			*parser(t_ast **tokens, t_ast *parent)
 {
 	t_ast			*old;
 	t_ast			*prev;

@@ -6,13 +6,13 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/11 09:07:27 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/11 09:08:25 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/11 10:08:59 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-int		count_backslashes(int index, char *str)
+int				count_backslashes(int index, char *str)
 {
 	int				i;
 
@@ -22,7 +22,7 @@ int		count_backslashes(int index, char *str)
 	return ((index - i + 1) % 2);
 }
 
-void	handle_dollar_tilde(char *str, t_info *t)
+static void		handle_dollar_tilde(char *str, t_info *t)
 {
 	char			*tmp;
 
@@ -49,7 +49,7 @@ void	handle_dollar_tilde(char *str, t_info *t)
 	}
 }
 
-void	handle_backslash(char *str, t_info *t)
+static void		handle_backslash(char *str, t_info *t)
 {
 	t->number_bs = t->i;
 	t->bs_index = t->i;
@@ -72,7 +72,7 @@ void	handle_backslash(char *str, t_info *t)
 	}
 }
 
-void	handle_quotation(char *str, t_info *t)
+static void		handle_quotation(char *str, t_info *t)
 {
 	char			ch;
 	char			*tmp;
@@ -101,7 +101,7 @@ void	handle_quotation(char *str, t_info *t)
 		add_token(t, t->i - 1, t->j, str);
 }
 
-void	quoting(char *str, t_info *t)
+void			quoting(char *str, t_info *t)
 {
 	char			ch;
 	char			*tmp;

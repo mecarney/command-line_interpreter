@@ -6,13 +6,13 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/11 09:04:19 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/11 10:08:27 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void		append_str(char *str, t_info *t, t_ast **tokens, char *msg)
+static void		append_str(char *str, t_info *t, t_ast **tokens, char *msg)
 {
 	char	*tmp;
 	char	*line;
@@ -38,7 +38,7 @@ void		append_str(char *str, t_info *t, t_ast **tokens, char *msg)
 	free(tmp);
 }
 
-int			check_operator(char *str, t_info *t, t_ast **tokens)
+static int		check_operator(char *str, t_info *t, t_ast **tokens)
 {
 	char	*tmp;
 
@@ -62,7 +62,7 @@ int			check_operator(char *str, t_info *t, t_ast **tokens)
 	return (0);
 }
 
-void		check_quotes(char *str, t_info *t, t_ast **tokens)
+void			check_quotes(char *str, t_info *t, t_ast **tokens)
 {
 	char	ch;
 

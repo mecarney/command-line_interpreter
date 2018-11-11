@@ -6,13 +6,13 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/11 09:08:47 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/11 10:06:15 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void	add_token(t_info *t, int i, int j, char *str)
+void			add_token(t_info *t, int i, int j, char *str)
 {
 	t_ast			*new;
 	t_ast			*old;
@@ -41,7 +41,7 @@ void	add_token(t_info *t, int i, int j, char *str)
 	t->prev = '\0';
 }
 
-void	sub_tokenize(char *str, t_info *t)
+static void		sub_tokenize(char *str, t_info *t)
 {
 	if (OPERATOR)
 	{
@@ -60,7 +60,7 @@ void	sub_tokenize(char *str, t_info *t)
 	}
 }
 
-void	tokenize(char *str, t_info *t, int len)
+void			tokenize(char *str, t_info *t, int len)
 {
 	while (str && len > ++t->i && str[t->i] != '#')
 	{
