@@ -6,20 +6,20 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/05 13:30:59 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/05 16:09:32 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/10 13:23:05 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-int		count_backslashes(t_okenize *t, char *str)
+int		count_backslashes(int index, char *str)
 {
 	int				i;
 
-	i = t->i - 1;
-	while (str[i] && str[i] == '\\')
+	i = index - 1;
+	while (i >= 0 && str[i] == '\\')
 		i--;
-	return ((t->i - i + 1) % 2);
+	return ((index - i + 1) % 2);
 }
 
 int		ft_strfind(const char *s1, const char *s2)
@@ -98,8 +98,12 @@ void	ft_check_expand(t_ast *tokens)
 	tmp = tokens;
 	while (tmp)
 	{
-		if (tmp->expand)
+		if ((*tmp->val) && tmp->expand == 2)
+			tmp->val = get_backquote(tmp->val);
+		else if ((*tmp->val) && tmp->expand == 1)
 			tmp->val = ft_expand(tmp->val, 1);
+		if (!(tmp->val))
+			ft_restart(tokens, "Null expansion");
 		tmp = tmp->l_child;
 	}
 }

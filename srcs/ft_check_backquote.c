@@ -6,7 +6,7 @@
 /*   By: fhong <fhong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/30 21:19:54 by fhong             #+#    #+#             */
-/*   Updated: 2018/11/04 16:37:07 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/11/09 16:04:02 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static char	*get_pipe_stdin(int *fd)
 	{
 		if (new_str)
 		{
-			new_str = free_append(new_str, ' ');
+			new_str = free_append(new_str, '\n');
 			new_str = free_join(new_str, line);
 		}
 		else

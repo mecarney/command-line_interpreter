@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:15:18 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/05 15:25:07 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/10 14:40:46 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,32 +24,20 @@ t_builtin	g_builtin[NBRBUILTIN] = {
 	{"history", &ft_builtin_history}
 };
 
-void	ft_run_shell(_Bool *ret, char *line)
+void	ft_init_struct(t_info *t)
 {
-	t_okenize	t;
-
-	t.i = -1;
-	t.j = 0;
-	t.expand = 0;
-	t.prev = '\0';
-	t.tokens = NULL;
-	check_quotes(line, &t, &t.tokens);
-	t.tokens = parser(&t.tokens, NULL);
-	*ret = ft_tokens_exec(t.tokens);
-	free_ast(t.tokens);
+	t->i = -1;
+	t->j = 0;
+	t->expand = 0;
+	t->operator = 0;
+	t->prev = '\0';
+	t->tokens = NULL;
 }
 
-int		main(int argc, char **argv, char **envp)
+void	input_loop(_Bool ret)
 {
 	char	*line;
-	_Bool	ret;
 
-	(argc != 1 || !argv[0]) ? ft_error("Usage: ./42sh") : NULL;
-	ft_printf("%s%sWelcome!%s Make great code today\n", BOLD, BLUE, REGULAR);
-	envp = ft_newenv(envp);
-	g_history = NULL;
-	g_history_file = get_history_file();
-	ret = 0;
 	while (42)
 	{
 		(ret) ? ft_putstr(RED) : ft_putstr(PURPLE);
@@ -60,5 +48,36 @@ int		main(int argc, char **argv, char **envp)
 			ft_strdel(&line);
 		}
 	}
+}
+
+void	ft_restart(t_ast *tokens, char *msg)
+{
+	ft_putendl(msg);
+	free_ast(tokens);
+	input_loop(1);
+}
+
+void	ft_run_shell(_Bool *ret, char *line)
+{
+	t_info	t;
+
+	ft_init_struct(&t);
+	check_quotes(line, &t, &t.tokens);
+	t.tokens = parser(&t.tokens, NULL);
+	*ret = ft_tokens_exec(t.tokens);
+	free_ast(t.tokens);
+}
+
+int		main(int argc, char **argv, char **envp)
+{
+	_Bool	ret;
+
+	(argc != 1 || !argv[0]) ? ft_error("Usage: ./42sh") : NULL;
+	ft_printf("%s%sWelcome!%s Make great code today\n", BOLD, BLUE, REGULAR);
+	envp = ft_newenv(envp);
+	g_history = NULL;
+	g_history_file = get_history_file();
+	ret = 0;
+	input_loop(ret);
 	return (0);
 }

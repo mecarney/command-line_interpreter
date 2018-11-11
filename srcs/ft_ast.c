@@ -6,23 +6,11 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:59 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/01 16:40:53 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/10 14:41:09 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-
-void		print_ast(t_ast *tokens)
-{
-	if (!(tokens))
-		return ;
-	if (tokens->l_child)
-		print_ast(tokens->l_child);
-	if (tokens->r_child)
-		print_ast(tokens->r_child);
-	ft_strdel(&tokens->val);
-	free(tokens);
-}
 
 t_ast		*search(t_ast **tokens, int *n, char *str, size_t len)
 {
@@ -33,15 +21,16 @@ t_ast		*search(t_ast **tokens, int *n, char *str, size_t len)
 	prev = NULL;
 	while (old)
 	{
-		if (ft_strlen(old->val) >= len && ft_strfind(old->val, str))
+		if (old->operator && ft_strlen(old->val) >= len &&\
+			ft_strfind(old->val, str))
 		{
 			if (prev)
 				prev->l_child = NULL;
-			else if (!(ft_strcmp(old->val, "<")) ||
-					!(ft_strcmp(old->val, ">") || !(ft_strcmp(old->val, "<<"))))
+			else if (!(ft_strcmp(old->val, "<")) ||\
+					!(ft_strcmp(old->val, ">")) || !(ft_strcmp(old->val, "<<")))
 				*tokens = NULL;
 			else
-				ft_error("parse error");
+				ft_restart(*tokens, "parse error");
 			*n = 0;
 			return (old);
 		}
@@ -66,7 +55,7 @@ t_ast		*parser(t_ast **tokens, t_ast *parent)
 	(n) ? old = search(tokens, &n, "&&||", 2) : 0;
 	(n) ? old = search(tokens, &n, "|", 1) : 0;
 	(n) ? old = search(tokens, &n, "<<", 1) : 0;
-	(n) ? old = search(tokens, &n, "&>>", 1) : 0;
+	(n) ? old = search(tokens, &n, ">>", 1) : 0;
 	if (n == 0)
 	{
 		old->r_child = parser(&old->l_child, old);
