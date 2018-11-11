@@ -6,22 +6,11 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/05 15:40:18 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/05 15:41:23 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/11/11 13:01:18 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-
-static char	*ft_streplace(char *str, char old, char new)
-{
-	int i;
-
-	i = -1;
-	while (str[++i])
-		if (str[i] == old)
-			str[i] = new;
-	return (str);
-}
 
 static char	*ft_get_backquote(char *str)
 {
@@ -40,8 +29,7 @@ static char	*ft_get_backquote(char *str)
 		cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
 		(tmp) ? ft_strdel(&tmp) : 0;
 		tmp = ft_strsub(mark, 1, ft_strchr(&mark[1], '`') - mark - 1);
-		tmp = get_backquote(tmp);
-		tmp = ft_streplace(tmp, ' ', '\n');
+		tmp = get_backquote(tmp, '\n');
 		cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
 		current = ft_strchr(&mark[1], '`') + 1;
 		(tmp) ? ft_strdel(&tmp) : 0;

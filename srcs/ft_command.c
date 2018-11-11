@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/17 23:58:44 by mjacques          #+#    #+#             */
-/*   Updated: 2018/10/28 19:29:51 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/11 12:57:22 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,9 @@ int			ft_run_cmd(char **cmd)
 		else
 		{
 			if (access(cmd[0], F_OK & R_OK) == 0 && ft_strchr(cmd[0], '/'))
-				ft_printf("42sh: permission denied: %s\n", cmd[0]);
+				ft_printf("42sh: %s :permission denied\n", cmd[0]);
 			else
-				ft_printf("42sh: command not found: %s\n", cmd[0]);
+				ft_printf("42sh: %s :command not found\n", cmd[0]);
 		}
 	}
 	return (ret);

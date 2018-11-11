@@ -6,13 +6,13 @@
 /*   By: fhong <fhong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/30 21:19:54 by fhong             #+#    #+#             */
-/*   Updated: 2018/11/09 16:04:02 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/11 13:00:35 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static char	*get_pipe_stdin(int *fd)
+static char	*get_pipe_stdin(int *fd, char c)
 {
 	int		fd_base;
 	char	*line;
@@ -25,7 +25,7 @@ static char	*get_pipe_stdin(int *fd)
 	{
 		if (new_str)
 		{
-			new_str = free_append(new_str, '\n');
+			new_str = free_append(new_str, c);
 			new_str = free_join(new_str, line);
 		}
 		else
@@ -36,7 +36,7 @@ static char	*get_pipe_stdin(int *fd)
 	return (new_str);
 }
 
-char		*get_backquote(char *str)
+char		*get_backquote(char *str, char c)
 {
 	int		stat_loc;
 	int		fd[2];
@@ -54,5 +54,5 @@ char		*get_backquote(char *str)
 		ft_putendl("ERROR: fork() failed");
 	waitpid(pid, &stat_loc, WUNTRACED);
 	ft_strdel(&str);
-	return (get_pipe_stdin(fd));
+	return (get_pipe_stdin(fd, c));
 }

@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/05 13:30:59 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/11 09:06:02 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/11 13:00:45 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	ft_check_expand(t_ast *tokens)
 	while (tmp)
 	{
 		if ((*tmp->val) && tmp->expand == 2)
-			tmp->val = get_backquote(tmp->val);
+			tmp->val = get_backquote(tmp->val, ' ');
 		else if ((*tmp->val) && tmp->expand == 1)
 			tmp->val = ft_expand(tmp->val, 1);
 		if (!(tmp->val))

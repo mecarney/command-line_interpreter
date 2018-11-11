@@ -6,7 +6,7 @@
 /*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/15 14:27:48 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/11 10:03:15 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/11 13:00:09 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,6 @@ char				*get_history_file(void);
 char				*ft_check_history(char *str);
 
 void				ft_dup_fd(int fd_origin, int fd_new, int io);
-char				*get_backquote(char *str);
+char				*get_backquote(char *str, char c);
 
 #endif
