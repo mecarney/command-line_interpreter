@@ -1,60 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_validate.c                                      :+:      :+:    :+:   */
+/*   ft_validate_input.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:49 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/10 14:35:27 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/11 09:04:19 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-
-void		sub_tokenize(char *str, t_info *t)
-{
-	if (OPERATOR)
-	{
-		if (t->prev && !(PREV_WHITESPACE))
-			add_token(t, t->i - 1, t->j, str);
-		t->prev = str[t->i];
-		t->j = t->i;
-	}
-	else if (t->prev && (WHITESPACE) && !(PREV_WHITESPACE))
-		add_token(t, t->i - 1, t->j, str);
-	else
-	{
-		(PREV_WHITESPACE) ? t->prev = '\0' : 0;
-		(!(t->prev)) ? t->j = t->i : 0;
-		t->prev = str[t->i];
-	}
-}
-
-void		tokenize(char *str, t_info *t, int len)
-{
-	while (str && len > ++t->i && str[t->i] != '#')
-	{
-		if (t->prev && (PREV_OPERATOR) && str[t->i] == t->prev)
-		{
-			t->operator = 1;
-			add_token(t, t->i, t->i - 1, str);
-			t->operator = 0;
-		}
-		else if (t->prev && (PREV_OPERATOR))
-		{
-			t->operator = 1;
-			add_token(t, t->i - 1, t->i - 1, str);
-			t->prev = str[t->i];
-			t->operator = 0;
-		}
-		else if (SPECIAL_CHAR || QUOTE)
-			quoting(str, t);
-		else
-			sub_tokenize(str, t);
-	}
-	(t->prev && !(PREV_WHITESPACE)) ? add_token(t, t->i - 1, t->j, str) : 0;
-}
 
 void		append_str(char *str, t_info *t, t_ast **tokens, char *msg)
 {

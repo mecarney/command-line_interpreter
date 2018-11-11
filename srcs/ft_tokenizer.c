@@ -6,13 +6,13 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:55:08 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/10 14:36:53 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/11 09:08:47 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void				add_token(t_info *t, int i, int j, char *str)
+void	add_token(t_info *t, int i, int j, char *str)
 {
 	t_ast			*new;
 	t_ast			*old;
@@ -41,110 +41,46 @@ void				add_token(t_info *t, int i, int j, char *str)
 	t->prev = '\0';
 }
 
-void				handle_dollar_tilde(char *str, t_info *t)
+void	sub_tokenize(char *str, t_info *t)
 {
-	char			*tmp;
-
-	t->expand = !(count_backslashes(t->i, str));
-	(!(t->prev)) ? t->j = t->i : 0;
-	if (str[t->i] == '$' && !(count_backslashes(t->i, str)) &&\
-		str[t->i + 1] && str[t->i + 1] == '(')
+	if (OPERATOR)
 	{
-		t->i++;
-		while (str[t->i] && (str[t->i] != ')' ||\
-				(str[t->i] == ')' && (count_backslashes(t->i, str)))))
-			t->i++;
-		t->expand = 2;
-		tmp = ft_strsub(str, t->j + 2, t->i - (t->j + 2));
-		add_token(t, t->i - (t->j + 2), 0, tmp);
-		free(tmp);
-	}
-	else
-	{
-		while (str[t->i] && !(WHITESPACE || QUOTE) &&\
-				!(count_backslashes(t->i, str)))
-			t->i++;
-		add_token(t, t->i - 1, t->j, str);
-	}
-}
-
-void				handle_backslash(char *str, t_info *t)
-{
-	t->number_bs = t->i;
-	t->bs_index = t->i;
-	while (str[t->number_bs] && str[t->number_bs] == '\\')
-		t->number_bs++;
-	t->number_bs -= t->i;
-	t->expand = !(t->number_bs % 2);
-	t->i += t->number_bs;
-	t->number_bs = (t->number_bs > 1) ? t->number_bs / 2 + !(t->expand) : 1;
-	(!(t->prev)) ? t->j = t->i - t->number_bs : 0;
-	if (t->expand && str[t->i] && str[t->i] == '$' &&\
-		str[t->i + 1] && str[t->i + 1] == '(')
-		t->i--;
-	else
-	{
-		(str[++t->i] && (WHITESPACE)) ? t->i++ : 0;
-		while (str[t->i] && !(WHITESPACE || QUOTE || SPECIAL_CHAR))
-			t->i++;
-		(WHITESPACE || QUOTE || SPECIAL_CHAR) ? t->i-- : 0;
-	}
-}
-
-void				handle_quotation(char *str, t_info *t)
-{
-	char			ch;
-	char			*tmp;
-
-	ch = str[t->i];
-	t->j = ++t->i;
-	while (str[t->i] && (str[t->i] != ch))
-	{
+		if (t->prev && !(PREV_WHITESPACE))
+			add_token(t, t->i - 1, t->j, str);
 		t->prev = str[t->i];
-		if ((ch == '"' || ch == '`') && (SPECIAL_CHAR || str[t->i] == '`'))
-		{
-			quoting(str, t);
-			t->j = t->i + 1;
-			(str[t->i] == ch) ? t->i-- : 0;
-		}
-		t->i++;
+		t->j = t->i;
 	}
-	if (ch == '`')
-	{
-		t->expand = 2;
-		tmp = ft_strsub(str, t->j, t->i - (t->j));
-		add_token(t, t->i - t->j, 0, tmp);
-		free(tmp);
-	}
-	else if (ch == '\'' || ch == '\"')
+	else if (t->prev && (WHITESPACE) && !(PREV_WHITESPACE))
 		add_token(t, t->i - 1, t->j, str);
+	else
+	{
+		(PREV_WHITESPACE) ? t->prev = '\0' : 0;
+		(!(t->prev)) ? t->j = t->i : 0;
+		t->prev = str[t->i];
+	}
 }
 
-void				quoting(char *str, t_info *t)
+void	tokenize(char *str, t_info *t, int len)
 {
-	char			ch;
-	char			*tmp;
-	char			*tmp2;
-
-	(t->prev) ? add_token(t, t->i - 1, t->j, str) : 0;
-	t->j = t->i + 1;
-	ch = str[t->i];
-	if (ch == '\\')
-		handle_backslash(str, t);
-	else if (ch == '$' || ch == '~')
-		handle_dollar_tilde(str, t);
-	else
-		handle_quotation(str, t);
-	if (ch == '\\' && t->prev)
+	while (str && len > ++t->i && str[t->i] != '#')
 	{
-		tmp = ft_strsub(str, t->j, t->bs_index - t->j);
-		tmp2 = ft_strsub(str, t->bs_index + t->number_bs,\
-						t->i - (t->bs_index + t->number_bs) + 1);
-		tmp = free_join(tmp, tmp2);
-		add_token(t, ft_strlen(tmp), 0, tmp);
-		free(tmp);
-		free(tmp2);
+		if (t->prev && (PREV_OPERATOR) && str[t->i] == t->prev)
+		{
+			t->operator = 1;
+			add_token(t, t->i, t->i - 1, str);
+			t->operator = 0;
+		}
+		else if (t->prev && (PREV_OPERATOR))
+		{
+			t->operator = 1;
+			add_token(t, t->i - 1, t->i - 1, str);
+			t->prev = str[t->i];
+			t->operator = 0;
+		}
+		else if (SPECIAL_CHAR || QUOTE)
+			quoting(str, t);
+		else
+			sub_tokenize(str, t);
 	}
-	else if (ch == '\\')
-		add_token(t, t->i, t->j + !(t->expand), str);
+	(t->prev && !(PREV_WHITESPACE)) ? add_token(t, t->i - 1, t->j, str) : 0;
 }

@@ -6,7 +6,7 @@
 /*   By: fhong <fhong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:21:52 by fhong             #+#    #+#             */
-/*   Updated: 2018/11/07 18:34:03 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/11 09:25:28 by mcarney          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,11 @@ static int		ft_check_history_helper(char *str, int mark)
 	return (mark);
 }
 
-static char		*get_history_command(char *str, char *cmd, int mark, int tmp_mark)
+static char		*get_history_command(char *str, char *cmd, int mark, int t_mark)
 {
-	char	*tmp;
+	char		*tmp;
 
-	tmp = ft_strsub(str, tmp_mark, mark - tmp_mark);
+	tmp = ft_strsub(str, t_mark, mark - t_mark);
 	cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
 	(tmp) ? ft_strdel(&tmp) : 0;
 	tmp = (str[mark] == '!') ? get_history((str + mark)) : ft_strdup("");
@@ -72,31 +72,31 @@ static int		move_mark_in_siglequote(char *str, int mark)
 	return (mark);
 }
 
-char	*ft_check_history(char *str)
+char			*ft_check_history(char *str)
 {
-	int		mark;
-	int		tmp_mark;
-	char	*cmd;
+	int			mark;
+	int			t_mark;
+	char		*cmd;
 
 	if (!ft_strchr(str, '!'))
 		return (str);
 	cmd = NULL;
 	mark = 0;
-	tmp_mark = mark;
+	t_mark = mark;
 	while (str && str[mark])
 	{
 		if (str[mark] == '\'' && !(count_backslashes(mark, str)))
 			mark = move_mark_in_siglequote(str, mark);
 		else if (str[mark] == '!' && !(count_backslashes(mark, str)))
 		{
-			cmd = get_history_command(str, cmd, mark, tmp_mark);
+			cmd = get_history_command(str, cmd, mark, t_mark);
 			mark = ft_check_history_helper(str, mark);
-			tmp_mark = mark;
+			t_mark = mark;
 		}
 		else
 			mark++;
 	}
-	cmd = (cmd) ? free_join(cmd, &str[tmp_mark]) : ft_strdup(str);
+	cmd = (cmd) ? free_join(cmd, &str[t_mark]) : ft_strdup(str);
 	(ft_strcmp(cmd, str) != 0) ? (ft_putendl(cmd)) : 0;
 	return (cmd);
 }

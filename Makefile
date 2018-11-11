@@ -6,7 +6,7 @@
 #    By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/09 11:32:00 by mjacques          #+#    #+#              #
-#    Updated: 2018/11/05 15:41:13 by mjacques         ###   ########.fr        #
+#    Updated: 2018/11/11 09:27:49 by mcarney          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ BASE		= main.c ft_util.c
 BUILTINS	= ft_builtins.c ft_envp.c ft_envp_tools.c ft_helper.c
 EXECUTE		= ft_command.c ft_tokens_exec.c ft_tokens_fct.c ft_tokens_tools.c\
 			      ft_expand.c ft_here_document.c
-PARSER		= ft_validate.c ft_tokenizer.c ft_ast.c ft_check_backquote.c
+PARSER		= ft_validate_input.c ft_tokenizer.c ft_ast.c ft_check_backquote.c\
+					ft_tokenizer_util.c
 HISTORY		= ft_history.c ft_history_tools.c ft_history_check.c
 FUNCTIONS	= $(BASE) $(BUILTINS) $(EXECUTE) $(PARSER) $(HISTORY)
 
