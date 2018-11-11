@@ -12,7 +12,7 @@
 
 #include "shell.h"
 
-static char	*get_history(char *cmd)
+static char		*get_history(char *cmd)
 {
 	int			i;
 	int			index;
@@ -40,76 +40,63 @@ static char	*get_history(char *cmd)
 	return ("!");
 }
 
-static char	*ft_check_history_helper(char *current, char *mark, _Bool *flag)
+static int		ft_check_history_helper(char *str, int mark)
 {
-	if (!ft_strncmp(mark, "!!", 2))
-	{
-		current = mark + 2;
-		*flag = 1;
-	}
-	else if (ft_numlen(&mark[1]) != 0)
-	{
-		current = mark + ft_numlen(&mark[1]) + 1;
-		*flag = 1;
-	}
+	if (!ft_strncmp(&str[mark], "!!", 2))
+		mark += 2;
+	else if (ft_numlen(&str[mark + 1]) != 0)
+		mark = mark + ft_numlen(&str[mark + 1]) + 1;
 	else
-		current = mark + 1;
-	return (current);
+		mark += 1;
+	return (mark);
 }
 
-char		*ft_check_history(char *str)
+static char		*get_history_command(char *str, char *cmd, int mark, int tmp_mark)
 {
-	char	*current;
+	char	*tmp;
+
+	tmp = ft_strsub(str, tmp_mark, mark - tmp_mark);
+	cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
+	(tmp) ? ft_strdel(&tmp) : 0;
+	tmp = (str[mark] == '!') ? get_history((str + mark)) : ft_strdup("");
+	cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
+	return (cmd);
+}
+
+static int		move_mark_in_siglequote(char *str, int mark)
+{
+	while (str[++mark] && (str[mark] != '\'' ||
+				(str[mark] == '\'' && count_backslashes(mark, str))))
+		;
+	mark++;
+	return (mark);
+}
+
+char	*ft_check_history(char *str)
+{
 	int		mark;
 	int		tmp_mark;
-	char	*tmp;
 	char	*cmd;
-	_Bool	flag;
 
 	if (!ft_strchr(str, '!'))
 		return (str);
-	flag = 0;
 	cmd = NULL;
-	current = str;
 	mark = 0;
 	tmp_mark = mark;
-
-	while (current && current[mark])
+	while (str && str[mark])
 	{
-		if (current[mark] == '\'' && !(count_backslashes(mark, current)))
+		if (str[mark] == '\'' && !(count_backslashes(mark, str)))
+			mark = move_mark_in_siglequote(str, mark);
+		else if (str[mark] == '!' && !(count_backslashes(mark, str)))
 		{
-			mark++;
-			while (current[mark] && (current[mark] != '\'' || (current[mark] == '\'' && count_backslashes(mark, current))))
-				mark++;
-			tmp = ft_strsub(current, tmp_mark, mark);
-			cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
-			tmp_mark = mark;
-		}
-		else if (current[mark] == '!' && !(count_backslashes(mark, current)))
-		{
-			tmp = ft_strsub(current, 0, mark);
-			cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
-			(tmp) ? ft_strdel(&tmp) : 0;
-			tmp = (current[mark] == '!') ? get_history((current + mark)) : ft_strdup("");
-			cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
-			current = ft_check_history_helper(current, (current + mark), &flag);
-			mark++;
+			cmd = get_history_command(str, cmd, mark, tmp_mark);
+			mark = ft_check_history_helper(str, mark);
 			tmp_mark = mark;
 		}
 		else
 			mark++;
 	}
-	// while (current && (mark = ft_strchr(current, '!')))
-	// {
-	// 	(mark - 1 && count_backslashes(mark - current, current) && mark++);
-	// 	tmp = ft_strsub(current, 0, mark - current);
-	// 	cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
-	// 	(tmp) ? ft_strdel(&tmp) : 0;
-	// 	tmp = (*mark == '!') ? get_history(mark) : ft_strdup("");
-	// 	cmd = (cmd) ? free_join(cmd, tmp) : ft_strdup(tmp);
-	// 	current = ft_check_history_helper(current, mark, &flag);
-	// }
-	cmd = free_join(cmd, current);
-	(flag) ? (ft_putendl(cmd)) : 0;
+	cmd = (cmd) ? free_join(cmd, &str[tmp_mark]) : ft_strdup(str);
+	(ft_strcmp(cmd, str) != 0) ? (ft_putendl(cmd)) : 0;
 	return (cmd);
 }
