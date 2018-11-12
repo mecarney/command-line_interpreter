@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/05 13:30:59 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/11 13:00:45 by mjacques         ###   ########.fr       */
+/*   Updated: 2018/11/11 21:16:06 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,11 @@ void	ft_check_expand(t_ast *tokens)
 			ft_restart(tokens, "Null expansion");
 		tmp = tmp->l_child;
 	}
+}
+
+void	sigint_handle(int sig)
+{
+	(void)sig;
+	ft_putendl(RED);
+	ft_putstr(SHELLNAME);
 }
