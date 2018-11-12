@@ -6,7 +6,7 @@
 /*   By: mcarney <mcarney@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 15:54:59 by mcarney           #+#    #+#             */
-/*   Updated: 2018/11/11 10:08:05 by mcarney          ###   ########.fr       */
+/*   Updated: 2018/11/12 12:18:34 by mjacques         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,11 @@ static t_ast	*search(t_ast **tokens, int *n, char *str, size_t len)
 			if (prev)
 				prev->l_child = NULL;
 			else if (!(ft_strcmp(old->val, "<")) ||\
-					!(ft_strcmp(old->val, ">")) || !(ft_strcmp(old->val, "<<")))
+					!(ft_strcmp(old->val, ">")) || !(ft_strcmp(old->val, "<<"))\
+					|| !(ft_strcmp(old->val, ">>")))
 				*tokens = NULL;
 			else
-				ft_restart(*tokens, "parse error");
+				ft_restart(*tokens, "42sh: Parse error");
 			*n = 0;
 			return (old);
 		}
