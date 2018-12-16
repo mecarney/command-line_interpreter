@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mjacques <mjacques@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/15 14:15:18 by mjacques          #+#    #+#             */
-/*   Updated: 2018/11/11 21:14:36 by mjacques         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "shell.h"
 
 char		**g_envp;
@@ -74,7 +62,7 @@ int		main(int argc, char **argv, char **envp)
 
 	(argc != 1 || !argv[0]) ? ft_error("Usage: ./42sh") : NULL;
 	signal(SIGINT, sigint_handle);
-	ft_printf("%s%sWelcome!%s Make great code today\n", BOLD, BLUE, REGULAR);
+	ft_printf("%s%sWelcome!%s\n", BOLD, BLUE, REGULAR);
 	envp = ft_newenv(envp);
 	g_history = NULL;
 	g_history_file = get_history_file();
